@@ -33,6 +33,10 @@ const GlobalTheme = {
     lightDarkGrey: '#DBDBDB',
   },
   navigationBar: {
+  },
+  singleNewsComponent: {
+    newsDataHeight: 72,
+    padding: '15px'
   }
 };
 
