@@ -5,9 +5,12 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
+// Internal Modules
+import NavigationBarContainer from './NavigationBarContainer';
+import NewsDashboard from './NewsDashboard';
 
 const ClientHomeWrapper = styled.div`
-    background-color: red;
+    background-color: white;
     height: 100%;
     width: 100%;
     display: flex,
@@ -15,6 +18,7 @@ const ClientHomeWrapper = styled.div`
     align-items: center;
     text-align: center;
 `
+
 
 class ClientHomeContainer extends Component {
     constructor(props){
@@ -30,7 +34,8 @@ class ClientHomeContainer extends Component {
     render(){
         return(
             <ClientHomeWrapper>
-                <h1> Hi Abdel </h1>
+                <NavigationBarContainer />
+                <NewsDashboard />
             </ClientHomeWrapper>
         )
     }

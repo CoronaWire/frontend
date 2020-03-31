@@ -37,7 +37,7 @@ const LoginContainerBox = styled.div`
     height: 400px;
     background-color: white;
     border: 2px solid white;
-    border-radius: ${props => props.GlobalTheme.generalApplication.borderRadius};;
+    border-radius: ${props => props.GlobalTheme.generalApplication.borderRadius};
     display: inline-block;
 `
 
@@ -95,7 +95,7 @@ class ModeratorLoginContainer extends Component{
             password: '',
             unsuccessfulConnection: false,
             emailValidated: 'neutral',
-            headerText: 'CW Admin Login'
+            headerText: 'Covid Wire Admin Login'
         }
     }
     
