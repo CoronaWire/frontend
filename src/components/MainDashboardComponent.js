@@ -10,7 +10,8 @@ import Paper from '@material-ui/core/Paper';
 // Internal Modules
 import LoginButton from '../styledComponents/LoginButton';
 import GlobalTheme from '../styledComponents/GlobalTheme';
-
+// Components
+import SingleNewsComponent from '../components/SingleNewsComponent';
 
 const DashboardHeader = styled.h1`
     font-size: 28px;
@@ -72,7 +73,7 @@ const ScopeButton = styled.button`
 `;
 
 const ScopeContainer = styled.div`
-    background-color: red;
+    background-color: transparent;
     height: 40px;
     width: 100%
     border-bottom-style: solid;
@@ -84,7 +85,7 @@ const ScopeContainer = styled.div`
     margin-right: 30px;
 `;
 
-const ScopeContainerTwo = styled.div`
+const ScopeWrapper = styled.div`
     background-color: transparent;
     height: 40px;
     width: 100%
@@ -96,6 +97,22 @@ const ScopeContainerTwo = styled.div`
     margin-left: 30px;
     margin-right: 30px;
 `
+
+// #toFix: set margin-left and right of both styled components through Global Theming or through
+// # a common stylesheet for a single source of truth
+// #toFix: also centralize border-radius of article cards
+// #important #toFix: height now set as a static amount of pixels. should be proportions?
+const NewsListWrapper = styled.div`
+    background-color: transparent;
+    height: 480px;
+    margin-left: 30px;
+    margin-right: 30px;
+    overflow-y: auto;
+    margin-top: 20px;
+    borde
+`;
+
+// #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
 class MainDashboardComponent extends Component {
     constructor(props){
         super(props);
@@ -103,6 +120,11 @@ class MainDashboardComponent extends Component {
             categories: ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor'],
             scope: ['Local', 'National'],
             scopeClicked: 'Local',
+            news: [
+                {timeStamp: '12 min', title: 'Drive-through novel coronavirus (COVID-19) testing available by appointment at Stanford', summary: 'Drive-through appointmnets for Stanford Medicine COVID-19 test are available for patients who have been referred.', source: 'Stanford Health Care', newsType: 'Website'},
+                {timeStamp: '1 hour', title: 'Several SF police officers self-quarantined after coronavirus exposure', summary: 'A janitor who worked at a Sodo office park that houses several Seattle Police Department training and support units recently tested positive for COVID-19', source: 'SF Chronicle', newsType: 'Website'},
+                {timeStamp: '1 d', title: 'Researchers from Taiwan find cure for COVID-19.', summary: "It's all in the title. Enough said", source: 'NY Times', newsType: 'Website'},
+            ]
         }
     }
 
@@ -115,7 +137,7 @@ class MainDashboardComponent extends Component {
     }
 
     // #toDo: figure out the clicked state of the categories button, same grey color?
-    
+
     render(){
         return(
             <div>
@@ -127,11 +149,16 @@ class MainDashboardComponent extends Component {
                     return <Button GlobalTheme={GlobalTheme} key={index}>{value}</Button>
                 })}
             </ButtonsContainer>
-            <ScopeContainerTwo>
+            <ScopeWrapper>
                 {this.state.scope.map((value, index) => {
                     return <ScopeButton key={index} value={value} onClick={e => this.handleScopeClick(e.target.value)} underlined={this.state.scopeClicked == value ? true : false}> {value} </ScopeButton>
                 })}
-            </ScopeContainerTwo>
+            </ScopeWrapper>
+            <NewsListWrapper>
+                {this.state.news.map((newsObject, index) => {
+                        return <SingleNewsComponent key={index} props={newsObject} />
+                })}
+            </NewsListWrapper>
             </div>
         )
     }
