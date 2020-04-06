@@ -61,4 +61,7 @@ class NewsDashboard extends Component {
     }
 }
 
+// #toUpgrade: Information Feed Component currently only holds one component (Global News) but needs
+// to be extended to also hold a National News component 
+
 export default NewsDashboard;

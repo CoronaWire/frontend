@@ -2,51 +2,19 @@
 
 import React, { Component } from 'react';
 import styled from 'styled-components';
+// Internal Modules
+import LeftMenuButtonComponent from './LeftMenuButtonComponent';
+import GlobalTheme from '../styledComponents/GlobalTheme';
 
 // #toDo: Needs to be connected to parent component, Dashboard and send up the actual news
 
 const LeftMenuWrapper = styled.div`
     background-color: transparent;
-    margin-top: 30px;
+    margin-top: ${props => props.GlobalTheme.dashboardStyling.marginTop};
     width: 100%
 `
 // #toDo: move margin-top to GlobalTheming to ensure that it'll be shared across the Dashboard middle title
 // and the main menu buttons
-
-const MenuButton = styled.div`
-    cursor: pointer;
-    background-color: transparent;
-    &:hover {
-        background-color: #F0F0F0;
-    };
-    height: auto;
-    text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: auto;
-`
-
-const MenuButtonTitle = styled.p`
-    font-size: 14px;
-    color: black;
-    font-weight: 600;
-    text-align: left;
-    height: 100%;
-    display: block;
-    margin-top: 0px;
-    margin-bottom: 0px;
-`;
-const MenuButtonSubTitle = styled.p`
-    font-size: 12px;
-    color: grey;
-    text-align: left;
-    width: 100%;
-    font-style: italic;
-    margin-top: 4px;
-    margin-bottom: 4px;
-`;
 
 const DividingLine = styled.div`
     height: 1px;
@@ -61,54 +29,47 @@ class LeftMenuComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
-            // Empty for now
+            menuOptions: [
+                {
+                    menuTitle: 'News',
+                    menuSubtitle: "Learn what's reported locally"
+                },
+                {
+                    menuTitle: 'Neighborhood Numbers',
+                    menuSubtitle: 'Latest numbers on local resources'
+                }, 
+                {
+                    menuTitle: 'COVID-19 Facts',
+                    menuSubtitle: 'Knowledge on the Virus'
+                }
+            ],
+            secondMenuOptions: [
+                {
+                    menuTitle: 'About Covid-Wire',
+                    menuSubtitle: 'Donate & learn about the site'
+                },
+                {
+                    menuTitle: 'Other resources',
+                    menuSubtitle: 'Alliance projects and organizations'
+                }
+            ], 
         }
     }
 
     render(){
         return(
-            <LeftMenuWrapper>
-                    <MenuButton> 
-                        <MenuButtonTitle>
-                            News 
-                        </MenuButtonTitle>
-                        <MenuButtonSubTitle>
-                            Learn what's reported locally
-                        </MenuButtonSubTitle>
-                    </MenuButton>
-                    <MenuButton> 
-                        <MenuButtonTitle>
-                            Neighborhood Numbers 
-                        </MenuButtonTitle>
-                        <MenuButtonSubTitle>
-                            Latest numbers on local resources
-                        </MenuButtonSubTitle>
-                    </MenuButton>
-                    <MenuButton> 
-                        <MenuButtonTitle>
-                            Coronavirus Facts 
-                        </MenuButtonTitle>
-                        <MenuButtonSubTitle>
-                            Knowledge on COVID-19
-                        </MenuButtonSubTitle>
-                    </MenuButton>
+            <LeftMenuWrapper GlobalTheme={GlobalTheme} >
+                    {
+                        this.state.menuOptions.map((menuObject, index) => {
+                            return <LeftMenuButtonComponent props={menuObject} key={index} />
+                        })
+                    }
                     <DividingLine />
-                    <MenuButton> 
-                        <MenuButtonTitle>
-                            About COVID Wire 
-                        </MenuButtonTitle>
-                        <MenuButtonSubTitle>
-                            Donate and learn about the site
-                        </MenuButtonSubTitle>
-                    </MenuButton>
-                    <MenuButton> 
-                        <MenuButtonTitle>
-                            Other Resources 
-                        </MenuButtonTitle>
-                        <MenuButtonSubTitle>
-                            Alliance projects and organizations
-                        </MenuButtonSubTitle>
-                    </MenuButton>
+                    {
+                        this.state.secondMenuOptions.map((menuObject, index) => {
+                            return <LeftMenuButtonComponent props={menuObject} key={index} />
+                        })
+                    }
             </LeftMenuWrapper>
         )
     }

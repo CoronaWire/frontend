@@ -3,10 +3,6 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Paper from '@material-ui/core/Paper';
-
 // Internal Modules
 import LoginButton from '../styledComponents/LoginButton';
 import GlobalTheme from '../styledComponents/GlobalTheme';
@@ -21,6 +17,7 @@ const DashboardHeader = styled.h1`
     text-align: left;
     padding-left: 30px;
     margin-bottom: 0px;
+    margin-top: ${props => props.GlobalTheme.dashboardStyling.marginTop};
 `;
 
 // #toDo: make paddingLeft and marginLeft below 30px
@@ -60,7 +57,7 @@ const ScopeButton = styled.button`
     background-color: white;
     color: black;
     border-bottom-style: solid;
-    border-bottom-color: ${props => props.underlined == true ? 'black': 'white'};
+    border-bottom-color: ${props => props.underlined === true ? 'black': 'white'};
     border-bottom-width: 2px;
     border-left-width: 0px;
     border-right-width: 0px;
@@ -109,7 +106,7 @@ const NewsListWrapper = styled.div`
     margin-right: 30px;
     overflow-y: auto;
     margin-top: 20px;
-    borde
+
 `;
 
 // #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
@@ -117,13 +114,13 @@ class MainDashboardComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
-            categories: ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor'],
-            scope: ['Local', 'National'],
+            categories: ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor'], // #toDecide : Finalize number of categories and type of categories
+            scope: ['Local', 'National'], // #toDecide : is national news going to be on the side or is it going to be part of the main
             scopeClicked: 'Local',
             news: [
                 {timeStamp: '12 min', title: 'Drive-through novel coronavirus (COVID-19) testing available by appointment at Stanford', summary: 'Drive-through appointmnets for Stanford Medicine COVID-19 test are available for patients who have been referred.', source: 'Stanford Health Care', newsType: 'Website'},
                 {timeStamp: '1 hour', title: 'Several SF police officers self-quarantined after coronavirus exposure', summary: 'A janitor who worked at a Sodo office park that houses several Seattle Police Department training and support units recently tested positive for COVID-19', source: 'SF Chronicle', newsType: 'Website'},
-                {timeStamp: '1 d', title: 'Researchers from Taiwan find cure for COVID-19.', summary: "It's all in the title. Enough said", source: 'NY Times', newsType: 'Website'},
+                {timeStamp: '1 d', title: 'Researchers from Taiwan find cure for COVID-19.', summary: "It's all in the title. Enough said.", source: 'NY Times', newsType: 'Website'},
             ]
         }
     }
@@ -141,7 +138,7 @@ class MainDashboardComponent extends Component {
     render(){
         return(
             <div>
-            <DashboardHeader>
+            <DashboardHeader GlobalTheme={GlobalTheme} >
                 News
             </DashboardHeader>
             <ButtonsContainer>

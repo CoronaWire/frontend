@@ -22,6 +22,9 @@ const GlobalTheme = {
     whiteBackgroundColor: '#FFF',
     lightGreyColor: '#F5F7FA'
   }, 
+  dashboardStyling: {
+    marginTop: '30px',
+  },
   generalColors: {
     lightBlue: '#4AB7FF',
     neonGreen: '#39ff14',

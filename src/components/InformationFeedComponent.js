@@ -4,7 +4,8 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
-//
+// Internal Modules
+import GlobalTheme from '../styledComponents/GlobalTheme';
 
 // #toFix: make components responsive
 // #toDo: decide between show more button that extends feed (limits other features) or simple left and right
@@ -17,7 +18,7 @@ const GlobalFeed = styled.div`
     background-color: transparent;
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
+    margin-top: ${ props => props.GlobalTheme.dashboardStyling.marginTop };
     border-radius: 5px;
     border-style: solid;
     border-color: #B0B0B0;
@@ -101,9 +102,13 @@ class InformationFeedComponent extends Component{
         }
     }
 
+    // #important #toChange: once hte InformationFeedComponent gets "upgraded" to hold both GlobalFeedComponent
+    // and NationalFeedComponent (not created yet), then create Wrapper that will hold the two components and set
+    // the margin of that to be the DashboardStyling margin
+    // or set it to the RightSideContainer? Make it consistent. Currently margin is set to the first child component.
     render() {
         return (
-            <GlobalFeed>
+            <GlobalFeed GlobalTheme={GlobalTheme}>
                 <FeedHeader> Global News </FeedHeader>
                 <FeedText> 
                     {this.state.globalFeed.map((articleObject, index) => {
