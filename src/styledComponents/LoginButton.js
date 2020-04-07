@@ -5,9 +5,9 @@
 import styled from 'styled-components';
 
 const LoginButton = styled.button`
-    background-color: ${props => props.GlobalTheme.adminLoginStyling.buttonColor};
-    width: ${props => props.GlobalTheme.adminLoginStyling.buttonInputWidth};
-    border-radius: ${props => props.GlobalTheme.generalApplication.borderRadius};;
+    background-color: ${props => props.theme.adminLoginStyling.buttonColor};
+    width: ${props => props.theme.adminLoginStyling.buttonInputWidth};
+    border-radius: ${props => props.theme.generalApplication.borderRadius};;
     color: white;
     padding-left: 10px;
     padding-right: 10px;
@@ -18,10 +18,10 @@ const LoginButton = styled.button`
     margin-left: 13px;
     margin-right: 13px;
     display: block;
-    box-sizing: content-box; 
+    box-sizing: content-box;
     outline: none;
-    font-size: ${props => props.GlobalTheme.adminLoginStyling.textSize};
+    font-size: ${props => props.theme.adminLoginStyling.textSize};
     cursor: pointer;
 `
-  
+
 export default LoginButton;

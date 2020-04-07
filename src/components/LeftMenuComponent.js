@@ -4,13 +4,12 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import LeftMenuButtonComponent from './LeftMenuButtonComponent';
-import GlobalTheme from '../styledComponents/GlobalTheme';
 
 // #toDo: Needs to be connected to parent component, Dashboard and send up the actual news
 
 const LeftMenuWrapper = styled.div`
     background-color: transparent;
-    margin-top: ${props => props.GlobalTheme.dashboardStyling.marginTop};
+    margin-top: ${props => props.theme.dashboardStyling.marginTop};
     width: 100%
 `
 // #toDo: move margin-top to GlobalTheming to ensure that it'll be shared across the Dashboard middle title
@@ -58,7 +57,7 @@ class LeftMenuComponent extends Component {
 
     render(){
         return(
-            <LeftMenuWrapper GlobalTheme={GlobalTheme} >
+            <LeftMenuWrapper>
                     {
                         this.state.menuOptions.map((menuObject, index) => {
                             return <LeftMenuButtonComponent props={menuObject} key={index} />
