@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
+import GlobalTheme from '../styledComponents/GlobalTheme';
 import LoginInput from '../styledComponents/LoginInput';
 import LoginButton from '../styledComponents/LoginButton';
 import LoginForm from '../styledComponents/LoginForm';
@@ -36,7 +37,7 @@ const LoginContainerBox = styled.div`
     height: 400px;
     background-color: white;
     border: 2px solid white;
-    border-radius: ${props => props.theme.generalApplication.borderRadius};
+    border-radius: ${props => props.GlobalTheme.generalApplication.borderRadius};
     display: inline-block;
 `
 
@@ -155,14 +156,15 @@ class ModeratorLoginContainer extends Component{
     render() {
         return(
             <ModeratorContainerWrapper>
-            <LoginContainerBox>
+            <LoginContainerBox GlobalTheme={GlobalTheme} >
             <LoginForm onSubmit={this.handleSignIn}>
-                <FormHeaderText>
+                <FormHeaderText GlobalTheme={GlobalTheme} >
                     {this.state.headerText}
                 </FormHeaderText>
                 <LoginInput 
                 type="email" 
                 placeholder="Email" 
+                GlobalTheme={GlobalTheme} 
                 id="email" 
                 onChange={this.handleChange} 
                 InputStyling={this.state} 
@@ -171,22 +173,23 @@ class ModeratorLoginContainer extends Component{
                 type={this.state.showPassword ? "text" : "password"} 
                 placeholder="Password" onChange={this.handleChange} 
                 value={this.state.password} 
+                GlobalTheme={GlobalTheme} 
                 id="password"
                 InputStyling={this.state}
-                />
+                /> 
                 <CheckboxRememberMeContainer>
                     <CheckboxContainer>
                         <input type='checkbox' onClick={this.handleRememberMeClick} checked={this.state.rememberMeClicked} name='loginCheckbox' />
                         <CheckboxLabel for='loginContainer'> Remember Me </CheckboxLabel>
                     </CheckboxContainer>
                     {
-                        this.state.showPassword ?
-                        <LinkTypeText onClick={this.handleShowPassword}> Hide Password </LinkTypeText>
-                        :
-                        <LinkTypeText onClick={this.handleShowPassword}> Show Password </LinkTypeText>
+                        this.state.showPassword ? 
+                        <LinkTypeText GlobalTheme={GlobalTheme} onClick={this.handleShowPassword}> Hide Password </LinkTypeText> 
+                        : 
+                        <LinkTypeText GlobalTheme={GlobalTheme} onClick={this.handleShowPassword}> Show Password </LinkTypeText>
                     }
                 </CheckboxRememberMeContainer>
-                <LoginButtonWithGradient type="submit" disabled={!this.validateForm()} > Sign In </LoginButtonWithGradient>
+                <LoginButtonWithGradient type="submit" GlobalTheme={GlobalTheme} disabled={!this.validateForm()} > Sign In </LoginButtonWithGradient>
             </LoginForm>
             </LoginContainerBox>
             </ModeratorContainerWrapper>

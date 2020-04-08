@@ -2,13 +2,11 @@
 
 // External Packages
 import React, { Component } from 'react';
-import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 // Internal Modules
 import Routes from './routing/Routes';
 // Styled Components
 import AppComponentWrapper from './styledComponents/AppComponentWrapper';
-import GlobalTheme from './styledComponents/GlobalTheme';
 
 import logo from './logo.svg';
 import './App.css';
@@ -32,11 +30,9 @@ class App extends Component {
     // level of the hierarchy in order to give access to the redux state to
     // the sub components
     return (
-      <ThemeProvider theme={GlobalTheme}>
-        <AppComponentWrapper>
-          <Routes childProps={childProps} />
-        </AppComponentWrapper>
-      </ThemeProvider>
+      <AppComponentWrapper>
+        <Routes childProps={childProps} />
+      </AppComponentWrapper>
     );
   }
 }
