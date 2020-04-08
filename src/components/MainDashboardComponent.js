@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import LoginButton from '../styledComponents/LoginButton';
+import GlobalTheme from '../styledComponents/GlobalTheme';
 // Components
 import SingleNewsComponent from '../components/SingleNewsComponent';
 
@@ -16,7 +17,7 @@ const DashboardHeader = styled.h1`
     text-align: left;
     padding-left: 30px;
     margin-bottom: 0px;
-    margin-top: ${props => props.theme.dashboardStyling.marginTop};
+    margin-top: ${props => props.GlobalTheme.dashboardStyling.marginTop};
 `;
 
 // #toDo: make paddingLeft and marginLeft below 30px
@@ -137,12 +138,12 @@ class MainDashboardComponent extends Component {
     render(){
         return(
             <div>
-            <DashboardHeader>
+            <DashboardHeader GlobalTheme={GlobalTheme} >
                 News
             </DashboardHeader>
             <ButtonsContainer>
                 {this.state.categories.map((value, index) => {
-                    return <Button key={index}>{value}</Button>
+                    return <Button GlobalTheme={GlobalTheme} key={index}>{value}</Button>
                 })}
             </ButtonsContainer>
             <ScopeWrapper>

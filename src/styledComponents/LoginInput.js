@@ -5,10 +5,10 @@ import styled from 'styled-components';
 // #toDo: change the name of the InputForLoginSignUp
 
 const LoginInput = styled.input`
-    border-bottom: solid 1px ${props => props.theme.applicationGeneralColor};
-    color: ${props => props.theme.applicationGeneralColor};
-    position: relative;
-    width: ${props => props.theme.adminLoginStyling.buttonInputWidth};
+    border-bottom: solid 1px ${props => props.GlobalTheme.applicationGeneralColor};
+    color: ${props => props.GlobalTheme.applicationGeneralColor};
+    position: relative;   
+    width: ${props => props.GlobalTheme.adminLoginStyling.buttonInputWidth};
     display: block;
     padding: 10px;
     margin: 10px;
@@ -19,7 +19,7 @@ const LoginInput = styled.input`
     &:placeholder {
         color: grey;
     }
-    font-size: ${props => props.theme.adminLoginStyling.textSize};
+    font-size: ${props => props.GlobalTheme.adminLoginStyling.textSize};
 `
 
 export default LoginInput;
