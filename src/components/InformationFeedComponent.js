@@ -4,8 +4,6 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
-// Internal Modules
-import GlobalTheme from '../styledComponents/GlobalTheme';
 
 // #toFix: make components responsive
 // #toDo: decide between show more button that extends feed (limits other features) or simple left and right
@@ -18,7 +16,7 @@ const GlobalFeed = styled.div`
     background-color: transparent;
     display: flex;
     flex-direction: column;
-    margin-top: ${ props => props.GlobalTheme.dashboardStyling.marginTop };
+    margin-top: ${ props => props.theme.dashboardStyling.marginTop };
     border-radius: 5px;
     border-style: solid;
     border-color: #B0B0B0;
@@ -108,7 +106,7 @@ class InformationFeedComponent extends Component{
     // or set it to the RightSideContainer? Make it consistent. Currently margin is set to the first child component.
     render() {
         return (
-            <GlobalFeed GlobalTheme={GlobalTheme}>
+            <GlobalFeed>
                 <FeedHeader> Global News </FeedHeader>
                 <FeedText> 
                     {this.state.globalFeed.map((articleObject, index) => {
