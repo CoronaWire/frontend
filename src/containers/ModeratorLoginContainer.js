@@ -3,6 +3,8 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import firebase from 'firebase';
+
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import LoginInput from '../styledComponents/LoginInput';
@@ -10,7 +12,26 @@ import LoginButton from '../styledComponents/LoginButton';
 import LoginForm from '../styledComponents/LoginForm';
 import LinkTypeText from '../styledComponents/LinkTypeText';
 
-// To do:
+// Redux-related
+import store from '../store/store';
+import {
+    authenticateUser 
+} from '../actionCreators/actions';
+
+let firebaseConfig = {
+    apiKey: "AIzaSyBioAKQzfRargmo8bAM-fuKRmYTdtgQxSw",
+    authDomain: "coronawire-2020.firebaseapp.com",
+    databaseURL: "https://coronawire-2020.firebaseio.com",
+    projectId: "coronawire-2020",
+    storageBucket: "coronawire-2020.appspot.com",
+    messagingSenderId: "464179001029",
+    appId: "1:464179001029:web:6590be0326ab59b6f962ac",
+    measurementId: "G-Q47EB979TP"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+// #toDo:
 // Change the name of the styled components
 
 const ModeratorContainerWrapper = styled.div`
@@ -95,7 +116,8 @@ class ModeratorLoginContainer extends Component{
             password: '',
             unsuccessfulConnection: false,
             emailValidated: 'neutral',
-            headerText: 'Covid Wire Admin Login'
+            headerText: 'CoronaWire Login',
+            rememberMeClicked: false
         }
     }
     
@@ -112,6 +134,14 @@ class ModeratorLoginContainer extends Component{
 
     // Method used to disable submit button while password and email lengths are not validated
     validateForm = () => this.state.email !== '' && this.state.password !== '';
+
+    // Validates that the string entered in the email filed is an email
+    validateEmail = (email) => {
+        console.log('Validating email');
+        var re = /\S+@\S+\.\S+/;
+        return re.test(email);
+    }
+
 
     // Function used in order to set the email information entered by the user in local storage
     // in order to create a smoother UX when the moderator logs out and tries to login again 
@@ -152,6 +182,49 @@ class ModeratorLoginContainer extends Component{
         })
     }
 
+
+    handleRememberMeClick = () => {
+        this.setState({
+            rememberMeClicked: this.state.rememberMeClicked === true ? false : true
+        })
+    }
+    
+    // Function used to let the user know that an unsuccessful connection has been made
+    // Allows us to create an error user message
+    toggleConnectionStatus = () => {
+        this.setState({
+            unsuccesfulConnection: !this.state.unsuccesfulConnection
+        })
+    }
+
+    handleSignIn = async (event) => {
+        event.preventDefault();
+        console.log('Sign in button clicked');
+        let  { email, password } = this.state;
+
+        if (this.validateEmail(email)) {
+            try { // DevelopmentChange: Put in the correct firebase authentication credentials later on
+                let firebaseAuthenticationResult = await firebase.auth().signInWithEmailAndPassword(email, password);
+                console.log('Firebase Authentication ?', firebaseAuthenticationResult);
+                store.dispatch(authenticateUser(true));
+                try {
+                    this.storeEmailInLocalStorage(); // Makes sure that the email is stored in local storage for the future
+                    this.props.history.push('/authenticatedAdmin');
+                } catch(error) {
+                    console.log('History not changed successfully.')
+                }
+            } catch (error) {
+                console.log('Firebase authentication unsuccessful');
+                this.toggleConnectionStatus()
+                setTimeout(this.toggleConnectionStatus, 4000); // Ensures that the red error text disappears
+                // UXdecision: Do I leave the error message so that the user always knows or remove it? 
+            }
+        } else {
+            this.setState({
+                emailValidated: 'false'
+            })
+        }
+    }
 
     render() {
         return(
