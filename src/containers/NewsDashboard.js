@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import LeftClientMenuComponent from '../components/LeftClientMenuComponent';
-import MainDashboardComponent from '../components/MainDashboardComponent';
+import NewsDashboardComponent from '../components/MainDashboardComponent';
 import InformationFeedComponent from '../components/InformationFeedComponent';
 
 const DashboardWrapper = styled.div`
@@ -51,7 +51,7 @@ class NewsDashboard extends Component {
                     <LeftClientMenuComponent />
                 </LeftSideContainer>
                 <MiddleContainer>
-                    <MainDashboardComponent />
+                    <NewsDashboardComponent />
                 </MiddleContainer>
                 <RightSideContainer>
                     <InformationFeedComponent />
