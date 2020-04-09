@@ -3,8 +3,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-import LeftMenuButtonComponent from './LeftMenuButtonComponent';
+import LeftMenuButtonComponent from './LeftMenuComplexButtonComponent';
 import GlobalTheme from '../styledComponents/GlobalTheme';
+import DividingLine from '../styledComponents/DividingLine';
 
 // #toDo: Needs to be connected to parent component, Dashboard and send up the actual news
 
@@ -16,16 +17,9 @@ const LeftMenuWrapper = styled.div`
 // #toDo: move margin-top to GlobalTheming to ensure that it'll be shared across the Dashboard middle title
 // and the main menu buttons
 
-const DividingLine = styled.div`
-    height: 1px;
-    background-color: black;
-    margin-left: 20px;
-    margin-right: 20px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-`
 
-class LeftMenuComponent extends Component {
+
+class LeftClientMenuComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -75,4 +69,4 @@ class LeftMenuComponent extends Component {
     }
 }
 
-export default LeftMenuComponent;
+export default LeftClientMenuComponent;

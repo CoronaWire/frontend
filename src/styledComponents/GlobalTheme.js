@@ -22,6 +22,9 @@ const GlobalTheme = {
     whiteBackgroundColor: '#FFF',
     lightGreyColor: '#F5F7FA'
   }, 
+  leftMenuStyling: {
+    backgroundColor: 'white',
+  },
   dashboardStyling: {
     marginTop: '30px',
   },

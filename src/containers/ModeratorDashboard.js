@@ -1,13 +1,14 @@
-// News Dashboard Container which holds the MenuSelectionComponent, NewsListComponent/Container
-// and RightSideFeedContainer
+// Moderator Dashboard Container 
 
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-import LeftClientMenuComponent from '../components/LeftClientMenuComponent';
+import LeftModeratorMenuComponent from '../components/LeftModeratorMenuComponent';
 import MainDashboardComponent from '../components/MainDashboardComponent';
-import InformationFeedComponent from '../components/InformationFeedComponent';
+import GlobalTheme from '../styledComponents/GlobalTheme';
+
+// #toDo: move all of these to styledComponent folder 
 
 const DashboardWrapper = styled.div`
     width: 100%;
@@ -18,9 +19,9 @@ const DashboardWrapper = styled.div`
 `
 
 const LeftSideContainer = styled.div`
-    width: 18%;
+    width: 20%;
     height: 100%;
-    background-color: transparent;
+    background-color: ${props => props.GlobalTheme.leftMenuStyling.backgroundColor} ;
 `
 const MiddleContainer = styled.div`
     width: 60%;
@@ -47,15 +48,11 @@ class NewsDashboard extends Component {
     render(){
         return(
             <DashboardWrapper>
-                <LeftSideContainer>
-                    <LeftClientMenuComponent />
+                <LeftSideContainer GlobalTheme={GlobalTheme} >
+                    <LeftModeratorMenuComponent />
                 </LeftSideContainer>
                 <MiddleContainer>
-                    <MainDashboardComponent />
                 </MiddleContainer>
-                <RightSideContainer>
-                    <InformationFeedComponent />
-                </RightSideContainer>
             </DashboardWrapper>
         )
     }

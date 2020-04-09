@@ -3,6 +3,8 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 // Internal Modules
 import SearchBarComponent from '../components/SearchBarComponent';
 
@@ -12,7 +14,7 @@ import SearchBarComponent from '../components/SearchBarComponent';
 const NavigationBarWrapper = styled.div`
     width: 100%;
     height: 70px;
-    background-color: transparent;
+    background-color: ${props => props.isAuthenticated === true ? '#CCB9E9' : 'white'};
     display: flex;
     flex-direction: row;
     -webkit-box-shadow: 0px 7px 10px -1px #D8D8D8;
@@ -21,15 +23,14 @@ const NavigationBarWrapper = styled.div`
 `
 
 const NavigationBarHeader = styled.h1`
-    font-weight: 600;
-    font-size: 30px;
-    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: 1px;
     background-color: transparent;
     margin-left: 20px;
-    width: 30%;
     text-align: left;
-    positon: relative;
-`
+    position: relative;
+`;
 
 const SearchBarContainer = styled.div`
     width: 33%;
@@ -39,7 +40,19 @@ const SearchBarContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-`
+`;
+
+// #toFix: styling of height between nav bar text and nav bar header
+
+const AuthenticationNavigationText = styled.h2`
+    display: inline-block:
+    font-size: 13px;
+    color: black;
+    font-weight: 400;
+    background-color: transparent;
+    margin-left: 14px;
+    text-align: center;
+`;
 
 class NavigationBarContainer extends Component{
     constructor(props){
@@ -50,15 +63,40 @@ class NavigationBarContainer extends Component{
     }
 
     render() {
+        const isAuthenticated = this.props.isAuthenticated;
+
         return(
-            <NavigationBarWrapper>
-                <NavigationBarHeader> COVIDWIRE </NavigationBarHeader>
-                <SearchBarContainer>
-                    <SearchBarComponent />
-                </SearchBarContainer>
+            <NavigationBarWrapper isAuthenticated={isAuthenticated} >
+                <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
+                {
+                        isAuthenticated === true ?
+                        <AuthenticationNavigationText>
+                            Editor
+                        </AuthenticationNavigationText>
+                        :
+                        <SearchBarContainer>
+                            <SearchBarComponent />
+                        </SearchBarContainer>
+                }
             </NavigationBarWrapper>
         )
     }
 }
 
-export default NavigationBarContainer;
+NavigationBarContainer.propTypes = {
+	isAuthenticated: PropTypes.bool,
+};
+
+NavigationBarContainer.defaultProps = {
+	isAuthenticated: false
+};
+
+function mapStateToProps(state) {
+	return {
+			isAuthenticated: state.authentication.isAuthenticated
+	};
+}
+
+export default connect(mapStateToProps)(NavigationBarContainer);
+
+

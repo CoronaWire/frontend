@@ -11,6 +11,7 @@ import LoginInput from '../styledComponents/LoginInput';
 import LoginButton from '../styledComponents/LoginButton';
 import LoginForm from '../styledComponents/LoginForm';
 import LinkTypeText from '../styledComponents/LinkTypeText';
+import ErrorText from '../styledComponents/ErrorText';
 
 // Redux-related
 import store from '../store/store';
@@ -100,13 +101,16 @@ const LoginFormWithGradient = styled(LoginForm)`
     border-radius: 5px;
 `
 
+const LoginErrorText = styled(ErrorText)`
+  visibility: ${props => props.unsuccessfulConnectionStatus === true ? 'visible' : 'hidden'};
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 5px;
+`
+
 // Will send the login email / username in the redux state
 // Wouldn't be necessary if all moderators logged in as Admin, but this wouldn't be good
 // if we wanted to track changes or for clarity
-// To do later:
-// - Create local state, set initial redux state, create login action creators and actions
-// - create reudcers
-// - Connect to AWS
 class ModeratorLoginContainer extends Component{
     constructor(props){
         super(props);
@@ -137,7 +141,6 @@ class ModeratorLoginContainer extends Component{
 
     // Validates that the string entered in the email filed is an email
     validateEmail = (email) => {
-        console.log('Validating email');
         var re = /\S+@\S+\.\S+/;
         return re.test(email);
     }
@@ -148,7 +151,6 @@ class ModeratorLoginContainer extends Component{
     storeEmailInLocalStorage = () => {
         if (this.state.rememberMeClicked === true) {
             try {
-                console.log(`Will store email in local storage ${this.state.email}`)
                 localStorage.setItem('email', this.state.email);
             } catch(err) {
                 console.error('Key value pair not stored in local storage');
@@ -188,12 +190,13 @@ class ModeratorLoginContainer extends Component{
             rememberMeClicked: this.state.rememberMeClicked === true ? false : true
         })
     }
-    
+
     // Function used to let the user know that an unsuccessful connection has been made
     // Allows us to create an error user message
     toggleConnectionStatus = () => {
+        console.log('Connection status', this.state.unsuccessfulConnection)
         this.setState({
-            unsuccesfulConnection: !this.state.unsuccesfulConnection
+            unsuccessfulConnection: !this.state.unsuccessfulConnection
         })
     }
 
@@ -203,18 +206,18 @@ class ModeratorLoginContainer extends Component{
         let  { email, password } = this.state;
 
         if (this.validateEmail(email)) {
-            try { // DevelopmentChange: Put in the correct firebase authentication credentials later on
+            try { 
                 let firebaseAuthenticationResult = await firebase.auth().signInWithEmailAndPassword(email, password);
-                console.log('Firebase Authentication ?', firebaseAuthenticationResult);
+                // console.log('Firebase Authentication ?', firebaseAuthenticationResult);
                 store.dispatch(authenticateUser(true));
                 try {
                     this.storeEmailInLocalStorage(); // Makes sure that the email is stored in local storage for the future
-                    this.props.history.push('/authenticatedAdmin');
+                    this.props.history.push('/authenticatedLogin');
                 } catch(error) {
-                    console.log('History not changed successfully.')
+                    console.error('History not changed successfully.')
                 }
             } catch (error) {
-                console.log('Firebase authentication unsuccessful');
+                // console.error('Firebase authentication unsuccessful');
                 this.toggleConnectionStatus()
                 setTimeout(this.toggleConnectionStatus, 4000); // Ensures that the red error text disappears
                 // UXdecision: Do I leave the error message so that the user always knows or remove it? 
@@ -227,6 +230,7 @@ class ModeratorLoginContainer extends Component{
     }
 
     render() {
+        console.log('Re-rendered unsuccessfulConnectionStatus', this.state.unsuccessfulConnection)
         return(
             <ModeratorContainerWrapper>
             <LoginContainerBox GlobalTheme={GlobalTheme} >
@@ -255,6 +259,7 @@ class ModeratorLoginContainer extends Component{
                         <input type='checkbox' onClick={this.handleRememberMeClick} checked={this.state.rememberMeClicked} name='loginCheckbox' />
                         <CheckboxLabel for='loginContainer'> Remember Me </CheckboxLabel>
                     </CheckboxContainer>
+
                     {
                         this.state.showPassword ? 
                         <LinkTypeText GlobalTheme={GlobalTheme} onClick={this.handleShowPassword}> Hide Password </LinkTypeText> 
@@ -262,6 +267,9 @@ class ModeratorLoginContainer extends Component{
                         <LinkTypeText GlobalTheme={GlobalTheme} onClick={this.handleShowPassword}> Show Password </LinkTypeText>
                     }
                 </CheckboxRememberMeContainer>
+
+                <LoginErrorText  unsuccessfulConnectionStatus={this.state.unsuccessfulConnection} > Email or password information incorrect </LoginErrorText> 
+            
                 <LoginButtonWithGradient type="submit" GlobalTheme={GlobalTheme} disabled={!this.validateForm()} > Sign In </LoginButtonWithGradient>
             </LoginForm>
             </LoginContainerBox>

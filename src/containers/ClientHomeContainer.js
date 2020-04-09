@@ -18,7 +18,6 @@ const ClientHomeWrapper = styled.div`
     align-items: center;
 `
 
-
 class ClientHomeContainer extends Component {
     constructor(props){
         super(props);
