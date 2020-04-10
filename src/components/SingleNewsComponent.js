@@ -16,9 +16,7 @@ const NewsComponentStyling = {
 const SingleNewsWrapper = styled.div`
     height: 160px;
     border-radius: 5px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #B0B0B0;
+    border: 1px solid #B0B0B0;
     display: flex,
     flex-direction: column;
     background-color: transparent;
@@ -28,14 +26,10 @@ const SingleNewsWrapper = styled.div`
 const NewsData = styled.div`
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: #B0B0B0;
+    border-bottom: 1px solid #B0B0B0;
     width: auto;
-    height: ${props =>  (props.GlobalTheme.singleNewsComponent.newsDataHeight) + '%'}; 
-    padding-left: ${props =>  props.GlobalTheme.singleNewsComponent.padding};
-    padding-right: ${props =>  props.GlobalTheme.singleNewsComponent.padding};
-    padding-top: 7px;
+    height: ${props =>  (props.GlobalTheme.singleNewsComponent.newsDataHeight) + '%'};
+    padding: 7px ${props =>  props.GlobalTheme.singleNewsComponent.padding} 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -53,22 +47,19 @@ const URLContainer = styled.div`
 const NewsTimeStamp = styled.h4`
     font-size: 11px;
     color: grey;
-    margin-top: 6px;
-    margin-bottom: 6px;
+    margin: 6px 0;
 `
 // #toDo #UIUX: what happens if title/text too long? Cut off at X amount of characters. Or set overflow-x hidden.
 const NewsText = styled.p`
     color: black;
-    margin-top: 6px;
-    margin-bottom: 6px;
+    margin: 6px 0;
     font-size: 17px;
     font-family: ${props => props.GlobalTheme.generalApplication.articleSummaryFont};
 `;
 
 const NewsTitle = styled(NewsText)`
     font-style: bold;
-    margin-top: 6px;
-    margin-bottom: 6px;
+    margin: 6px 0;
     font-size: 18px;
     font-weight: 600;
     font-family: ${props => props.GlobalTheme.generalApplication.articleTitleFont};
@@ -78,8 +69,7 @@ const NewsTitle = styled(NewsText)`
 const DataSource = styled.p`
     display: inline-block;
     width: auto;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 0 5px;
     margin-right: 5px;
     background-color: transparent;
     font-size: 11px;
@@ -90,8 +80,7 @@ const DataSource = styled.p`
 const DataType = styled(DataSource)`
     display: inline-block;
     width: auto;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 5px 0;
     margin-right: 5px;
     background-color: transparent;
     font-size: 11px;
