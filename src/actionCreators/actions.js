@@ -18,3 +18,5 @@ export const setGeolocation = geolocation => ({
   type: SET_GEOLOCATION,
   geolocation,
 });
+
+export const setGeolactionRefused = () => ({ type: SET_GEOLOCATION_REFUSED });
