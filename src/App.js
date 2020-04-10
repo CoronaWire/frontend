@@ -22,7 +22,28 @@ class App extends Component {
     }
   }
 
+  setGeolocation = geolocation => {
+    this.setState({ geolocation });
+  }
+
+  handleGeolocationError = () => {
+    this.setState({ geolocationRefused: true });
+  }
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      this.setGeolocation,
+      this.handleGeolocationError,
+    );
+
+    navigator.geolocation.watchPosition(
+      this.setGeolocation,
+      this.handleGeolocationError,
+    );
+  }
+
   render() {
+    console.log(this.state);
 
     const childProps = {
       isAuthenticated: this.props.isAuthenticated,
