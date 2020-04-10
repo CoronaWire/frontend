@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import './index.css';
 import App from './App';
+import './fonts/oldEnglish.ttf'
+import './fonts/franklinLT.ttf'
+
 // Redux
 import store from './store/store'
 import * as serviceWorker from './serviceWorker';

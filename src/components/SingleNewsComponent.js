@@ -12,8 +12,9 @@ import GlobalTheme from '../styledComponents/GlobalTheme';
 const NewsComponentStyling = {
     height: '76%'
 }
+
 const SingleNewsWrapper = styled.div`
-    height: 145px;
+    height: 160px;
     border-radius: 5px;
     border-style: solid;
     border-width: 1px;
@@ -60,15 +61,17 @@ const NewsText = styled.p`
     color: black;
     margin-top: 6px;
     margin-bottom: 6px;
-    font-size: 13px;
+    font-size: 17px;
+    font-family: ${props => props.GlobalTheme.generalApplication.articleSummaryFont};
 `;
 
 const NewsTitle = styled(NewsText)`
     font-style: bold;
     margin-top: 6px;
     margin-bottom: 6px;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
+    font-family: ${props => props.GlobalTheme.generalApplication.articleTitleFont};
 
 `
 
@@ -114,10 +117,10 @@ class SingleNewsComponent extends Component {
                     <NewsTimeStamp>
                         {props.timeStamp}
                     </NewsTimeStamp>
-                    <NewsTitle>
+                    <NewsTitle GlobalTheme={GlobalTheme} >
                         {props.title}
                     </NewsTitle>
-                    <NewsText> 
+                    <NewsText GlobalTheme={GlobalTheme}> 
                         {props.summary}
                     </NewsText>
                 </NewsData>

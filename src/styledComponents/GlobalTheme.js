@@ -11,6 +11,8 @@ const GlobalTheme = {
   generalApplication: {
     fontFamily: 'Muli',
     borderRadius: '5px',
+    newsTitleFont: 'oldEnglish',
+    newsSummaryFont: 'franklinLT',
   },
   adminLoginStyling: {
     buttonInputWidth: '300px',

@@ -23,13 +23,14 @@ const NavigationBarWrapper = styled.div`
 `
 
 const NavigationBarHeader = styled.h1`
-    font-weight: 700;
-    font-size: 26px;
+    font-weight: 900;
+    font-size: 30px;
     letter-spacing: 1px;
     background-color: transparent;
     margin-left: 20px;
     text-align: left;
     position: relative;
+    font-family: oldEnglish;
 `;
 
 const SearchBarContainer = styled.div`

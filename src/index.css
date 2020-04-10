@@ -15,3 +15,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'oldEnglish';
+  src: local('oldEnglish'), url(./fonts/oldEnglish.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'franklinLT';
+  src: local('franklinLT'), url(./fonts/franklinLT.ttf) format('truetype');
+}
