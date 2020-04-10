@@ -10,6 +10,7 @@ import Routes from './routing/Routes';
 import AppComponentWrapper from './styledComponents/AppComponentWrapper';
 // Redux 
 import store from './store/store';
+import { setGeolocation } from './actionCreators/actions';
 
 class App extends Component {
 
@@ -20,23 +21,10 @@ class App extends Component {
     }
   }
 
-  setGeolocation = geolocation => {
-    this.setState({ geolocation });
-  }
-
-  handleGeolocationError = () => {
-    this.setState({ geolocationRefused: true });
-  }
-
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
-      this.setGeolocation,
-      this.handleGeolocationError,
-    );
-
-    navigator.geolocation.watchPosition(
-      this.setGeolocation,
-      this.handleGeolocationError,
+      this.props.setGeolocation,
+      err => console.log(err),
     );
   }
 
@@ -77,5 +65,10 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(
+  mapStateToProps,
+  dispatch => ({
+    setGeolocation: geolocation => dispatch(setGeolocation(geolocation)),
+  }),
+)(App);
 
