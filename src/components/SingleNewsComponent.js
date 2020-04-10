@@ -5,6 +5,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
+import GlobalTheme from '../styledComponents/GlobalTheme';
 
 // #toAsk #UIUX: how is width / height going to change with mobile responsiveness?
 
@@ -30,9 +31,9 @@ const NewsData = styled.div`
     border-bottom-width: 1px;
     border-bottom-color: #B0B0B0;
     width: auto;
-    height: ${props =>  (props.theme.singleNewsComponent.newsDataHeight) + '%'}; 
-    padding-left: ${props =>  props.theme.singleNewsComponent.padding};
-    padding-right: ${props =>  props.theme.singleNewsComponent.padding};
+    height: ${props =>  (props.GlobalTheme.singleNewsComponent.newsDataHeight) + '%'}; 
+    padding-left: ${props =>  props.GlobalTheme.singleNewsComponent.padding};
+    padding-right: ${props =>  props.GlobalTheme.singleNewsComponent.padding};
     padding-top: 7px;
     display: flex;
     flex-direction: column;
@@ -44,9 +45,9 @@ const URLContainer = styled.div`
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     background-color: transparent;
-    padding-left: ${props =>  props.theme.singleNewsComponent.padding};
-    padding-right: ${props =>  props.theme.singleNewsComponent.padding};
-    height: ${props =>  (100-props.theme.singleNewsComponent.newsDataHeight) + '%'};
+    padding-left: ${props =>  props.GlobalTheme.singleNewsComponent.padding};
+    padding-right: ${props =>  props.GlobalTheme.singleNewsComponent.padding};
+    height: ${props =>  (100-props.GlobalTheme.singleNewsComponent.newsDataHeight) + '%'};
 `
 const NewsTimeStamp = styled.h4`
     font-size: 11px;
@@ -109,7 +110,7 @@ class SingleNewsComponent extends Component {
         const {props} = this.props;
         return (
             <SingleNewsWrapper>
-                <NewsData>
+                <NewsData GlobalTheme={GlobalTheme}>
                     <NewsTimeStamp>
                         {props.timeStamp}
                     </NewsTimeStamp>
@@ -120,7 +121,7 @@ class SingleNewsComponent extends Component {
                         {props.summary}
                     </NewsText>
                 </NewsData>
-                <URLContainer> 
+                <URLContainer GlobalTheme={GlobalTheme} > 
                     <DataSource>
                         {props.source}
                     </DataSource>

@@ -3,8 +3,8 @@
 import styled from 'styled-components';
 
 const LinkTypeText = styled.span`
-    font-size: ${props => props.theme.adminLoginStyling.textSize};
-    color: ${props => props.theme.applicationInputColor};
+    font-size: ${props => props.GlobalTheme.adminLoginStyling.textSize};
+    color: ${props => props.GlobalTheme.applicationInputColor};
     cursor: pointer;
     font-weight: 500;
     padding: 10px;
