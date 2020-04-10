@@ -18,7 +18,6 @@ const LeftMenuWrapper = styled.div`
 // and the main menu buttons
 
 
-
 class LeftClientMenuComponent extends Component {
     constructor(props){
         super(props);

@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
 // Internal Modules
 import SearchBarComponent from '../components/SearchBarComponent';
 
@@ -34,7 +35,7 @@ const NavigationBarHeader = styled.h1`
 `;
 
 const SearchBarContainer = styled.div`
-    width: 33%;
+    width: 55%;
     padding-left: 20px;
     padding-right: 20px;
     background-color: transparent;
@@ -55,16 +56,58 @@ const AuthenticationNavigationText = styled.h2`
     text-align: center;
 `;
 
+const Button = styled.button`
+    background-color: transparent;
+    border-style: solid;
+    border-width: black;
+    border-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 30px;
+    cursor: pointer;
+    height: 30px;
+    width: 140px;
+    border-radius: 5px;
+`
+
 class NavigationBarContainer extends Component{
     constructor(props){
         super(props);
         this.state = {
             // Empty for now
+            isBrowserAdvanced: false
         }
+    }
+
+    // Ensures that the Find Near Me button only appears with browsers that have the navigation API
+    componentDidMount = () => {
+        if (navigator.geolocation) {
+            this.setState({
+                isBrowserAdvanced: true
+            })
+        }
+    }
+
+
+    // #toDo: figure out asking users for location flow
+    // #toDo: figure out which browsers have access to navigator API
+    findUserLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(this.displayLocationInfo);
+        } 
+    }
+
+    displayLocationInfo = (position) => {
+        const lng = position.coords.longitude;
+        const lat = position.coords.latitude;
+        
+        console.log(`longitude: ${ lng } | latitude: ${ lat }`);
     }
 
     render() {
         const isAuthenticated = this.props.isAuthenticated;
+        console.log('state', this.state);
 
         return(
             <NavigationBarWrapper isAuthenticated={isAuthenticated} >
@@ -77,7 +120,12 @@ class NavigationBarContainer extends Component{
                         :
                         <SearchBarContainer>
                             <SearchBarComponent />
-                        </SearchBarContainer>
+                            {
+                                this.state.isBrowserAdvanced 
+                                && 
+                                <Button onClick={this.findUserLocation}> Find News Near me </Button>
+                            }
+                            </SearchBarContainer>
                 }
             </NavigationBarWrapper>
         )
