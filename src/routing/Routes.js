@@ -7,8 +7,11 @@ import { Switch, BrowserRouter } from 'react-router-dom';
 import AuthenticatedRoute from '../components/AuthenticatedRoute';
 import UnauthenticatedRoute from '../components/UnauthenticatedRoute';
 import ClientHomeContainer from '../containers/ClientHomeContainer';
+import ModeratorHomeContainer from '../containers/ModeratorHomeContainer';
 import ModeratorLoginContainer from '../containers/ModeratorLoginContainer';
 // import TestComponent from '../components/TestComponent';
+
+// #toDo: create 404 error page displayed when user can't login.
 
 export default ({childProps}) =>
     <BrowserRouter>
@@ -16,6 +19,6 @@ export default ({childProps}) =>
             <UnauthenticatedRoute path='/' exact component={ClientHomeContainer} props={childProps} /> 
             <UnauthenticatedRoute path='/adminLogin' exact component={ModeratorLoginContainer} props={childProps} />
             {/* <UnauthenticatedRoute path='/admin' exact component={LoginContainer} props={childProps} /> */}
-            {/* <AuthenticatedRoute path='/admin' exact component={ModeratorHome} props={childProps} /> */}
+            <AuthenticatedRoute path='/authenticatedLogin' exact component={ModeratorHomeContainer} props={childProps} />
         </Switch>
     </BrowserRouter>

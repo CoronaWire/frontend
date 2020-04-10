@@ -11,6 +11,8 @@ const GlobalTheme = {
   generalApplication: {
     fontFamily: 'Muli',
     borderRadius: '5px',
+    newsTitleFont: 'oldEnglish',
+    newsSummaryFont: 'franklinLT',
   },
   adminLoginStyling: {
     buttonInputWidth: '300px',
@@ -22,6 +24,9 @@ const GlobalTheme = {
     whiteBackgroundColor: '#FFF',
     lightGreyColor: '#F5F7FA'
   }, 
+  leftMenuStyling: {
+    backgroundColor: 'white',
+  },
   dashboardStyling: {
     marginTop: '30px',
   },

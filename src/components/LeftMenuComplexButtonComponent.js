@@ -3,23 +3,21 @@
 // E.g. Button for 'News', 'Numbers', 'COVID-19' facts, etc. each with their title and respective
 // sub-titles
 
+// ExternalPackages
 import React, { Component } from 'react';
 import styled from 'styled-components';
+// Internal Modules
+import MenuButton from '../styledComponents/MenuButton';
 
-const MenuButton = styled.div`
-    cursor: pointer;
-    background-color: transparent;
+const MenuButtonWitHover = styled(MenuButton)`
     &:hover {
         background-color: #F0F0F0;
     };
-    height: auto;
-    text-align: center;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
-    width: auto;
 `
+
+// For now, MenuButtonTitle here is the initial design made with Jeff's wireframe.
+// The MenuButtonTitle in the Styled Components folder is the one designed by Linda
+// #toDo: choose between one design and the other.
 
 const MenuButtonTitle = styled.p`
     font-size: 14px;
@@ -31,6 +29,7 @@ const MenuButtonTitle = styled.p`
     margin-top: 0px;
     margin-bottom: 0px;
 `;
+
 const MenuButtonSubTitle = styled.p`
     font-size: 12px;
     color: grey;
@@ -41,7 +40,7 @@ const MenuButtonSubTitle = styled.p`
     margin-bottom: 4px;
 `;
 
-class LeftMenuButtonComponent extends Component {
+class LeftMenuComplexButtonComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -51,16 +50,16 @@ class LeftMenuButtonComponent extends Component {
 
     render(){
         return (
-            <MenuButton> 
+            <MenuButtonWitHover> 
                 <MenuButtonTitle>
                     {this.props.props.menuTitle} 
                 </MenuButtonTitle>
                 <MenuButtonSubTitle>
                     {this.props.props.menuSubtitle}
                 </MenuButtonSubTitle>
-            </MenuButton>
+            </MenuButtonWitHover>
         )
     }
 }
 
-export default LeftMenuButtonComponent;
+export default LeftMenuComplexButtonComponent;

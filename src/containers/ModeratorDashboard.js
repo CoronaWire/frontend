@@ -1,13 +1,14 @@
-// News Dashboard Container which holds the MenuSelectionComponent, NewsListComponent/Container
-// and RightSideFeedContainer
+// Moderator Dashboard Container 
 
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-import LeftClientMenuComponent from '../components/LeftClientMenuComponent';
-import NewsDashboardComponent from '../components/MainDashboardComponent';
-import InformationFeedComponent from '../components/InformationFeedComponent';
+import LeftModeratorMenuComponent from '../components/LeftModeratorMenuComponent';
+import ModeratorArticleFeedComponent from '../components/ModeratorArticleFeedComponent';
+import GlobalTheme from '../styledComponents/GlobalTheme';
+
+// #toDo: move all of these to styledComponent folder 
 
 const DashboardWrapper = styled.div`
     width: 100%;
@@ -18,12 +19,12 @@ const DashboardWrapper = styled.div`
 `
 
 const LeftSideContainer = styled.div`
-    width: 18%;
+    width: 20%;
     height: 100%;
-    background-color: transparent;
+    background-color: ${props => props.GlobalTheme.leftMenuStyling.backgroundColor} ;
 `
 const MiddleContainer = styled.div`
-    width: 60%;
+    width: 80%;
     height: 100%;
     background-color: transparent;
 `
@@ -36,7 +37,7 @@ const RightSideContainer = styled.div`
     justify-content: center;
 `
 
-class NewsDashboard extends Component {
+class ModeratorDashboard extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -47,15 +48,12 @@ class NewsDashboard extends Component {
     render(){
         return(
             <DashboardWrapper>
-                <LeftSideContainer>
-                    <LeftClientMenuComponent />
+                <LeftSideContainer GlobalTheme={GlobalTheme} >
+                    <LeftModeratorMenuComponent />
                 </LeftSideContainer>
                 <MiddleContainer>
-                    <NewsDashboardComponent />
+                    <ModeratorArticleFeedComponent />
                 </MiddleContainer>
-                <RightSideContainer>
-                    <InformationFeedComponent />
-                </RightSideContainer>
             </DashboardWrapper>
         )
     }
@@ -64,4 +62,4 @@ class NewsDashboard extends Component {
 // #toUpgrade: Information Feed Component currently only holds one component (Global News) but needs
 // to be extended to also hold a National News component 
 
-export default NewsDashboard;
+export default ModeratorDashboard;
