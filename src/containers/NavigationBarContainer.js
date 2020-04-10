@@ -1,7 +1,7 @@
 // Navigation Bar Container
 
 // External Packages
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -71,7 +71,7 @@ const Button = styled.button`
     border-radius: 5px;
 `
 
-class NavigationBarContainer extends Component{
+class NavigationBarContainer extends PureComponent{
     constructor(props){
         super(props);
         this.state = {
@@ -81,6 +81,7 @@ class NavigationBarContainer extends Component{
     }
 
     // Ensures that the Find Near Me button only appears with browsers that have the navigation API
+    // Navigator Geolocation API available across all web and mobile browsers.
     componentDidMount = () => {
         if (navigator.geolocation) {
             this.setState({
@@ -88,7 +89,6 @@ class NavigationBarContainer extends Component{
             })
         }
     }
-
 
     // #toDo: figure out asking users for location flow
     // #toDo: figure out which browsers have access to navigator API

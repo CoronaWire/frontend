@@ -61,7 +61,7 @@ const NewsText = styled.p`
     color: black;
     margin-top: 6px;
     margin-bottom: 6px;
-    font-size: 17px;
+    font-size: 14px;
     font-family: ${props => props.GlobalTheme.generalApplication.articleSummaryFont};
 `;
 
@@ -69,7 +69,7 @@ const NewsTitle = styled(NewsText)`
     font-style: bold;
     margin-top: 6px;
     margin-bottom: 6px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     font-family: ${props => props.GlobalTheme.generalApplication.articleTitleFont};
 
