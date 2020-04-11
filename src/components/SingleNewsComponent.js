@@ -2,7 +2,7 @@
 // Contains News / Tweeter information: Title of News, Summary or Tweet, Timestamp, and Link to URL
 
 // External Packages
-import React, { useEffect, useRef, useState, Component } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import { UpArrowIcon, DownArrowIcon, Text } from './core';
