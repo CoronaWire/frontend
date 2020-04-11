@@ -54,14 +54,14 @@ const NewsTimeStamp = styled.h4`
 const NewsText = styled.p`
     color: black;
     margin: 6px 0;
-    font-size: 17px;
+    font-size: 14px;
     font-family: ${props => props.GlobalTheme.generalApplication.articleSummaryFont};
 `;
 
 const NewsTitle = styled(NewsText)`
     font-style: bold;
     margin: 6px 0;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     font-family: ${props => props.GlobalTheme.generalApplication.articleTitleFont};
 
