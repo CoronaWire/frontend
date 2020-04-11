@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
+import { Text } from './core';
 
 // #toAsk #UIUX: how is width / height going to change with mobile responsiveness?
 
@@ -14,22 +15,18 @@ const NewsComponentStyling = {
 }
 
 const SingleNewsWrapper = styled.div`
-    height: 160px;
     border-radius: 5px;
     border: 1px solid #B0B0B0;
     display: flex,
     flex-direction: column;
     background-color: transparent;
     margin-bottom: 15px;
+    overflow: hidden;
 `;
 
 const NewsData = styled.div`
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
     border-bottom: 1px solid #B0B0B0;
-    width: auto;
-    height: ${props =>  (props.GlobalTheme.singleNewsComponent.newsDataHeight) + '%'};
-    padding: 7px ${props =>  props.GlobalTheme.singleNewsComponent.padding} 0;
+    padding: 24px 45px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -38,93 +35,67 @@ const NewsData = styled.div`
 
 // #toDo: set up URL container and above component's height so they automatically complement each other
 const URLContainer = styled.div`
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
     background-color: transparent;
-    padding-left: ${props =>  props.GlobalTheme.singleNewsComponent.padding};
-    padding-right: ${props =>  props.GlobalTheme.singleNewsComponent.padding};
-    height: ${props =>  (100-props.GlobalTheme.singleNewsComponent.newsDataHeight) + '%'};
+    height: 40px;
+    padding: 11px 46px;
 `
-const NewsTimeStamp = styled.h4`
-    font-size: 11px;
+const NewsTimeStamp = styled(Text)`
+    font-size: 14px;
     color: grey;
-    margin: 6px 0;
+    margin-bottom: 20px;
 `
 // #toDo #UIUX: what happens if title/text too long? Cut off at X amount of characters. Or set overflow-x hidden.
-const NewsText = styled.p`
-    color: black;
-    margin: 6px 0;
-    font-size: 14px;
-    font-family: ${props => props.GlobalTheme.generalApplication.articleSummaryFont};
+const NewsText = styled(Text)`
+  color: black;
+  font-size: 18px;
+  font-family: ${props => props.GlobalTheme.generalApplication.articleSummaryFont};
 `;
 
 const NewsTitle = styled(NewsText)`
-    font-style: bold;
-    margin: 6px 0;
-    font-size: 16px;
-    font-weight: 600;
-    font-family: ${props => props.GlobalTheme.generalApplication.articleTitleFont};
-
+  font-style: bold;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  font-family: ${props => props.GlobalTheme.generalApplication.articleTitleFont};
 `
 
-const DataSource = styled.p`
-    display: inline-block;
-    width: auto;
-    padding: 0 5px;
-    margin-right: 5px;
-    background-color: transparent;
-    font-size: 11px;
-    color: black;
+const DataSource = styled(Text)`
+  font-size: 14px;
+  color: black;
 `
 
 // #toDo #UIUX #UXUI: is the whole URL container a link or just the website / twitter text?
-const DataType = styled(DataSource)`
-    display: inline-block;
-    width: auto;
-    padding: 5px 0;
-    margin-right: 5px;
-    background-color: transparent;
-    font-size: 11px;
-    color: grey;
-    cursor: pointer;
+const DataType = styled.span`
+  color: grey;
+  cursor: pointer;
 `
 
-
-class SingleNewsComponent extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            // Empty for now
-        }
-    }
-
-    render(){
-        // #toFix: props nested inside of props. 
-        const {props} = this.props;
-        return (
-            <SingleNewsWrapper>
-                <NewsData GlobalTheme={GlobalTheme}>
-                    <NewsTimeStamp>
-                        {props.timeStamp}
-                    </NewsTimeStamp>
-                    <NewsTitle GlobalTheme={GlobalTheme} >
-                        {props.title}
-                    </NewsTitle>
-                    <NewsText GlobalTheme={GlobalTheme}> 
-                        {props.summary}
-                    </NewsText>
-                </NewsData>
-                <URLContainer GlobalTheme={GlobalTheme} > 
-                    <DataSource>
-                        {props.source}
-                    </DataSource>
-                    <DataType>
-                        {props.newsType}
-                    </DataType>
-                </URLContainer>
-            </SingleNewsWrapper>
-        )
-    }
+const SingleNewsComponent = ({
+  props: { timeStamp, title, summary, source, newsType } = {},
+}) => {
+  return (
+    <SingleNewsWrapper>
+        <NewsData GlobalTheme={GlobalTheme}>
+          <NewsTimeStamp>
+            {timeStamp}
+          </NewsTimeStamp>
+          <NewsTitle GlobalTheme={GlobalTheme}>
+            {title}
+          </NewsTitle>
+          <NewsText GlobalTheme={GlobalTheme}>
+            {summary}
+          </NewsText>
+        </NewsData>
+        <URLContainer GlobalTheme={GlobalTheme} >
+          <DataSource>
+            {source}
+            <DataType>
+              {` - ${newsType}`}
+            </DataType>
+          </DataSource>
+        </URLContainer>
+    </SingleNewsWrapper>
+  );
 }
 
 export default SingleNewsComponent;
