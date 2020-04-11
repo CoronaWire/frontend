@@ -2,18 +2,12 @@
 // Contains News / Tweeter information: Title of News, Summary or Tweet, Timestamp, and Link to URL
 
 // External Packages
-import React, { Component } from 'react';
+import React, { useEffect, useRef, useState, Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-import GlobalTheme from '../styledComponents/GlobalTheme';
-import { Text } from './core';
+import { UpArrowIcon, DownArrowIcon, Text } from './core';
 
 // #toAsk #UIUX: how is width / height going to change with mobile responsiveness?
-
-const NewsComponentStyling = {
-    height: '76%'
-}
-
 const SingleNewsWrapper = styled.div`
     border-radius: 5px;
     border: 1px solid #B0B0B0;
@@ -25,12 +19,13 @@ const SingleNewsWrapper = styled.div`
 `;
 
 const NewsData = styled.div`
-    border-bottom: 1px solid #B0B0B0;
-    padding: 24px 45px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+  border-bottom: 1px solid #B0B0B0;
+  padding: 24px 45px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
 `
 
 // #toDo: set up URL container and above component's height so they automatically complement each other
@@ -44,19 +39,28 @@ const NewsTimeStamp = styled(Text)`
     color: grey;
     margin-bottom: 20px;
 `
+const lineHeight = 24;
+
 // #toDo #UIUX: what happens if title/text too long? Cut off at X amount of characters. Or set overflow-x hidden.
 const NewsText = styled(Text)`
   color: black;
   font-size: 18px;
-  font-family: ${props => props.GlobalTheme.generalApplication.articleSummaryFont};
+  line-height: ${lineHeight}px;
+  font-family: ${props => props.theme.generalApplication.articleSummaryFont};
 `;
 
-const NewsTitle = styled(NewsText)`
+const NewsTextContainer = styled.div`
+  overflow: hidden;
+  ${({ expanded }) => !expanded && `height: ${2 * lineHeight}px`};
+`;
+
+const NewsTitle = styled(Text)`
+  color: black;
   font-style: bold;
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 16px;
-  font-family: ${props => props.GlobalTheme.generalApplication.articleTitleFont};
+  font-family: ${props => props.theme.generalApplication.articleTitleFont};
 `
 
 const DataSource = styled(Text)`
@@ -70,23 +74,48 @@ const DataType = styled.span`
   cursor: pointer;
 `
 
+const ExpandWrapper = styled.div`
+  position: absolute;
+  bottom: 21px;
+  right: 21px;
+  cursor: pointer;
+`;
+
 const SingleNewsComponent = ({
   props: { timeStamp, title, summary, source, newsType } = {},
 }) => {
+  const [expanded, setExpanded] = useState(false);
+  const [isExpandable, setExpandable] = useState(false);
+  const summaryRef = useRef(null);
+
+  useEffect(() => {
+    const numberOfLines = summaryRef.current.clientHeight / lineHeight;
+    if (numberOfLines > 2) {
+      setExpandable(true);
+    }
+  }, []);
+
   return (
     <SingleNewsWrapper>
-        <NewsData GlobalTheme={GlobalTheme}>
-          <NewsTimeStamp>
-            {timeStamp}
-          </NewsTimeStamp>
-          <NewsTitle GlobalTheme={GlobalTheme}>
-            {title}
-          </NewsTitle>
-          <NewsText GlobalTheme={GlobalTheme}>
-            {summary}
-          </NewsText>
+        <NewsData>
+          <NewsTimeStamp>{timeStamp}</NewsTimeStamp>
+          <NewsTitle>{title}</NewsTitle>
+          <NewsTextContainer expanded={expanded}>
+            <NewsText ref={summaryRef}>
+              {summary}
+            </NewsText>
+          </NewsTextContainer>
+          {isExpandable && (
+            <ExpandWrapper
+              onClick={() => {
+                setExpanded(!expanded);
+              }}
+            >
+              {expanded ? <UpArrowIcon /> : <DownArrowIcon />}
+            </ExpandWrapper>
+          )}
         </NewsData>
-        <URLContainer GlobalTheme={GlobalTheme} >
+        <URLContainer>
           <DataSource>
             {source}
             <DataType>

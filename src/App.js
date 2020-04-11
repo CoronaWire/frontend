@@ -3,12 +3,14 @@
 // External Packages
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 // Internal Modules
-import Routes from './routing/Routes'; 
+import Routes from './routing/Routes';
 // Styled Components
 import AppComponentWrapper from './styledComponents/AppComponentWrapper';
-// Redux 
+import GlobalTheme from './styledComponents/GlobalTheme';
+// Redux
 import store from './store/store';
 
 class App extends Component {
@@ -31,9 +33,11 @@ class App extends Component {
     // the sub components
 
     return (
-      <AppComponentWrapper>
-        <Routes childProps={childProps} />
-      </AppComponentWrapper>
+      <ThemeProvider theme={GlobalTheme}>
+        <AppComponentWrapper>
+          <Routes childProps={childProps} />
+        </AppComponentWrapper>
+      </ThemeProvider>
     );
   }
 }

@@ -118,7 +118,16 @@ class MainDashboardComponent extends Component {
             scope: ['Local', 'National'], // #toDecide : is national news going to be on the side or is it going to be part of the main
             scopeClicked: 'Local',
             news: [
-                {timeStamp: '12 min', title: 'Drive-through novel coronavirus (COVID-19) testing available by appointment at Stanford', summary: 'Drive-through appointments for Stanford Medicine COVID-19 test are available for patients who have been referred.', source: 'Stanford Health Care', newsType: 'Website'},
+              {
+                timeStamp: '12 min',
+                title: 'Drive-through novel coronavirus (COVID-19) testing available by appointment at Stanford',
+                summary: `
+                  Drive-through appointments for Stanford Medicine COVID-19 test are available for patients who have been referred.
+                  Drive-through appointments for Stanford Medicine COVID-19 test are available for patients who have been referred.
+                `,
+                source: 'Stanford Health Care',
+                newsType: 'Website',
+              },
                 {timeStamp: '1 hour', title: 'Several SF police officers self-quarantined after coronavirus exposure', summary: 'A janitor who worked at a Sodo office park that houses several Seattle Police Department training and support units recently tested positive for COVID-19', source: 'SF Chronicle', newsType: 'Website'},
                 {timeStamp: '1 d', title: 'Researchers from Taiwan find cure for COVID-19.', summary: "It's all in the title. Enough said.", source: 'NY Times', newsType: 'Website'},
             ]
