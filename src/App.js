@@ -10,7 +10,6 @@ import Routes from './routing/Routes';
 import AppComponentWrapper from './styledComponents/AppComponentWrapper';
 // Redux 
 import store from './store/store';
-import { setGeolactionRefused, setGeolocation } from './actionCreators/actions';
 
 class App extends Component {
 
@@ -19,18 +18,6 @@ class App extends Component {
     this.state = {
       // Empty for now
     }
-  }
-
-  componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
-      this.props.setGeolocation,
-      this.props.setGeolactionRefused,
-    );
-
-    navigator.geolocation.watchPosition(
-      this.props.setGeolocation,
-      this.props.setGeolactionRefused,
-    );
   }
 
   render() {
@@ -71,9 +58,5 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  dispatch => ({
-    setGeolocation: geolocation => dispatch(setGeolocation(geolocation)),
-    setGeolactionRefused: () => dispatch(setGeolactionRefused()),
-  }),
 )(App);
 

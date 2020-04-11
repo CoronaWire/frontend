@@ -30,6 +30,7 @@ const NewsData = styled.div`
     width: auto;
     height: ${props =>  (props.GlobalTheme.singleNewsComponent.newsDataHeight) + '%'};
     padding: 7px ${props =>  props.GlobalTheme.singleNewsComponent.padding} 0;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
