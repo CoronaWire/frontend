@@ -25,12 +25,19 @@ class LeftMenuSimpleButtonComponent extends PureComponent {
         this.state = {
             // Empty
         }
+        this.handleButtonClick = props.handleButtonClick;
+        this.handlePageChange = props.handlePageChange;
+        
     }
 
+    handleButtonPageClick = (buttonTitle, pageTitle) => {
+        this.handleButtonClick(buttonTitle);
+        this.handlePageChange(pageTitle);
+    }
 
     render(){
-        const buttonTitle = this.props.props.buttonTitle;
-        const {handleButtonClick, buttonSelected} = this.props;
+        const {buttonTitle, pageTitle} = this.props.props; 
+        const {buttonSelected} = this.props;
 
         const buttonMetaData = {
             buttonSelected: buttonSelected,
@@ -39,7 +46,7 @@ class LeftMenuSimpleButtonComponent extends PureComponent {
 
         return (
             <MenuButton>
-                <MenuButtonTitleWithEffect onClick={() => handleButtonClick(buttonTitle)} buttonMetaData={buttonMetaData} >
+                <MenuButtonTitleWithEffect onClick={() => this.handleButtonPageClick(buttonTitle, pageTitle)} buttonMetaData={buttonMetaData} >
                     {this.props.props.buttonTitle} 
                 </MenuButtonTitleWithEffect>
             </MenuButton>

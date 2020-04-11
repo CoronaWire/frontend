@@ -42,17 +42,30 @@ class ModeratorDashboard extends Component {
         super(props);
         this.state = {
             // Empty for now
+            pageDisplayed: 'ArticleFeed'
         }
+    }
+
+    handlePageChange = (pageName) => {
+        this.setState({
+            pageDisplayed: pageName
+        })
     }
 
     render(){
         return(
             <DashboardWrapper>
                 <LeftSideContainer GlobalTheme={GlobalTheme} >
-                    <LeftModeratorMenuComponent />
+                    <LeftModeratorMenuComponent handlePageChange={this.handlePageChange} />
                 </LeftSideContainer>
                 <MiddleContainer>
-                    <ModeratorArticleFeedComponent />
+                    {
+                        this.state.pageDisplayed == 'ArticleFeed' && <ModeratorArticleFeedComponent /> 
+                    }
+                    
+                    {/* {
+                        this.state.pageDisplayed == 'AddArticle'  && <AddDataComponent />
+                    } */}
                 </MiddleContainer>
             </DashboardWrapper>
         )

@@ -40,20 +40,25 @@ class LeftClientMenuComponent extends Component {
             menuOptions: [
                 {
                     buttonTitle: 'Article Feeds',
+                    pageTitle: 'ArticleFeed',
                 },
                 {
                     buttonTitle: 'Article Submissions',
+                    pageTitle: 'AddArticle'
                 }, 
                 {
                     buttonTitle: 'Team Activity',
+                    pageTitle: 'TeamActivity'
                 }
             ],
             secondMenuOptions: [
                 {
                     buttonTitle: 'Resources',
+                    pageTitle: 'Resources'
                 },
                 {
                     buttonTitle: 'Profile',
+                    pageTitle: 'Profile',
                 }
             ], 
             buttonSelected: 'Article Feeds'
@@ -71,17 +76,31 @@ class LeftClientMenuComponent extends Component {
     }
 
     render(){
+        const { handlePageChange } = this.props;
+
         return(
             <LeftMenuWrapper GlobalTheme={GlobalTheme} >
                     {
                         this.state.menuOptions.map((menuObject, index) => {
-                            return <LeftMenuButtonComponent props={menuObject} key={index} handleButtonClick={this.handleButtonClick} buttonSelected={this.state.buttonSelected} />
+                            return <LeftMenuButtonComponent 
+                                    props={menuObject} 
+                                    key={index} 
+                                    handleButtonClick={this.handleButtonClick} 
+                                    buttonSelected={this.state.buttonSelected} 
+                                    handlePageChange={handlePageChange}
+                                    />
                         })
                     }
                     <DividingLine />
                     {
                         this.state.secondMenuOptions.map((menuObject, index) => {
-                            return <LeftMenuButtonComponent props={menuObject} key={index} handleButtonClick={this.handleButtonClick} buttonSelected={this.state.buttonSelected} />
+                            return <LeftMenuButtonComponent 
+                                    props={menuObject} 
+                                    key={index} 
+                                    handleButtonClick={this.handleButtonClick} 
+                                    buttonSelected={this.state.buttonSelected} 
+                                    handlePageChange={handlePageChange}
+                                    />
                         })
                     }
                 <MenuButton>

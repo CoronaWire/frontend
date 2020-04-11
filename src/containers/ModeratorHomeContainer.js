@@ -22,11 +22,11 @@ class ModeratorHomeContainer extends Component {
         super(props);
         this.state = {
             // Empty for now
+        
         } 
     } 
 
     render(){
-        console.log('ModeratorHomeContainer rendered');
         return(
             <ModeratorHomeWrapper>
                 <NavigationBarContainer />
