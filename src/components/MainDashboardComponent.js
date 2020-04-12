@@ -2,7 +2,7 @@
 
 // External Packages
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 // Internal Modules
 import LoginButton from '../styledComponents/LoginButton';
 import GlobalTheme from '../styledComponents/GlobalTheme';
@@ -26,16 +26,24 @@ const Button = styled(LoginButton)`
     background-color: white;
     color: black;
     border-radius: 5px;
-    border-style: solid;
-    border-color: #D3D3D3;
-    min-width: 60px;
+    border: 1px solid #D3D3D3;
     width: auto;
+    margin: 0;
     padding-top: 5px;
     padding-bottom: 5px;
-    height: 15px;
+    box-sizing: border-box;
+    height: 32px;
     &:hover {
-        background-color: #F0F0F0;
+      background-color: #F0F0F0;
     }
+    ${({ active }) => active && css`
+      border: none;
+      color: white;
+      background-color: #828282;
+      &:hover {
+        background-color: #828282;
+      }
+    `};
 `;
 
 const ButtonsContainer = styled.div`
@@ -44,8 +52,15 @@ const ButtonsContainer = styled.div`
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
     align-items: center;
+    padding: 0 30px;
+
+    ${Button} {
+      margin-right: 20px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
 `;
 
 // #toFix: resizing of the button when the bottom border is added
@@ -147,13 +162,13 @@ class MainDashboardComponent extends Component {
     render(){
         return(
             <div>
-            <DashboardHeader GlobalTheme={GlobalTheme} >
-                News
+            <DashboardHeader GlobalTheme={GlobalTheme}>
+              News
             </DashboardHeader>
             <ButtonsContainer>
-                {this.state.categories.map((value, index) => {
-                    return <Button GlobalTheme={GlobalTheme} key={index}>{value}</Button>
-                })}
+              {this.state.categories.map((value, index) => (
+                <Button key={index}>{value}</Button>
+              ))}
             </ButtonsContainer>
             <ScopeWrapper>
                 {this.state.scope.map((value, index) => {
@@ -161,9 +176,9 @@ class MainDashboardComponent extends Component {
                 })}
             </ScopeWrapper>
             <NewsListWrapper>
-                {this.state.news.map((newsObject, index) => {
-                        return <SingleNewsComponent key={index} props={newsObject} />
-                })}
+              {this.state.news.map((newsObject, index) => (
+                <SingleNewsComponent key={index} props={newsObject} />
+              ))}
             </NewsListWrapper>
             </div>
         )
