@@ -5,8 +5,10 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import LeftModeratorMenuComponent from '../components/LeftModeratorMenuComponent';
-import ModeratorArticleFeedComponent from '../components/ModeratorArticleFeedComponent';
 import GlobalTheme from '../styledComponents/GlobalTheme';
+
+import ModeratorArticleFeedComponent from '../components/ModeratorArticleFeedComponent';
+import AddArticleComponent from '../components/AddArticleComponent';
 
 // #toDo: move all of these to styledComponent folder 
 
@@ -42,7 +44,7 @@ class ModeratorDashboard extends Component {
         super(props);
         this.state = {
             // Empty for now
-            pageDisplayed: 'ArticleFeed'
+            pageDisplayed: 'AddArticle'
         }
     }
 
@@ -63,9 +65,9 @@ class ModeratorDashboard extends Component {
                         this.state.pageDisplayed == 'ArticleFeed' && <ModeratorArticleFeedComponent /> 
                     }
                     
-                    {/* {
-                        this.state.pageDisplayed == 'AddArticle'  && <AddDataComponent />
-                    } */}
+                    {
+                        this.state.pageDisplayed == 'AddArticle'  && <AddArticleComponent />
+                    }
                 </MiddleContainer>
             </DashboardWrapper>
         )
