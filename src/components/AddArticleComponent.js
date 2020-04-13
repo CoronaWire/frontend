@@ -19,30 +19,30 @@ const AddArticleWrapper = styled.div`
 
 const LeftURLWrapper = styled.div`
     height: auto;
-    width: 50%;
+    width: 30%;
     background-color: transparent;
     display: flex;
     flex-direction: column;
+    min-width: 335px;
 `;
 
 const RightDataWrapper = styled.div`
     height: auto;
-    width: 50%;
+    width: 70%;
     background-color: transparent;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 20px;
 `;
 
 const URLWrapper = styled.div`
-    height: 40px;
     width: 80%;
     background-color: transparent;
     margin-top: 50px;
     margin-left: 40px;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
 `
 
 const URLText = styled.p`
@@ -61,14 +61,15 @@ const URLInput = styled.input`
     border-color: black;
     border-width: 1px;
     display: inline-block;
-    margin-left: 15px;
+    outline: none;
+    padding-left: 5px;
 `
 
 const URLButton = styled.button`
     height: 32px;
-    background-color: transparent;
+    background-color: black;
     color: white;
-    margin-left: 20px;
+    margin-top: 20px;
     width: 150px;
     text-align: center;
     border-radius: 5px;
@@ -77,19 +78,25 @@ const URLButton = styled.button`
     outline: none;
 `
 
-const DataWrapper = styled.div`
-    width: 60%;
-    background-color: red;
-    border-radius: 5px; 
-    margin-top: 50px;
-    padding-top: 20px;
-    padding-left: 50px;
-    padding-right: 50px;
-    padding-bottom: 50px;
+const SubmitDataButton = styled(URLButton)`
+    width: 80%;
+    margin: 15px auto;
+
 `
 
-const DataPointWrapper = styled.div`
-    width: 320px;
+const DataWrapper = styled.div`
+    width: 48%;
+    background-color: transparent;
+    border-radius: 5px; 
+
+    display: flex;
+    flex-direction: column;
+    min-width: 320px;
+`
+
+
+const DataPointWrapperRow = styled.div`
+    width: auto;
     background-color: transparent;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -98,6 +105,12 @@ const DataPointWrapper = styled.div`
     justify-content: flex-start;
     align-items: center;
 `;
+
+const DataPointWrapperColumn = styled(DataPointWrapperRow)`
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`
 
 const DataPointTitle = styled.p`
     width: 33%;
@@ -118,6 +131,8 @@ const DataPointShortText = styled.input`
     margin-left: 20px;
     margin-right: 20px;
     height: 34px;
+    padding: 5px;
+    outline: none;
 `
 
 const DataPointLongText = styled.textarea`
@@ -130,7 +145,12 @@ const DataPointLongText = styled.textarea`
     border-radius: 5px;
     margin-left: 20px;
     margin-right: 20px;
-    height: 200px;
+    height: 175px;
+    padding: 5px;
+    max-height: 361px;
+    min-height: 130px;
+    min-width: 199px;
+    outline: none;
 `
 
 class AddArticleComponent extends Component {
@@ -180,54 +200,87 @@ class AddArticleComponent extends Component {
                 </LeftURLWrapper>
                 <RightDataWrapper>
                     <DataWrapper>
-                        <DataPointWrapper >
+                        <DataPointWrapperRow >
                             <DataPointTitle>
                                 URL
                             </DataPointTitle>
                             <DataPointShortText id='url'/>
-                        </DataPointWrapper>
-                        <DataPointWrapper >
+                        </DataPointWrapperRow>
+                        <DataPointWrapperRow >
                             <DataPointTitle>
                                 Title
                             </DataPointTitle>
                             <DataPointShortText id='title' />
-                        </DataPointWrapper>
-                        <DataPointWrapper>
+                        </DataPointWrapperRow>
+                        <DataPointWrapperRow>
                             <DataPointTitle>
                                 Author
                             </DataPointTitle>
                             <DataPointShortText id='author' />
-                        </DataPointWrapper>
-                        <DataPointWrapper>
+                        </DataPointWrapperRow>
+                        <DataPointWrapperRow>
                             <DataPointTitle>
                                 Source
                             </DataPointTitle>
                             <DataPointShortText id='source' />
-                        </DataPointWrapper>
-                        <DataPointWrapper>
+                        </DataPointWrapperRow>
+                        <DataPointWrapperRow>
                             <DataPointTitle>
                                 City
                             </DataPointTitle>
                             <DataPointShortText id='city'/>
-                        </DataPointWrapper>
-                        <DataPointWrapper>
+                        </DataPointWrapperRow>
+                        <DataPointWrapperRow>
                             <DataPointTitle>
                                 Region
                             </DataPointTitle>
                             <DataPointShortText id='region' />
-                        </DataPointWrapper>
-                        <DataPointWrapper>
+                        </DataPointWrapperRow>
+                        <DataPointWrapperRow>
                             <DataPointTitle>
-                                State
+                                Country
                             </DataPointTitle>
-                            <DataPointShortText id='state'/>
-                        </DataPointWrapper>
-                        <DataPointWrapper>
+                            <DataPointShortText id='country'/>
+                        </DataPointWrapperRow>
+                        <DataPointWrapperRow >
+                            <DataPointTitle>
+                                Specificity
+                            </DataPointTitle>
+                            <DataPointShortText id='specificity' />
+                        </DataPointWrapperRow>
+                        <DataPointWrapperRow >
+                            <DataPointTitle>
+                                Category
+                            </DataPointTitle>
+                            <DataPointShortText id='specificity' />
+                        </DataPointWrapperRow>
+                        <DataPointWrapperRow >
+                            <DataPointTitle>
+                                Positivity
+                            </DataPointTitle>
+                            <DataPointShortText id='specificity' />
+                        </DataPointWrapperRow>
+                    </DataWrapper>
+                    <DataWrapper>
+                        <DataPointWrapperColumn >
+                            <DataPointTitle>
+                                Language
+                            </DataPointTitle>
+                            <DataPointShortText id='language' />
+                        </DataPointWrapperColumn>
+                        <DataPointWrapperColumn>
                             <DataPointTitle>
                                 Content
                             </DataPointTitle>
                             <DataPointLongText id='content'/>
-                        </DataPointWrapper>
+                        </DataPointWrapperColumn>
+                        <DataPointWrapperColumn>
+                            <DataPointTitle>
+                                Summary
+                            </DataPointTitle>
+                            <DataPointLongText id='summary'/>
+                        </DataPointWrapperColumn>
+                        <SubmitDataButton> Submit </SubmitDataButton>
                     </DataWrapper>
                 </RightDataWrapper>
             </AddArticleWrapper>
