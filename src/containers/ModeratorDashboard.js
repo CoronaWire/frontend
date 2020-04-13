@@ -15,7 +15,7 @@ import AddArticleComponent from '../components/AddArticleComponent';
 const DashboardWrapper = styled.div`
     width: 100%;
     height: 100%;
-    background-color: transparent;
+    background-color: white;
     display: flex;
     flex-direction: row;
 `
@@ -23,12 +23,13 @@ const DashboardWrapper = styled.div`
 const LeftSideContainer = styled.div`
     width: 20%;
     height: 100%;
-    background-color: ${props => props.GlobalTheme.leftMenuStyling.backgroundColor} ;
+    background-color: white;
 `
 const MiddleContainer = styled.div`
     width: 80%;
     height: 100%;
-    background-color: transparent;
+    background-color: white;
+    overflow-y: scroll;
 `
 
 const RightSideContainer = styled.div`
@@ -44,7 +45,7 @@ class ModeratorDashboard extends Component {
         super(props);
         this.state = {
             // Empty for now
-            pageDisplayed: 'AddArticle'
+            pageDisplayed: 'ArticleFeed'
         }
     }
 

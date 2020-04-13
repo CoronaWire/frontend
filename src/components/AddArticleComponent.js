@@ -6,7 +6,6 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
-const urlMetaData = require('url-metadata');
 // Internal Modules
 
 const AddArticleWrapper = styled.div`
@@ -162,19 +161,13 @@ class AddArticleComponent extends Component {
         }
     }
 
-    fetchArticleMetaData = async () => {
-        try {
-            urlMetaData(this.state.articleURL).then(
-            function (metadata) { // success handler
-                console.log(metadata)
-            },
-            function (error) { // failure handler
-                console.log(error)
-            })
-        } catch (error) {
-            console.error(`Error caught in fetchArticleMetaData ${error}`)
-        }
-    }
+    // fetchArticleMetaData = async () => {
+    //     try {
+
+    //     } catch (error) {
+    //         console.error(`Error caught in fetchArticleMetaData ${error}`)
+    //     }
+    // }
 
     handleChange = (event) => {
         this.setState({
