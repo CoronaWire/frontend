@@ -1,6 +1,6 @@
 import {
     AUTHENTICATE_USER,
-    SIGNOUT_USER
+    SIGNOUT_USER,
 } from './constants';
 
 export const authenticateUser = (state) => ({
