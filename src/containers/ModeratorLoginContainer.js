@@ -11,7 +11,7 @@ import LoginInput from '../styledComponents/LoginInput';
 import LoginButton from '../styledComponents/LoginButton';
 import LoginForm from '../styledComponents/LoginForm';
 import LinkTypeText from '../styledComponents/LinkTypeText';
-import ErrorText from '../styledComponents/ErrorText';
+import { ErrorText } from '../styledComponents/TextComponents';
 
 // Redux-related
 import store from '../store/store';

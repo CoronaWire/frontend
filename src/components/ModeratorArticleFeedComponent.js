@@ -5,7 +5,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-
+import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
+import ModeratorArticleComponent from './ModeratorArticleComponent'
+import { Checkbox } from './core/index.js';
+import { MediumText } from '../styledComponents/TextComponents';
 
 const FeedWrapper = styled.div`
     height: 100%;
@@ -110,7 +113,7 @@ const ButtonWrapper = styled(CityFilterWrapper)`
     padding-right: 14px;
 `
 
-// #toRemember: height of drop down and button needs to be the same
+// #toRemember #toFix: height of drop down and button needs to be the same
 // store in global theme?
 
 const Button = styled.div`
@@ -125,7 +128,7 @@ const Button = styled.div`
 `;
 
 const BottomBarButton = styled(Button)`
-    background-color: purple;
+    background-color: transparent;
     margin-right: 40px;
 `;
 
@@ -170,6 +173,24 @@ const StatusButton = styled.button`
     min-width: 90px;
 `;
 
+
+const FeedSortingBar = styled.div`
+    height: 40px;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+`
+
+
+const ArticleFeedWrapper = styled.div`
+    background-color: transparent;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+`
+
 class ModeratorArticleFeedComponent extends Component {
     constructor(props){
         super(props);
@@ -178,7 +199,36 @@ class ModeratorArticleFeedComponent extends Component {
             filterArticleStatus: '',
             sortBy: '',
             articleSelected: false,
+            allArticlesSelected: false,
+            statusFilter: 'pending',
+            articleFeed: [
+                {
+                    title: 'Covid-19 takes 24 deaths in Africa',
+                    summary: 'Never forget the day that Covid claimed the lvies of innocent citizens that used to live in America for the past three generations.',
+                    source: 'The New York Times',
+                    date: '4 days ago',
+                },
+                {
+                    title: 'Covid-19 finally eradicated',
+                    summary: 'Finally, the day has come people. The day has come. This is not judgment day but a day of celebration, the celebration of our individuality and more importantly, the celebration of our victory over this deadly and insidious virus that has claimed the lives of so many of our compatriots.',
+                    source: 'MLK TV',
+                    date: '6 days ago',
+                }
+            ]
         }
+    }
+
+
+    selectAllArticles = () => {
+        this.setState({
+            allArticlesSelected: !this.state.allArticlesSelected
+        })
+    }
+
+    changeStatusFilter = (event) => {
+        this.setState({
+            statusFilter: event.target.id
+        })
     }
 
     render(){
@@ -200,14 +250,36 @@ class ModeratorArticleFeedComponent extends Component {
                     </CityFilterWrapper>
                     <StatusFilterWrapper>
                         <LeftFilterWrapper>
-                            <StatusButton id='pending'> Needs Review </StatusButton>
-                            <StatusButton id='approved'> Approved </StatusButton>
-                            <StatusButton id='rejected'> Rejected </StatusButton>
+                            <StatusButton id='pending' onClick={this.changeStatusFilter} > Needs Review </StatusButton>
+                            <StatusButton id='approved' onClick={this.changeStatusFilter} > Approved </StatusButton>
+                            <StatusButton id='rejected' onClick={this.changeStatusFilter} > Rejected </StatusButton>
                         </LeftFilterWrapper>
                     </StatusFilterWrapper>
                 </FilterWrapper>
             </FilterActionsWrapper>
-            <MiddleFeedWrapper />
+            <MiddleFeedWrapper>
+                <FeedSortingBar>
+                    <CheckboxWrapper>
+                        <Checkbox  />
+                    </CheckboxWrapper>
+                    <LeftTextWrapper> 
+                        <MediumText> Article </MediumText>
+                    </LeftTextWrapper>
+                    <MiddleTextWrapper>
+                        <MediumText> Source </MediumText>
+                    </MiddleTextWrapper>
+                    <RightTextWrapper>
+                        <MediumText> Published </MediumText>
+                    </RightTextWrapper>
+                </FeedSortingBar>
+                <ArticleFeedWrapper>
+                    {
+                        this.state.articleFeed.map((articleObject, index) => {
+                            return <ModeratorArticleComponent props={articleObject} key={index} />
+                        })
+                    }
+                </ArticleFeedWrapper>
+            </MiddleFeedWrapper>
             <BottomBarWrapper articleSelected={this.state.articleSelected} >
                 <BottomBarButton> Add Article </BottomBarButton>
             </BottomBarWrapper>
