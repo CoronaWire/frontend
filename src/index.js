@@ -6,6 +6,7 @@ import App from './App';
 import './fonts/oldEnglish.ttf'
 import './fonts/franklinLT.ttf'
 
+
 // Redux
 import store from './store/store'
 import * as serviceWorker from './serviceWorker';

@@ -26,18 +26,10 @@ const LeftSideContainer = styled.div`
     background-color: white;
 `
 const MiddleContainer = styled.div`
-    width: 80%;
+    width: 100%;
     height: 100%;
     background-color: white;
     overflow-y: scroll;
-`
-
-const RightSideContainer = styled.div`
-    width: 22%;
-    height: 100%;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
 `
 
 class ModeratorDashboard extends Component {
@@ -58,9 +50,9 @@ class ModeratorDashboard extends Component {
     render(){
         return(
             <DashboardWrapper>
-                <LeftSideContainer GlobalTheme={GlobalTheme} >
+                {/* <LeftSideContainer GlobalTheme={GlobalTheme} >
                     <LeftModeratorMenuComponent handlePageChange={this.handlePageChange} />
-                </LeftSideContainer>
+                </LeftSideContainer> */}
                 <MiddleContainer>
                     {
                         this.state.pageDisplayed == 'ArticleFeed' && <ModeratorArticleFeedComponent /> 

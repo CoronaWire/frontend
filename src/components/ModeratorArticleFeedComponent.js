@@ -9,6 +9,7 @@ import GlobalTheme from '../styledComponents/GlobalTheme'
 import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
 import ModeratorArticleComponent from './ModeratorArticleComponent'
 import { MediumText } from '../styledComponents/TextComponents';
+import TabularButton from '../styledComponents/TabularButton';
 
 const GreyMediumText = styled(MediumText)`
     color: #646464;
@@ -195,21 +196,9 @@ const StatusButton = styled.button`
     padding-right: 20px;
 `;
 
-const CityButton = styled.h2`
-    font-size: 15px;
-    color: ${props => props.chosenLocation == props.id ? '#6558f5' : 'black'};
-    font-weight: 500;
-    height: 100%;
-    padding-top: 20px;
-    background-color: white;
-    margin-right: 20px;
-    display: inline-block;
-    border-bottom-style: solid;
-    border-bottom-color: ${props => props.chosenLocation == props.id ? '#6558f5' : 'white'};
-    border-bottom-width: 3px;
-    min-width: 50px;
-    text-align: center;
-    cursor: pointer;
+const CityButton = styled(TabularButton)`
+    color: ${props => props.selectedState == props.id ? '#6558f5' : 'black'};
+
 `
 
 
@@ -298,19 +287,19 @@ class ModeratorArticleFeedComponent extends PureComponent {
                     <CityFilterWrapper>
                         <LeftFilterWrapper>
                             <CityButton id='sanfrancisco' 
-                            chosenLocation={this.state.locationFilter} 
+                            selectedState={this.state.locationFilter} 
                             onClick={this.toggleLocationFilter}
                             > 
                             San Francisco 
                             </CityButton>
                             <CityButton id='seattle'
-                            chosenLocation={this.state.locationFilter} 
+                            selectedState={this.state.locationFilter} 
                             onClick={this.toggleLocationFilter}
                             > 
                             Seattle 
                             </CityButton>
                             <CityButton id='all' 
-                            chosenLocation={this.state.locationFilter} 
+                            selectedState={this.state.locationFilter} 
                             onClick={this.toggleLocationFilter}
                             >
                              All  

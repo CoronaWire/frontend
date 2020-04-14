@@ -9,6 +9,11 @@ import PropTypes from 'prop-types';
 // Internal Modules
 import SearchBarComponent from '../components/SearchBarComponent';
 import GlobalTheme from '../styledComponents/GlobalTheme';
+import TabularButton from '../styledComponents/TabularButton';
+
+// React-Redux
+import store from '../store/store';
+import { signoutUser } from '../actionCreators/actions';
 
 // #toDo: move all exports to index.js file to make quicker imports?
 // #toDo #UIUX: figure out mobile responsiveness look
@@ -24,6 +29,7 @@ const NavigationBarWrapper = styled.div`
     -moz-box-shadow: 0px 7px 10px -1px #D8D8D8;
     box-shadow: 0px 7px 10px -1px #D8D8D8;
     align-items: center;
+    justify-content: space-between;
 `
 
 const NavigationBarHeader = styled.h1`
@@ -88,19 +94,79 @@ const NavBarLeftWrapper = styled.div`
     align-items: center;
 `
 
+const NavBarRightWrapper = styled.div`
+    margin-right: 40px;
+    width: auto;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+`
+
+const NavBarButton = styled(TabularButton)`
+    height: 100%;
+    font-weight: 600;
+    padding-top: 30px;
+    margin-right: 15px;
+    background-color: transparent
+`
+
 class AuthenticatedNavigationBar extends Component {
     constructor(props){
         super(props);
+        this.state = {
+            buttonSelected: 'curate'
+        }
+    }
+
+    handleButtonToggle = (event) => {
+        this.setState({
+            buttonSelected: event.target.id
+        })
+    }
+
+    handleSignOut = () => {
+        store.dispatch(signoutUser());
     }
 
     render(){
-        console.log('Props passed are', this.props)
         return (
             <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} GlobalTheme={GlobalTheme} >
                 <NavBarLeftWrapper>
                     <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
                     <AuthenticationNavigationText> Editor </AuthenticationNavigationText>
                 </NavBarLeftWrapper>
+                <NavBarRightWrapper>
+                    <NavBarButton 
+                    selectedState={this.state.buttonSelected}
+                    onClick={this.handleButtonToggle}
+                    id='curate'
+                    > 
+                    Curate
+                    </NavBarButton>
+                    <NavBarButton 
+                    selectedState={this.state.buttonSelected}
+                    onClick={this.handleButtonToggle}
+                    id='moderate'
+                    > 
+                    Moderate 
+                    </NavBarButton>
+                    <NavBarButton 
+                    selectedState={this.state.buttonSelected}
+                    onClick={this.handleButtonToggle}
+                    id='team'>
+                    Team 
+                    </NavBarButton>
+                    <NavBarButton 
+                    selectedState={this.state.buttonSelected}
+                    onClick={this.handleSignOut}
+                    id='signout'
+                    > 
+                    Sign Out 
+                    </NavBarButton>
+                </NavBarRightWrapper>
             </NavigationBarWrapper>
         )
     }
