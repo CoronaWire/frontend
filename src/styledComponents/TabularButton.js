@@ -19,8 +19,8 @@ const TabularButton = styled.h2`
     margin-right: 20px;
     display: inline-block;
     border-bottom-style: solid;
-    color: ${props => props.selectedState == props.id ? '#6558f5' : 'black'};
-    border-bottom-color: ${props => props.selectedState == props.id ? '#6558f5' : 'transparent'};
+    color: ${props => props.selectedState === props.id ? '#6558f5' : 'black'};
+    border-bottom-color: ${props => props.selectedState === props.id ? '#6558f5' : 'transparent'};
     border-bottom-width: 3px;
     min-width: 50px;
     text-align: center;

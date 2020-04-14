@@ -4,8 +4,10 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-import LeftModeratorMenuComponent from '../components/LeftModeratorMenuComponent';
-import GlobalTheme from '../styledComponents/GlobalTheme';
+
+// #altCode #altDesign: previous design for menu. will delete when UX finalized.
+// import LeftModeratorMenuComponent from '../components/LeftModeratorMenuComponent';
+// import GlobalTheme from '../styledComponents/GlobalTheme';
 
 import ModeratorArticleFeedComponent from '../components/ModeratorArticleFeedComponent';
 import AddArticleComponent from '../components/AddArticleComponent';
@@ -20,11 +22,13 @@ const DashboardWrapper = styled.div`
     flex-direction: row;
 `
 
-const LeftSideContainer = styled.div`
-    width: 20%;
-    height: 100%;
-    background-color: white;
-`
+// #altCode #altDesign
+// const LeftSideContainer = styled.div`
+//     width: 20%;
+//     height: 100%;
+//     background-color: white;
+// `
+
 const MiddleContainer = styled.div`
     width: 100%;
     height: 100%;
@@ -55,11 +59,11 @@ class ModeratorDashboard extends Component {
                 </LeftSideContainer> */}
                 <MiddleContainer>
                     {
-                        this.state.pageDisplayed == 'ArticleFeed' && <ModeratorArticleFeedComponent /> 
+                        this.state.pageDisplayed === 'ArticleFeed' && <ModeratorArticleFeedComponent /> 
                     }
                     
                     {
-                        this.state.pageDisplayed == 'AddArticle'  && <AddArticleComponent />
+                        this.state.pageDisplayed === 'AddArticle'  && <AddArticleComponent />
                     }
                 </MiddleContainer>
             </DashboardWrapper>

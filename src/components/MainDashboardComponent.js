@@ -84,19 +84,6 @@ const ScopeButton = styled.button`
     box-sizing: border-width;
 `;
 
-const ScopeContainer = styled.div`
-    background-color: transparent;
-    height: 40px;
-    width: 100%
-    border-bottom-style: solid;
-    border-bottom-color: #A9A9A9;
-    border-bottom-length: 1px;
-    justify-content: flex-start;
-    display: flex;
-    margin-left: 30px;
-    margin-right: 30px;
-`;
-
 const ScopeWrapper = styled.div`
     background-color: transparent;
     height: 40px;
@@ -172,7 +159,13 @@ class MainDashboardComponent extends Component {
             </ButtonsContainer>
             <ScopeWrapper>
                 {this.state.scope.map((value, index) => {
-                    return <ScopeButton key={index} value={value} onClick={e => this.handleScopeClick(e.target.value)} underlined={this.state.scopeClicked == value ? true : false}> {value} </ScopeButton>
+                    return <ScopeButton 
+                            key={index} value={value} 
+                            onClick={event => this.handleScopeClick(event.target.value)} 
+                            underlined={this.state.scopeClicked === value ? true : false}
+                            >
+                             {value} 
+                            </ScopeButton>
                 })}
             </ScopeWrapper>
             <NewsListWrapper>

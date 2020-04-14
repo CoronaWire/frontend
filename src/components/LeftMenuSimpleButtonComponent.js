@@ -2,7 +2,7 @@
 // Buttons used within the @LeftModeratorMenuComponent to display options to users
 
 // External Packages
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import MenuButton from '../styledComponents/MenuButton';

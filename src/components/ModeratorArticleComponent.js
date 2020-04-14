@@ -9,7 +9,7 @@ import styled from 'styled-components'
 // Internal Modules
 import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
 import { Checkbox } from './core';
-import { LargeText, SmallText, MediumText } from '../styledComponents/TextComponents';
+import { LargeText, SmallText } from '../styledComponents/TextComponents';
 import GlobalTheme from '../styledComponents/GlobalTheme';
 
 const IndividualArticleWrapper = styled.div`

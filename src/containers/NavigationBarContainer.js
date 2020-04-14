@@ -173,9 +173,6 @@ class AuthenticatedNavigationBar extends Component {
 }
 
 class UnauthenticatedNavigationBar extends Component {
-    constructor(props){
-        super(props);
-    }
     render(){
         return (
             <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} GlobalTheme={GlobalTheme} >

@@ -91,41 +91,6 @@ const BottomBarWrapper = styled.div`
     border-top-style:solid;
 `
 
-const DropDownText = styled.h3`
-    width: 80px;
-    font-size: 17px;
-    color: black;
-    font-weight: 600;
-    display: inline-block;
-    background-color: transparent;
-    margin-left: 20px;
-    margin-right: 10px;
-`;
-
-const DropDownMenuPlaceholder = styled.div`
-    height: 30px;
-    width: 200px;
-    background-color: transparent;
-    border-radius: 5px;
-    display: inline-block;
-    margin-left: 25px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: black;
-`
-
-const PublishRejectWrapper = styled(FilterWrapper)`
-    width: 30%;
-`
-
-const ButtonWrapper = styled(CityFilterWrapper)`
-    justify-content: flex-end;
-    padding-right: 14px;
-`
-
-// #toRemember #toFix: height of drop down and button needs to be the same
-// store in global theme?
-
 const Button = styled.div`
     background-color: ${props => props.buttonType === 'Publish' ? 'green' : 'red'};
     height: 30px;
@@ -178,7 +143,7 @@ const RightFilterWrapper = styled.div`
 `;
 
 const StatusButton = styled.button`
-    background-color: ${props => props.chosenStatus == props.id ? '#6558f5' : 'white'}; 
+    background-color: ${props => props.chosenStatus === props.id ? '#6558f5' : 'white'}; 
     border-radius: 20px;
     margin-right: 15px;
     height: 40px;
@@ -190,15 +155,13 @@ const StatusButton = styled.button`
     min-width: 90px;
     cursor: pointer;
     font-weight: 600;
-    color: ${props => props.chosenStatus == props.id ? '#293845' : '#6558f5'};
+    color: ${props => props.chosenStatus === props.id ? '#293845' : '#6558f5'};
     border-style: none; 
     padding-left: 20px;
     padding-right: 20px;
 `;
 
 const CityButton = styled(TabularButton)`
-    color: ${props => props.selectedState == props.id ? '#6558f5' : 'black'};
-
 `
 
 

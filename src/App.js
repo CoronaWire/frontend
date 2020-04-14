@@ -11,7 +11,6 @@ import Routes from './routing/Routes';
 import AppComponentWrapper from './styledComponents/AppComponentWrapper';
 import GlobalTheme from './styledComponents/GlobalTheme';
 // Redux
-import store from './store/store';
 
 class App extends Component {
 

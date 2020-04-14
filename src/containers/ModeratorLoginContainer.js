@@ -93,14 +93,6 @@ const LoginButtonWithGradient = styled(LoginButton)`
     background: linear-gradient(90deg, rgba(121,9,119,1) 0%, rgba(24,11,255,1) 100%);
 `
 
-const LoginFormWithGradient = styled(LoginForm)`
-    border-color: rgb(24,11,255);
-    boder-color: linear-gradient(90deg, rgba(24,11,255,1) 0%, rgba(121,9,119,1) 100%);
-    border-width: 3px;
-    border-style: solid;
-    border-radius: 5px;
-`
-
 const LoginErrorText = styled(ErrorText)`
   visibility: ${props => props.unsuccessfulConnectionStatus === true ? 'visible' : 'hidden'};
   font-size: 13px;
