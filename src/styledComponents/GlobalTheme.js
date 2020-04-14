@@ -42,6 +42,9 @@ const GlobalTheme = {
   },
   navigationBar: {
   },
+  moderationPlatform: {
+    sharedLightGrey: '#DFE6ED',
+  },
   singleNewsComponent: {
     newsDataHeight: 72,
     padding: '15px'

@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
 import { Checkbox } from './core';
 import { LargeText, SmallText, MediumText } from '../styledComponents/TextComponents';
-
+import GlobalTheme from '../styledComponents/GlobalTheme';
 
 const IndividualArticleWrapper = styled.div`
     background-color: transparent;
@@ -19,7 +19,7 @@ const IndividualArticleWrapper = styled.div`
     display:flex;
     flex-direction: row;
     &:hover {
-        background-color: #D9CAFF;
+        background-color: ${props => props.GlobalTheme.moderationPlatform.sharedLightGrey};;
     };
     cursor: pointer;
     padding-top: 10px;
@@ -41,6 +41,7 @@ const ArticleTitle = styled(LargeText)`
 const ArticleSummary = styled(SmallText)`
     max-height: 70px;
     overflow-y: scroll;
+    color: #646464;
 `;
 
 const ArticleMetaDataText = styled(LargeText)`
@@ -60,7 +61,7 @@ class ModeratorArticleComponent extends PureComponent {
 
         return (
             <>
-                <IndividualArticleWrapper>
+                <IndividualArticleWrapper GlobalTheme={GlobalTheme} >
                     <CheckboxWrapper>
                         <Checkbox allArticlesSelected={allArticlesSelected} />
                     </CheckboxWrapper>

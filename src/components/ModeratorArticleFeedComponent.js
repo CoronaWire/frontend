@@ -2,13 +2,17 @@
 // Component that shows the moderator the article feeds, whether they are approved, rejected, or pending
 
 // External Packages
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 // Internal Modules
+import GlobalTheme from '../styledComponents/GlobalTheme'
 import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
 import ModeratorArticleComponent from './ModeratorArticleComponent'
-import { Checkbox } from './core/index.js';
 import { MediumText } from '../styledComponents/TextComponents';
+
+const GreyMediumText = styled(MediumText)`
+    color: #646464;
+`
 
 const FeedWrapper = styled.div`
     height: 100%;
@@ -21,15 +25,11 @@ const FeedWrapper = styled.div`
 
 const FilterActionsWrapper = styled.div`
     width: 100%;
-    height: 20%
+    height: 16%;
     background-color: transparent;
     display: flex;
     flex-direction: row;
-    padding-top: 10px;
     min-height: 140px;
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
-    border-bottom-color: black;
 `
 
 const FilterWrapper = styled.div`
@@ -43,17 +43,26 @@ const FilterWrapper = styled.div`
 
 const CityFilterWrapper = styled.div`
     width: auto;
-    height: 50px;
+    height: 60px;
     background-color: transparent;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    border-bottom-style: solid;
+    border-bottom-color: #C6C9D1;
+    border-bottom-width: 3px
 `
 
-const StatusFilterWrapper = styled(CityFilterWrapper)`
+const StatusFilterWrapper = styled.div`
     background-color: transparent;
-    height: 70px;
+    min-height: 64px;
+    height: 100%;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 `
 
 // #toFix: middlefeedwrapper and bottomfeedwrapper do not render properly
@@ -77,7 +86,7 @@ const BottomBarWrapper = styled.div`
     justify-content: ${props => props.articleSelected === true ? 'space-between' : 'flex-end'};
     align-items: center;
     border-top-width: 2px;
-    border-top-color: black;
+    border-top-color: #C3CFD9;
     border-top-style:solid;
 `
 
@@ -128,17 +137,24 @@ const Button = styled.div`
 `;
 
 const BottomBarButton = styled(Button)`
-    background-color: transparent;
+    background-color: #6558f5;
     margin-right: 40px;
+    border-radius: 3px;
+    color: white;
+    font-weight: 500;
+    width: 120px;
+    font-size: 14px;
 `;
 
 const TopBarButton = styled(Button)`
-    color: #242A49;
+    color: #6558f5;
     background-color: transparent;
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    border-bottom-color: #242A49;
+    border-bottom-color: #6558f5;
     width: auto;
+    font-size: 15px;
+
 `
 
 const LeftFilterWrapper = styled.div`
@@ -161,22 +177,45 @@ const RightFilterWrapper = styled.div`
 `;
 
 const StatusButton = styled.button`
-    background-color: #D9CAFF;
+    background-color: ${props => props.chosenStatus == props.id ? '#6558f5' : 'white'}; 
     border-radius: 20px;
     margin-right: 15px;
-    height: 45px;
+    height: 40px;
     outline: none;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
     padding-left: 10px;
     padding-right: 10px;
     min-width: 90px;
+    cursor: pointer;
+    font-weight: 600;
+    color: ${props => props.chosenStatus == props.id ? '#293845' : '#6558f5'};
+    border-style: none; 
+    padding-left: 20px;
+    padding-right: 20px;
 `;
+
+const CityButton = styled.h2`
+    font-size: 15px;
+    color: ${props => props.chosenLocation == props.id ? '#6558f5' : 'black'};
+    font-weight: 500;
+    height: 100%;
+    padding-top: 20px;
+    background-color: white;
+    margin-right: 20px;
+    display: inline-block;
+    border-bottom-style: solid;
+    border-bottom-color: ${props => props.chosenLocation == props.id ? '#6558f5' : 'white'};
+    border-bottom-width: 3px;
+    min-width: 50px;
+    text-align: center;
+    cursor: pointer;
+`
 
 
 const FeedSortingBar = styled.div`
     height: 40px;
-    background-color: transparent;
+    background-color: ${props => props.GlobalTheme.moderationPlatform.sharedLightGrey};
     display: flex;
     flex-direction: row;
 `
@@ -203,7 +242,7 @@ const ParentCheckbox = styled.div`
     border-radius: 3px;
 `
 
-class ModeratorArticleFeedComponent extends Component {
+class ModeratorArticleFeedComponent extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
@@ -226,7 +265,8 @@ class ModeratorArticleFeedComponent extends Component {
                     source: 'MLK TV',
                     date: '6 days ago',
                 }
-            ]
+            ],
+            locationFilter: 'sanfrancisco'
         }
     }
 
@@ -243,18 +283,38 @@ class ModeratorArticleFeedComponent extends Component {
         })
     }
 
+    toggleLocationFilter = (event) => {
+        this.setState({
+            locationFilter: event.target.id
+        })
+    }
 
     render(){
-        console.log('All articles selected', this.state.allArticlesSelected);
+        
         return(
             <FeedWrapper>
             <FilterActionsWrapper>
                 <FilterWrapper>
                     <CityFilterWrapper>
                         <LeftFilterWrapper>
-                            <StatusButton id='sanfrancisco'> San Francisco </StatusButton>
-                            <StatusButton id='seattle'> Seattle </StatusButton>
-                            <StatusButton id='all'> All </StatusButton>
+                            <CityButton id='sanfrancisco' 
+                            chosenLocation={this.state.locationFilter} 
+                            onClick={this.toggleLocationFilter}
+                            > 
+                            San Francisco 
+                            </CityButton>
+                            <CityButton id='seattle'
+                            chosenLocation={this.state.locationFilter} 
+                            onClick={this.toggleLocationFilter}
+                            > 
+                            Seattle 
+                            </CityButton>
+                            <CityButton id='all' 
+                            chosenLocation={this.state.locationFilter} 
+                            onClick={this.toggleLocationFilter}
+                            >
+                             All  
+                            </CityButton>
                         </LeftFilterWrapper>
                         <RightFilterWrapper>
                             <TopBarButton>
@@ -264,23 +324,41 @@ class ModeratorArticleFeedComponent extends Component {
                     </CityFilterWrapper>
                     <StatusFilterWrapper>
                         <LeftFilterWrapper>
-                            <StatusButton id='pending' onClick={this.changeStatusFilter} > Needs Review </StatusButton>
-                            <StatusButton id='approved' onClick={this.changeStatusFilter} > Approved </StatusButton>
-                            <StatusButton id='rejected' onClick={this.changeStatusFilter} > Rejected </StatusButton>
+                            <StatusButton 
+                            id='pending' 
+                            onClick={this.changeStatusFilter} 
+                            chosenStatus={this.state.statusFilter}
+                            > 
+                            Needs Review 
+                            </StatusButton>
+                            <StatusButton 
+                            id='approved' 
+                            onClick={this.changeStatusFilter} 
+                            chosenStatus={this.state.statusFilter}
+                            > 
+                            Approved 
+                            </StatusButton>
+                            <StatusButton 
+                            id='rejected' 
+                            onClick={this.changeStatusFilter} 
+                            chosenStatus={this.state.statusFilter}
+                            > 
+                            Rejected 
+                            </StatusButton>
                         </LeftFilterWrapper>
                     </StatusFilterWrapper>
                 </FilterWrapper>
             </FilterActionsWrapper>
             <MiddleFeedWrapper>
-                <FeedSortingBar>
+                <FeedSortingBar GlobalTheme={GlobalTheme} >
                     <CheckboxWrapper >
                         <ParentCheckbox  allArticlesSelected={this.state.allArticlesSelected} onClick={this.selectAllArticles} />
                     </CheckboxWrapper>
                     <LeftTextWrapper> 
-                        <MediumText> Article </MediumText>
+                        <GreyMediumText> Article </GreyMediumText>
                     </LeftTextWrapper>
                     <MiddleTextWrapper>
-                        <MediumText> Source </MediumText>
+                        <GreyMediumText> Source </GreyMediumText>
                     </MiddleTextWrapper>
                     <RightTextWrapper>
                         <MediumText> Published </MediumText>

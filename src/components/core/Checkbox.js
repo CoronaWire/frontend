@@ -28,7 +28,6 @@ export class Checkbox extends Component {
     }
 
     render(){
-        console.log('Checkbox toggled', this.state.checked)
         return (
             <CheckboxDiv onClick={this.toggleCheckbox} checked={this.state.checked} />
         )

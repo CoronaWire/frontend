@@ -8,31 +8,34 @@ import PropTypes from 'prop-types';
 
 // Internal Modules
 import SearchBarComponent from '../components/SearchBarComponent';
+import GlobalTheme from '../styledComponents/GlobalTheme';
 
 // #toDo: move all exports to index.js file to make quicker imports?
 // #toDo #UIUX: figure out mobile responsiveness look
+// #toDo #toFix: every component re-renders twice
 
 const NavigationBarWrapper = styled.div`
     width: 100%;
     height: 70px;
-    background-color: ${props => props.isAuthenticated === true ? '#E3E9F3' : 'white'};
+    background-color: ${props => props.isAuthenticated === true ? `${props.GlobalTheme.moderationPlatform.sharedLightGrey}` : 'white'};
     display: flex;
     flex-direction: row;
     -webkit-box-shadow: 0px 7px 10px -1px #D8D8D8;
     -moz-box-shadow: 0px 7px 10px -1px #D8D8D8;
     box-shadow: 0px 7px 10px -1px #D8D8D8;
+    align-items: center;
 `
 
 const NavigationBarHeader = styled.h1`
     font-weight: 900;
-    font-size: 30px;
-    letter-spacing: 1px;
+    font-size: 26px;
     background-color: transparent;
     margin-left: 20px;
     text-align: left;
-    position: relative;
-    font-family: oldEnglish;
+    height: auto;
 `;
+// font-family: oldEnglish;
+
 
 const SearchBarContainer = styled.div`
     width: 55%;
@@ -46,14 +49,18 @@ const SearchBarContainer = styled.div`
 
 // #toFix: styling of height between nav bar text and nav bar header
 
-const AuthenticationNavigationText = styled.h2`
+const AuthenticationNavigationText = styled.h4`
     display: inline-block:
     font-size: 13px;
+    height: 36px;
+    box-sizing: border-box;
     color: black;
     font-weight: 400;
     background-color: transparent;
-    margin-left: 14px;
     text-align: center;
+    height: auto;
+    margin-top: 29px;
+    margin-left: 16px;
 `;
 
 const Button = styled.button`
@@ -71,6 +78,16 @@ const Button = styled.button`
     border-radius: 5px;
 `
 
+const NavBarLeftWrapper = styled.div`
+    width: 350px;
+    height: auto;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+`
+
 class AuthenticatedNavigationBar extends Component {
     constructor(props){
         super(props);
@@ -79,9 +96,11 @@ class AuthenticatedNavigationBar extends Component {
     render(){
         console.log('Props passed are', this.props)
         return (
-            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} >
-                <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
-                <AuthenticationNavigationText> Editor </AuthenticationNavigationText>
+            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} GlobalTheme={GlobalTheme} >
+                <NavBarLeftWrapper>
+                    <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
+                    <AuthenticationNavigationText> Editor </AuthenticationNavigationText>
+                </NavBarLeftWrapper>
             </NavigationBarWrapper>
         )
     }
@@ -92,9 +111,8 @@ class UnauthenticatedNavigationBar extends Component {
         super(props);
     }
     render(){
-        console.log('Props passed are', this.props)
         return (
-            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} >
+            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} GlobalTheme={GlobalTheme} >
                 <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
                 <SearchBarContainer>
                     <SearchBarComponent />
@@ -146,7 +164,6 @@ class NavigationBarContainer extends PureComponent{
 
     render() {
         const isAuthenticated = this.props.isAuthenticated;
-        console.log('state', this.state);
         return(
             <>
             {
