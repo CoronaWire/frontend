@@ -201,25 +201,30 @@ class ModeratorArticleFeedComponent extends PureComponent {
             filterLocation: '',
             filterArticleStatus: '',
             sortBy: '',
-            articleSelected: false,
+            articleSelected: false, // Removed functionality for now
             allArticlesSelected: false,
             statusFilter: 'pending',
-            articleFeed: [
-                {
-                    title: 'Covid-19 takes 24 deaths in Africa',
-                    summary: 'Never forget the day that Covid claimed the lvies of innocent citizens that used to live in America for the past three generations.',
+            articleFeed: {
+                1: {
+                    title: 'COVID-19 finally eradicated',
+                    summary: 'Finally, the day has come people. The day has come. This is not judgment day but a day of celebration, the celebration of our resilience but more importantly, the celebration of our victory over this deadly and insidious disease that has claimed the lives of so many of our compatriots.',
+                    source: 'MLK TV',
+                    date: '1 hour ago',
+                },
+                2: {
+                    title: 'COVID-19 death toll reaches 20 million',
+                    summary: "In an unexpected turn of events, COVID-19 mutated into a more deadly form of itself, deemed by leading scientists as SUPER-COVID-19. After spreading rapidly throughout the African, Latin American, and Asian continents, the deadly virus' headcount has now reached 20 million people.",
                     source: 'The New York Times',
                     date: '4 days ago',
-                },
-                {
-                    title: 'Covid-19 finally eradicated',
-                    summary: 'Finally, the day has come people. The day has come. This is not judgment day but a day of celebration, the celebration of our individuality and more importantly, the celebration of our victory over this deadly and insidious virus that has claimed the lives of so many of our compatriots.',
-                    source: 'MLK TV',
-                    date: '6 days ago',
                 }
-            ],
-            locationFilter: 'sanfrancisco'
+            },
+            locationFilter: 'sanfrancisco',
+            selectedArticles: {
+                1: false,
+                2: false,
+            }
         }
+        // #comment: articles will be either stored in redux state or locally.
     }
 
 
@@ -241,8 +246,15 @@ class ModeratorArticleFeedComponent extends PureComponent {
         })
     }
 
+    // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
+    // to be the simplest solution in order to ensure that we can update our components accordingly
+    toggleArticleSelected = (articleID) => {
+        let selectedArticles = {...this.state.selectedArticles};
+        selectedArticles[articleID] = !selectedArticles[articleID];
+        this.setState({selectedArticles})
+    }
+
     render(){
-        
         return(
             <FeedWrapper>
             <FilterActionsWrapper>
@@ -304,7 +316,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
             <MiddleFeedWrapper>
                 <FeedSortingBar GlobalTheme={GlobalTheme} >
                     <CheckboxWrapper >
-                        <ParentCheckbox  allArticlesSelected={this.state.allArticlesSelected} onClick={this.selectAllArticles} />
+                        {/* <ParentCheckbox  allArticlesSelected={this.state.allArticlesSelected} onClick={this.selectAllArticles} /> */}
                     </CheckboxWrapper>
                     <LeftTextWrapper> 
                         <GreyMediumText> Article </GreyMediumText>
@@ -318,8 +330,17 @@ class ModeratorArticleFeedComponent extends PureComponent {
                 </FeedSortingBar>
                 <ArticleFeedWrapper>
                     {
-                        this.state.articleFeed.map((articleObject, index) => {
-                            return <ModeratorArticleComponent props={articleObject} key={index} allArticlesSelected={this.state.allArticlesSelected} />
+                        Object.keys(this.state.articleFeed).map((objectKey) => {
+                            console.log('Object keys', objectKey);
+                            const articleObject = this.state.articleFeed[objectKey];
+                            const articleKey = Number(objectKey)
+                            return <ModeratorArticleComponent 
+                                articleObject={articleObject} 
+                                key={objectKey} 
+                                toggleArticleSelected={this.toggleArticleSelected}
+                                checked={this.state.selectedArticles[articleKey]}
+                                index={articleKey}
+                                />
                         })
                     }
                 </ArticleFeedWrapper>

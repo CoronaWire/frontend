@@ -32,8 +32,11 @@ let firebaseConfig = {
   // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
 
-// #toDo:
-// Change the name of the styled components
+// #toDo #toFix:
+// - Change the name of the styled components
+// - figure out why login message re-renders 8 times
+// - fix input checkbox and turn it into a div
+// - remove console.logs returned when user successfully logs in
 
 const ModeratorContainerWrapper = styled.div`
     background: rgb(24,11,255);

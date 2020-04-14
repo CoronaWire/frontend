@@ -4,11 +4,10 @@
 // the source of the article itself, and the published date of the article
 
 // External Packages
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components'
 // Internal Modules
 import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
-import { Checkbox } from './core';
 import { LargeText, SmallText } from '../styledComponents/TextComponents';
 import GlobalTheme from '../styledComponents/GlobalTheme';
 
@@ -48,7 +47,17 @@ const ArticleMetaDataText = styled(LargeText)`
     background-color: transparent;
 `
 
-class ModeratorArticleComponent extends PureComponent {
+const Checkbox = styled.div`
+    height: 10px;
+    width: 10px;
+    background-color: ${props => props.checked === true ? 'black' : 'white'};
+    border: 1px black solid;
+    outline: none;
+    cursor: pointer;
+    border-radius: 3px;
+`
+
+class ModeratorArticleComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -56,30 +65,32 @@ class ModeratorArticleComponent extends PureComponent {
         }
     }
 
-    render() {
-        const { allArticlesSelected } = this.props;
+    toggleCheckbox = () => {
+        
+    }
 
+    render() {
         return (
             <>
                 <IndividualArticleWrapper GlobalTheme={GlobalTheme} >
                     <CheckboxWrapper>
-                        <Checkbox allArticlesSelected={allArticlesSelected} />
+                        <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(this.props.index)} />
                     </CheckboxWrapper>
                     <LeftTextWrapper>
                         <ArticleText>
                             <ArticleTitle>
-                                {this.props.props.title}
+                                {this.props.articleObject.title}
                             </ArticleTitle>
                             <ArticleSummary>
-                                {this.props.props.summary}
+                                {this.props.articleObject.summary}
                             </ArticleSummary>
                         </ArticleText>
                     </LeftTextWrapper>
                     <MiddleTextWrapper>
-                        <ArticleMetaDataText> {this.props.props.source} </ArticleMetaDataText>
+                        <ArticleMetaDataText> {this.props.articleObject.source} </ArticleMetaDataText>
                     </MiddleTextWrapper>
                     <RightTextWrapper>
-                        <ArticleMetaDataText> {this.props.props.date} </ArticleMetaDataText>
+                        <ArticleMetaDataText> {this.props.articleObject.date} </ArticleMetaDataText>
                     </RightTextWrapper>
                 </IndividualArticleWrapper>
                 

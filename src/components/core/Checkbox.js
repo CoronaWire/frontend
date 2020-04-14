@@ -17,7 +17,7 @@ export class Checkbox extends Component {
     constructor(props){
         super(props);
         this.state = {
-            checked: this.props.allArticlesSelected,
+            checked: this.props.selected,
         }
     }
 
@@ -25,6 +25,7 @@ export class Checkbox extends Component {
         this.setState({
             checked: !this.state.checked
         })
+        console.log('This props passed', this.props);
     }
 
     render(){
