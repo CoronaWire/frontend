@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Container } from './core';
+import { Container } from './../styledComponents/core';
 
 const NotSupportedText = styled.p`
   font-size: 24px;

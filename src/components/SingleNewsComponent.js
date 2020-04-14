@@ -5,7 +5,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-import { UpArrowIcon, DownArrowIcon, Text } from './core';
+import { UpArrowIcon, DownArrowIcon, Text } from './../styledComponents/core';
 
 // #toAsk #UIUX: how is width / height going to change with mobile responsiveness?
 const SingleNewsWrapper = styled.div`
