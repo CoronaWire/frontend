@@ -15,7 +15,7 @@ import SearchBarComponent from '../components/SearchBarComponent';
 const NavigationBarWrapper = styled.div`
     width: 100%;
     height: 70px;
-    background-color: ${props => props.isAuthenticated === true ? '#CCB9E9' : 'white'};
+    background-color: ${props => props.isAuthenticated === true ? '#E3E9F3' : 'white'};
     display: flex;
     flex-direction: row;
     -webkit-box-shadow: 0px 7px 10px -1px #D8D8D8;
@@ -71,6 +71,45 @@ const Button = styled.button`
     border-radius: 5px;
 `
 
+class AuthenticatedNavigationBar extends Component {
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+        console.log('Props passed are', this.props)
+        return (
+            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} >
+                <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
+                <AuthenticationNavigationText> Editor </AuthenticationNavigationText>
+            </NavigationBarWrapper>
+        )
+    }
+}
+
+class UnauthenticatedNavigationBar extends Component {
+    constructor(props){
+        super(props);
+    }
+    render(){
+        console.log('Props passed are', this.props)
+        return (
+            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} >
+                <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
+                <SearchBarContainer>
+                    <SearchBarComponent />
+                    {
+                        this.state.isBrowserAdvanced 
+                        && 
+                        <Button onClick={this.props.findUserLocation}> Find News Near me </Button>
+                    }
+                </SearchBarContainer>
+                }
+            </NavigationBarWrapper>
+        )
+    }
+}
+
 class NavigationBarContainer extends PureComponent{
     constructor(props){
         super(props);
@@ -108,26 +147,16 @@ class NavigationBarContainer extends PureComponent{
     render() {
         const isAuthenticated = this.props.isAuthenticated;
         console.log('state', this.state);
-
         return(
-            <NavigationBarWrapper isAuthenticated={isAuthenticated} >
-                <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
-                {
-                        isAuthenticated === true ?
-                        <AuthenticationNavigationText>
-                            Editor
-                        </AuthenticationNavigationText>
-                        :
-                        <SearchBarContainer>
-                            <SearchBarComponent />
-                            {
-                                this.state.isBrowserAdvanced 
-                                && 
-                                <Button onClick={this.findUserLocation}> Find News Near me </Button>
-                            }
-                            </SearchBarContainer>
-                }
-            </NavigationBarWrapper>
+            <>
+            {
+                isAuthenticated === true ? 
+                <AuthenticatedNavigationBar findUserLocation={this.findUserLocation} isAuthenticated={isAuthenticated} /> 
+                : 
+                <UnauthenticatedNavigationBar findUserLocation={this.findUserLocation} isAuthenticated={isAuthenticated} />
+            }
+            </>
+            
         )
     }
 }

@@ -17,7 +17,7 @@ export class Checkbox extends Component {
     constructor(props){
         super(props);
         this.state = {
-            checked: false
+            checked: this.props.allArticlesSelected,
         }
     }
 
@@ -28,10 +28,9 @@ export class Checkbox extends Component {
     }
 
     render(){
-        const { allArticlesSelected } = this.props;
-
+        console.log('Checkbox toggled', this.state.checked)
         return (
-            <CheckboxDiv onClick={this.toggleCheckbox} checked={this.state.checked || allArticlesSelected} />
+            <CheckboxDiv onClick={this.toggleCheckbox} checked={this.state.checked} />
         )
     }
 }
