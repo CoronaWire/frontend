@@ -99,7 +99,7 @@ class UnauthenticatedNavigationBar extends Component {
                 <SearchBarContainer>
                     <SearchBarComponent />
                     {
-                        this.state.isBrowserAdvanced 
+                        this.props.isBrowserAdvanced 
                         && 
                         <Button onClick={this.props.findUserLocation}> Find News Near me </Button>
                     }
@@ -153,7 +153,7 @@ class NavigationBarContainer extends PureComponent{
                 isAuthenticated === true ? 
                 <AuthenticatedNavigationBar findUserLocation={this.findUserLocation} isAuthenticated={isAuthenticated} /> 
                 : 
-                <UnauthenticatedNavigationBar findUserLocation={this.findUserLocation} isAuthenticated={isAuthenticated} />
+                <UnauthenticatedNavigationBar findUserLocation={this.findUserLocation} isAuthenticated={isAuthenticated} isBrowserAdvanced={this.state.isBrowserAdvanced} />
             }
             </>
             
