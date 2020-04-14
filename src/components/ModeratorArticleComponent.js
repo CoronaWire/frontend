@@ -56,12 +56,13 @@ class ModeratorArticleComponent extends PureComponent {
     }
 
     render() {
-        console.log('This props', this.props.props, "in moderatorarticlecomponent")
+        const { allArticlesSelected } = this.props;
+
         return (
             <>
                 <IndividualArticleWrapper>
                     <CheckboxWrapper>
-                        <Checkbox />
+                        <Checkbox allArticlesSelected={allArticlesSelected} />
                     </CheckboxWrapper>
                     <LeftTextWrapper>
                         <ArticleText>

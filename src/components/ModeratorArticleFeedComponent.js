@@ -191,6 +191,18 @@ const ArticleFeedWrapper = styled.div`
     flex-direction: column;
 `
 
+// Same as the one used in ./Checkbox in ./core folder, but here in order to trigger all of the checkboxes
+// to be checked
+const ParentCheckbox = styled.div`
+    height: 10px;
+    width: 10px;
+    background-color: ${props => props.allArticlesSelected === true ? 'black' : 'white'};
+    border: 1px black solid;
+    outline: none;
+    cursor: pointer;
+    border-radius: 3px;
+`
+
 class ModeratorArticleFeedComponent extends Component {
     constructor(props){
         super(props);
@@ -231,7 +243,9 @@ class ModeratorArticleFeedComponent extends Component {
         })
     }
 
+
     render(){
+        console.log('All articles selected', this.state.allArticlesSelected);
         return(
             <FeedWrapper>
             <FilterActionsWrapper>
@@ -259,8 +273,8 @@ class ModeratorArticleFeedComponent extends Component {
             </FilterActionsWrapper>
             <MiddleFeedWrapper>
                 <FeedSortingBar>
-                    <CheckboxWrapper>
-                        <Checkbox  />
+                    <CheckboxWrapper >
+                        <ParentCheckbox  allArticlesSelected={this.state.allArticlesSelected} onClick={this.selectAllArticles} />
                     </CheckboxWrapper>
                     <LeftTextWrapper> 
                         <MediumText> Article </MediumText>
@@ -275,7 +289,7 @@ class ModeratorArticleFeedComponent extends Component {
                 <ArticleFeedWrapper>
                     {
                         this.state.articleFeed.map((articleObject, index) => {
-                            return <ModeratorArticleComponent props={articleObject} key={index} />
+                            return <ModeratorArticleComponent props={articleObject} key={index} allArticlesSelected={this.state.allArticlesSelected} />
                         })
                     }
                 </ArticleFeedWrapper>

@@ -28,8 +28,10 @@ export class Checkbox extends Component {
     }
 
     render(){
+        const { allArticlesSelected } = this.props;
+
         return (
-            <CheckboxDiv onClick={this.toggleCheckbox} checked={this.state.checked} />
+            <CheckboxDiv onClick={this.toggleCheckbox} checked={this.state.checked || allArticlesSelected} />
         )
     }
 }
