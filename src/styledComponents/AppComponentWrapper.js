@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { media } from './../helpers/media';
 
 const AppComponentWrapper = styled.div`
-  height: 100%;
   width: 100% !important;
   background-color: transparent;
   display: flex;
@@ -17,7 +16,6 @@ const AppComponentWrapper = styled.div`
     min-width: 600px;
   `};
   font-family: 'Muli', sans-serif;
-  position: fixed;
 `;
 
 // #toFix: Position fixed is a hack for now, set it differently.

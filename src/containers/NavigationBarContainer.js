@@ -16,8 +16,11 @@ import { media } from './../helpers/media';
 const NavigationBarWrapper = styled.div`
     width: 100%;
     height: 70px;
-    background-color: ${props => props.isAuthenticated === true ? '#CCB9E9' : 'white'};
+    background: ${props => props.isAuthenticated === true ? '#CCB9E9' : 'white'};
+    position: fixed;
+    top: 0;
     display: flex;
+    z-index: 5;
     flex-direction: row;
     -webkit-box-shadow: 0px 7px 10px -1px #D8D8D8;
     -moz-box-shadow: 0px 7px 10px -1px #D8D8D8;

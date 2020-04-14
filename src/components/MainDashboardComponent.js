@@ -114,7 +114,6 @@ const ScopeWrapper = styled.div`
 // #important #toFix: height now set as a static amount of pixels. should be proportions?
 const NewsListWrapper = styled.div`
     background-color: transparent;
-    height: 480px;
     overflow-y: auto;
     margin-top: 20px;
 

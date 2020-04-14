@@ -12,15 +12,17 @@ import { media } from './../helpers/media';
 
 const DashboardWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  padding-top: 70px;
   background-color: transparent;
   display: flex;
   flex-direction: row;
+  ${media.mobile`
+    padding-top: 132px;
+  `};
 `
 
 const LeftSideContainer = styled.div`
   width: 18%;
-  height: 100%;
   background-color: transparent;
   ${media.mobile`
     display: none;
@@ -28,7 +30,6 @@ const LeftSideContainer = styled.div`
 `
 const MiddleContainer = styled.div`
   width: 60%;
-  height: 100%;
   background-color: transparent;
   ${media.mobile`
     width: 100%;
@@ -37,7 +38,6 @@ const MiddleContainer = styled.div`
 
 const RightSideContainer = styled.div`
   width: 22%;
-  height: 100%;
   background-color: transparent;
   display: flex;
   justify-content: center;
