@@ -5,11 +5,11 @@ const BREAKPOINTS = {
 };
 
 const queries = {
-  mobile: `(max-width: ${BREAKPOINTS.MOBILE})`,
-  aboveMobile: `(min-width: ${BREAKPOINTS.MOBILE})`,
+  mobile: `(max-width: ${BREAKPOINTS.MOBILE}px)`,
+  aboveMobile: `(min-width: ${BREAKPOINTS.MOBILE}px)`,
 };
 
-export const media = Object.keys(queries.reduce((acc, label) => {
+export const media = Object.keys(queries).reduce((acc, label) => {
   acc[label] = (...args) => css`
     && {
       @media ${queries[label]} {

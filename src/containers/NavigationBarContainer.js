@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 
 // Internal Modules
 import SearchBarComponent from '../components/SearchBarComponent';
+import { media } from './../helpers/media';
 
 // #toDo: move all exports to index.js file to make quicker imports?
 // #toDo #UIUX: figure out mobile responsiveness look
@@ -21,6 +22,11 @@ const NavigationBarWrapper = styled.div`
     -webkit-box-shadow: 0px 7px 10px -1px #D8D8D8;
     -moz-box-shadow: 0px 7px 10px -1px #D8D8D8;
     box-shadow: 0px 7px 10px -1px #D8D8D8;
+    ${media.mobile`
+      flex-direction: column;
+      height: auto;
+      padding-bottom: 16px;
+    `};
 `
 
 const NavigationBarHeader = styled.h1`
@@ -36,12 +42,15 @@ const NavigationBarHeader = styled.h1`
 
 const SearchBarContainer = styled.div`
     width: 55%;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 0 20px;
     background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
+    ${media.mobile`
+      width: auto;
+      padding: 0 16px;
+    `};
 `;
 
 // #toFix: styling of height between nav bar text and nav bar header
@@ -58,10 +67,9 @@ const AuthenticationNavigationText = styled.h2`
 
 const Button = styled.button`
     background-color: transparent;
-    border-style: solid;
-    border-width: black;
-    border-color: black;
+    border 1px solid black;
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     margin-left: 30px;

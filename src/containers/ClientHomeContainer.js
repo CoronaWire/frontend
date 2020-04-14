@@ -30,12 +30,12 @@ class ClientHomeContainer extends Component {
     // those will either be stored in redux state or here. TBD.
 
     render(){
-        return(
-            <ClientHomeWrapper>
-                <NavigationBarContainer />
-                <NewsDashboard />
-            </ClientHomeWrapper>
-        )
+      return(
+        <ClientHomeWrapper>
+          <NavigationBarContainer />
+          <NewsDashboard />
+        </ClientHomeWrapper>
+      );
     }
 }
 
