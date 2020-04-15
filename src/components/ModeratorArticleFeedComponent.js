@@ -259,7 +259,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
     approveArticles = () => {
         let articleFeed = {...this.state.articleFeed};
         let selectedArticles = {...this.state.selectedArticles};
-
+        let countToSubtract = 0;
         // Traverse list of selected articles. If article status is true, it is selected by user, therefore
         // we change the status of that article to 'Approved', revert it's selected status to false,
         // and finally make a call to the back-end to change the status
@@ -270,19 +270,20 @@ class ModeratorArticleFeedComponent extends PureComponent {
                 // Re-set selection to false
                 selectedArticles[key] = false;
                 // Ensure to decrement the counter
-                this.setState({selectedArticleCounter: this.state.selectedArticleCounter-1});
+                countToSubtract += 1
                 // Store article ID in array
             }
         })
         
         // Make asyncrhonous back-end call here with articleID list
-        
+        this.setState({selectedArticleCounter: this.state.selectedArticleCounter-countToSubtract});
         this.setState({articleFeed, selectedArticles});
     }
 
     rejectArticles = () => {
         let articleFeed = {...this.state.articleFeed};
         let selectedArticles = {...this.state.selectedArticles};
+        let countToSubtract = 0;
 
         // Sames as approveArticles logic but opposite
         Object.keys(this.state.selectedArticles).forEach((key) => {
@@ -292,11 +293,12 @@ class ModeratorArticleFeedComponent extends PureComponent {
                 // Re-set selection to false
                 selectedArticles[key] = false;
                 // Ensure to decrement the counter
-                this.setState({selectedArticleCounter: this.state.selectedArticleCounter-1});
+                countToSubtract += 1
                 // Store article ID in array
             }
         })
         
+        this.setState({selectedArticleCounter: this.state.selectedArticleCounter-countToSubtract});
         // Make asynchronous back-end call here with articleID list
         this.setState({articleFeed, selectedArticles});
     }
