@@ -60,8 +60,8 @@ const StatusText = styled(ArticleMetaDataText)`
 `
 
 const Checkbox = styled.div`
-    height: 20px;
-    width: 20px;
+    height: 15px;
+    width: 15px;
     background-color: ${props => props.checked === true ? '#6558f5' : 'white'};
     border: 1px #6558f5 solid;
     outline: none;
