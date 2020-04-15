@@ -5,7 +5,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-import { UpArrowIcon, DownArrowIcon, Text } from './core';
+import { UpArrowIcon, DownArrowIcon, Text, B1 } from './core';
 import { media } from './../helpers/media';
 
 // #toAsk #UIUX: how is width / height going to change with mobile responsiveness?
@@ -46,19 +46,16 @@ const NewsTimeStamp = styled(Text)`
     color: grey;
     margin-bottom: 20px;
 `
-const lineHeight = 24;
+const lineHeight = 22;
 
 // #toDo #UIUX: what happens if title/text too long? Cut off at X amount of characters. Or set overflow-x hidden.
-const NewsText = styled(Text)`
-  color: black;
-  font-size: 18px;
-  line-height: ${lineHeight}px;
-  font-family: ${props => props.theme.generalApplication.articleSummaryFont};
+const NewsText = styled(B1)`
+  ${({ theme }) => `color: ${theme.newsColors.navy}`};
 `;
 
 const NewsTextContainer = styled.div`
   overflow: hidden;
-  ${({ expanded }) => !expanded && `height: ${2 * lineHeight}px`};
+  ${({ expanded }) => !expanded && `height: ${3 * lineHeight}px`};
 `;
 
 const NewsTitle = styled(Text)`
@@ -97,7 +94,7 @@ const SingleNewsComponent = ({
 
   useEffect(() => {
     const numberOfLines = summaryRef.current.clientHeight / lineHeight;
-    if (numberOfLines > 2) {
+    if (numberOfLines > 3) {
       setExpandable(true);
     }
   }, []);
