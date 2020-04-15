@@ -239,9 +239,9 @@ class ModeratorArticleFeedComponent extends PureComponent {
         let selectedArticles = {...this.state.selectedArticles};
         let currentArticleState = selectedArticles[articleID]
         
-        // Ensures that only articles which haven't been approved yet increment the counter and are added
+        // Ensures that only articles which haven't been approved or rejected yet increment the counter and are added
         // to the list of selected articles. Also ensures that the background doesn't change when clicked.
-        if (this.state.articleFeed[articleID].mod_status !== 'Approved') {
+        if (this.state.articleFeed[articleID].mod_status !== 'Approved' && this.state.articleFeed[articleID].mod_status !== 'Rejected' ) {
             if (currentArticleState === true) {
                 this.setState({
                     selectedArticleCounter: this.state.selectedArticleCounter - 1
