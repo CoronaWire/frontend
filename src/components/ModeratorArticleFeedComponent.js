@@ -235,14 +235,14 @@ class ModeratorArticleFeedComponent extends PureComponent {
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
     // to be the simplest solution in order to ensure that we can update our components accordingly
     toggleArticleSelected = (articleID) => {
-        console.log('selecting article')
+        console.log('selecting clicked again with undo')
         let selectedArticles = {...this.state.selectedArticles};
-        let currentArticleState = selectedArticles[articleID]
+        let articleSelectedState = selectedArticles[articleID]
         
         // Ensures that only articles which haven't been approved or rejected yet increment the counter and are added
         // to the list of selected articles. Also ensures that the background doesn't change when clicked.
         if (this.state.articleFeed[articleID].mod_status !== 'Approved' && this.state.articleFeed[articleID].mod_status !== 'Rejected' ) {
-            if (currentArticleState === true) {
+            if (articleSelectedState === true) {
                 this.setState({
                     selectedArticleCounter: this.state.selectedArticleCounter - 1
                 })
@@ -267,7 +267,10 @@ class ModeratorArticleFeedComponent extends PureComponent {
             const selectedStatus = this.state.selectedArticles[key]
             if (selectedStatus === true){
                 articleFeed[key].mod_status = 'Approved';
+                // Re-set selection to false
                 selectedArticles[key] = false;
+                // Ensure to decrement the counter
+                this.setState({selectedArticleCounter: this.state.selectedArticleCounter-1});
                 // Store article ID in array
             }
         })
@@ -286,13 +289,24 @@ class ModeratorArticleFeedComponent extends PureComponent {
             const selectedStatus = this.state.selectedArticles[key]
             if (selectedStatus === true){
                 articleFeed[key].mod_status = 'Rejected';
+                // Re-set selection to false
                 selectedArticles[key] = false;
+                // Ensure to decrement the counter
+                this.setState({selectedArticleCounter: this.state.selectedArticleCounter-1});
                 // Store article ID in array
             }
         })
         
         // Make asynchronous back-end call here with articleID list
         this.setState({articleFeed, selectedArticles});
+    }
+
+    undoArticleApprovalRejection = (articleID) => {
+        console.log('UNDOING HAPPEN');
+        console.log('undo boy')
+        let articleFeed = {...this.state.articleFeed};
+        articleFeed[articleID].mod_status = 'pending';
+        this.setState({articleFeed});
     }
 
     // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
@@ -388,6 +402,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
                                 toggleArticleSelected={this.toggleArticleSelected}
                                 checked={this.state.selectedArticles[articleKey]}
                                 index={articleKey}
+                                undoArticleApprovalRejection={this.undoArticleApprovalRejection}
                                 />
                         })
                     }

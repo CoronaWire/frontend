@@ -86,6 +86,7 @@ const ColumnWrapper = styled.div`
     display: flex;
     flex-direction: column;
     visibility: ${props => (props.status === 'Approved' || props.status === 'Rejected')? 'visible' : 'hidden'};
+    z-index: 10;
 `
 
 class ModeratorArticleComponent extends Component {
@@ -94,16 +95,18 @@ class ModeratorArticleComponent extends Component {
         this.state = {
             // Empty for now
         }
+        this.toggleArticleSelected = this.props.toggleArticleSelected;
     }
 
     render() {
         console.log('articleObject', this.props.articleObject)
         console.log('article index', this.props.index)
+        const articleID = this.props.index;
         return (
             <>
                 <IndividualArticleWrapper 
                         GlobalTheme={GlobalTheme} 
-                        onClick={() => this.props.toggleArticleSelected(this.props.index)}
+                        // onClick={() => this.props.toggleArticleSelected(articleID)}
                         checked={this.props.checked}
                     >
                     <TinyLayoutSpace>
@@ -111,7 +114,7 @@ class ModeratorArticleComponent extends Component {
                             (this.props.articleObject.mod_status === 'Approved' || this.props.articleObject.mod_status === 'Rejected') ?
                             <StatusCircle status={this.props.articleObject.mod_status} />
                             :
-                            <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(this.props.index)} />
+                            <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(articleID)} />
 
                         }
                     </TinyLayoutSpace>
@@ -134,7 +137,7 @@ class ModeratorArticleComponent extends Component {
                     <SmallLayoutSpace>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >
                             <StatusText status={this.props.articleObject.mod_status}> {this.props.articleObject.mod_status} </StatusText>
-                            <UnderlinedMediumText> Undo </UnderlinedMediumText>
+                            <UnderlinedMediumText onClick={() => this.props.undoArticleApprovalRejection(articleID)} > Undo </UnderlinedMediumText>
                         </ColumnWrapper>
                     </SmallLayoutSpace>
                 </IndividualArticleWrapper>
