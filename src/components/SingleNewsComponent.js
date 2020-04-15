@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import { UpArrowIcon, DownArrowIcon, Text } from './core';
+import { media } from './../helpers/media';
 
 // #toAsk #UIUX: how is width / height going to change with mobile responsiveness?
 const SingleNewsWrapper = styled.div`
@@ -21,6 +22,9 @@ const SingleNewsWrapper = styled.div`
 const NewsData = styled.div`
   border-bottom: 1px solid #B0B0B0;
   padding: 24px 45px;
+  ${media.mobile`
+    padding: 20px 16px;
+  `};
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -33,6 +37,9 @@ const URLContainer = styled.div`
     background-color: transparent;
     height: 40px;
     padding: 11px 46px;
+    ${media.mobile`
+      padding: 11px 16px;
+    `};
 `
 const NewsTimeStamp = styled(Text)`
     font-size: 14px;

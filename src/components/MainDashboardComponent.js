@@ -8,6 +8,7 @@ import LoginButton from '../styledComponents/LoginButton';
 import GlobalTheme from '../styledComponents/GlobalTheme';
 // Components
 import SingleNewsComponent from '../components/SingleNewsComponent';
+import { media } from './../helpers/media';
 
 const DashboardHeader = styled.h1`
     font-size: 28px;
@@ -15,9 +16,11 @@ const DashboardHeader = styled.h1`
     color: black;
     background-color: transparent;
     text-align: left;
-    padding-left: 30px;
-    margin-bottom: 0px;
-    margin-top: ${props => props.GlobalTheme.dashboardStyling.marginTop};
+    margin-bottom: 24px;
+    margin-top: ${props => props.theme.dashboardStyling.marginTop};
+    ${media.mobile`
+      margin: 20px 0 12px;
+    `};
 `;
 
 // #toDo: make paddingLeft and marginLeft below 30px
@@ -47,13 +50,13 @@ const Button = styled(LoginButton)`
 `;
 
 const ButtonsContainer = styled.div`
-    height: 50px;
     background-color: white;
     width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0 30px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
 
     ${Button} {
       margin-right: 20px;
@@ -61,6 +64,14 @@ const ButtonsContainer = styled.div`
         margin-right: 0;
       }
     }
+
+    ${media.mobile`
+      margin-top: -8px;
+      ${Button} {
+        margin-top: 8px;
+        margin-right: 8px;
+      }
+    `};
 `;
 
 // #toFix: resizing of the button when the bottom border is added
@@ -72,29 +83,18 @@ const ScopeButton = styled.button`
     background-color: white;
     color: black;
     border-bottom-style: solid;
-    border-bottom-color: ${props => props.underlined === true ? 'black': 'white'};
+    border-bottom-color: ${({ underlined }) => underlined ? 'black': 'white'};
     border-bottom-width: 2px;
     border-left-width: 0px;
     border-right-width: 0px;
     border-top-width: 0px;
     cursor: pointer;
-    &:hover {
+    ${media.aboveMobile`
+      &:hover {
         background-color: #F0F0F0;
-    };
+      };
+    `};
     box-sizing: border-width;
-`;
-
-const ScopeContainer = styled.div`
-    background-color: transparent;
-    height: 40px;
-    width: 100%
-    border-bottom-style: solid;
-    border-bottom-color: #A9A9A9;
-    border-bottom-length: 1px;
-    justify-content: flex-start;
-    display: flex;
-    margin-left: 30px;
-    margin-right: 30px;
 `;
 
 const ScopeWrapper = styled.div`
@@ -106,8 +106,6 @@ const ScopeWrapper = styled.div`
     border-bottom-width: 3px;
     justify-content: flex-start;
     display: flex;
-    margin-left: 30px;
-    margin-right: 30px;
 `
 
 // #toFix: set margin-left and right of both styled components through Global Theming or through
@@ -116,12 +114,16 @@ const ScopeWrapper = styled.div`
 // #important #toFix: height now set as a static amount of pixels. should be proportions?
 const NewsListWrapper = styled.div`
     background-color: transparent;
-    height: 480px;
-    margin-left: 30px;
-    margin-right: 30px;
     overflow-y: auto;
     margin-top: 20px;
 
+`;
+
+const OuterWrapper = styled.div`
+  padding: 0 30px;
+  ${media.mobile`
+    padding: 0 16px;
+  `};
 `;
 
 // #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
@@ -161,26 +163,33 @@ class MainDashboardComponent extends Component {
 
     render(){
         return(
-            <div>
-            <DashboardHeader GlobalTheme={GlobalTheme}>
-              News
-            </DashboardHeader>
-            <ButtonsContainer>
-              {this.state.categories.map((value, index) => (
-                <Button key={index}>{value}</Button>
-              ))}
-            </ButtonsContainer>
+          <OuterWrapper>
+            <DashboardHeader>News</DashboardHeader>
+            {false && (
+              <ButtonsContainer>
+                {this.state.categories.map((value, index) => (
+                  <Button key={index}>{value}</Button>
+                ))}
+              </ButtonsContainer>
+            )}
             <ScopeWrapper>
-                {this.state.scope.map((value, index) => {
-                    return <ScopeButton key={index} value={value} onClick={e => this.handleScopeClick(e.target.value)} underlined={this.state.scopeClicked == value ? true : false}> {value} </ScopeButton>
-                })}
+              {this.state.scope.map((value, index) => (
+                <ScopeButton
+                  key={index}
+                  value={value}
+                  onClick={e => this.handleScopeClick(e.target.value)}
+                  underlined={this.state.scopeClicked == value}
+                >
+                  {value}
+                </ScopeButton>
+              ))}
             </ScopeWrapper>
             <NewsListWrapper>
               {this.state.news.map((newsObject, index) => (
                 <SingleNewsComponent key={index} props={newsObject} />
               ))}
             </NewsListWrapper>
-            </div>
+          </OuterWrapper>
         )
     }
 }
