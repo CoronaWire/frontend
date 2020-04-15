@@ -1,14 +1,16 @@
 // Moderator Article Component
-// Styling for the invididual articles displayed to the moderators
-// Will have (from left to right) a checkbox, a title / summary of the article, 
-// the source of the article itself, and the published date of the article
+// Invididual articles displayed to the moderators. Will have (from left to right) a checkbox, a title / summary
+// of the article, the source of the article itself, and the published date of the article
+// Props requirements if imported somewhere else:
+// - articleObject object, 'checked' variable, 'index' variable (representing the article's key in the parent's local state object)
+// and toggleArticleSelected function
 
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components'
 // Internal Modules
 import { TinyLayoutSpace, LargeLayoutSpace, SmallLayoutSpace } from '../styledComponents/ModeratorArticleFeed';
-import { LargeText, SmallText } from '../styledComponents/TextComponents';
+import { LargeText, SmallText, UnderlinedMediumText } from '../styledComponents/TextComponents';
 import GlobalTheme from '../styledComponents/GlobalTheme';
 
 
@@ -51,9 +53,10 @@ const ArticleMetaDataText = styled(LargeText)`
 
 // #toDo #globalTheme: move colors up to global theme
 const StatusText = styled(ArticleMetaDataText)`
-    visibility: ${props => (props.status === 'Approved' || props.status === 'Rejected')? 'visible' : 'hidden'};
     color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B'};
     font-weight: 500;
+    visibility: inherit;
+    margin-bottom: 10px;
 `
 
 const Checkbox = styled.div`
@@ -75,6 +78,15 @@ const StatusCircle = styled.div`
     background-color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B'}
 `
 
+// #toFix #toDo: create a core component that styles column
+const ColumnWrapper = styled.div`
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    visibility: ${props => (props.status === 'Approved' || props.status === 'Rejected')? 'visible' : 'hidden'};
+`
 
 class ModeratorArticleComponent extends Component {
     constructor(props){
@@ -82,10 +94,6 @@ class ModeratorArticleComponent extends Component {
         this.state = {
             // Empty for now
         }
-    }
-
-    toggleCheckbox = () => {
-        
     }
 
     render() {
@@ -124,7 +132,10 @@ class ModeratorArticleComponent extends Component {
                         <ArticleMetaDataText> {this.props.articleObject.date} </ArticleMetaDataText>
                     </SmallLayoutSpace>
                     <SmallLayoutSpace>
-                        <StatusText status={this.props.articleObject.mod_status} > {this.props.articleObject.mod_status} </StatusText>
+                        <ColumnWrapper status={this.props.articleObject.mod_status} >
+                            <StatusText> {this.props.articleObject.mod_status} </StatusText>
+                            <UnderlinedMediumText> Undo </UnderlinedMediumText>
+                        </ColumnWrapper>
                     </SmallLayoutSpace>
                 </IndividualArticleWrapper>
                 

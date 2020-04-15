@@ -235,6 +235,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
     // to be the simplest solution in order to ensure that we can update our components accordingly
     toggleArticleSelected = (articleID) => {
+        console.log('selecting article')
         let selectedArticles = {...this.state.selectedArticles};
         let currentArticleState = selectedArticles[articleID]
         
@@ -250,7 +251,6 @@ class ModeratorArticleFeedComponent extends PureComponent {
                     selectedArticleCounter: this.state.selectedArticleCounter + 1
                 })  
             }
-
             selectedArticles[articleID] = !selectedArticles[articleID];
             this.setState({selectedArticles})
         }
@@ -291,8 +291,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
             }
         })
         
-        // Make asyncrhonous back-end call here with articleID list
-        
+        // Make asynchronous back-end call here with articleID list
         this.setState({articleFeed, selectedArticles});
     }
 
