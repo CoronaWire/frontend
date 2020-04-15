@@ -51,7 +51,7 @@ const ArticleMetaDataText = styled(LargeText)`
 
 // #toDo #globalTheme: move colors up to global theme
 const StatusText = styled(ArticleMetaDataText)`
-    visibility: ${props => props.status === 'Approved' ? 'visible' : 'hidden'};
+    visibility: ${props => (props.status === 'Approved' || props.status === 'Rejected')? 'visible' : 'hidden'};
     color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B'};
     font-weight: 500;
 `
@@ -100,7 +100,7 @@ class ModeratorArticleComponent extends Component {
                     >
                     <TinyLayoutSpace>
                         {
-                            this.props.articleObject.mod_status === 'Approved' ?
+                            (this.props.articleObject.mod_status === 'Approved' || this.props.articleObject.mod_status === 'Rejected') ?
                             <StatusCircle status={this.props.articleObject.mod_status} />
                             :
                             <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(this.props.index)} />

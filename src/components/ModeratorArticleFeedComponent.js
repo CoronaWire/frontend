@@ -8,13 +8,12 @@ import styled from 'styled-components';
 import GlobalTheme from '../styledComponents/GlobalTheme'
 // #toFix: don't like those names, change them. grid is better name.
 import { TinyLayoutSpace, LargeLayoutSpace, SmallLayoutSpace } from '../styledComponents/ModeratorArticleFeed';
-import { NoBorderButton } from '../styledComponents/Buttons';
+// import { NoBorderButton } from '../styledComponents/Buttons';
 // #toDo: create index.jsfile in styled components to get all of components out?
 import ModeratorArticleComponent from './ModeratorArticleComponent'
 import { MediumText } from '../styledComponents/TextComponents';
 import TabularButton from '../styledComponents/TabularButton';
 import ModeratorFeedBottomBar from './ModeratorFeedBottomBar'
-
 
 const GreyMediumText = styled(MediumText)`
     color: #646464;
@@ -155,8 +154,6 @@ const ArticleFeedWrapper = styled.div`
 //     border-radius: 3px;
 // `
 
-
-
 class ModeratorArticleFeedComponent extends PureComponent {
     constructor(props){
         super(props);
@@ -259,23 +256,42 @@ class ModeratorArticleFeedComponent extends PureComponent {
         }
     }
 
-    approveArticles = (articleID) => {
-        console.log('approve article function called');
+    approveArticles = () => {
         let articleFeed = {...this.state.articleFeed};
         let selectedArticles = {...this.state.selectedArticles};
 
+        // Traverse list of selected articles. If article status is true, it is selected by user, therefore
+        // we change the status of that article to 'Approved', revert it's selected status to false,
+        // and finally make a call to the back-end to change the status
         Object.keys(this.state.selectedArticles).forEach((key) => {
             const selectedStatus = this.state.selectedArticles[key]
             if (selectedStatus === true){
                 articleFeed[key].mod_status = 'Approved';
-                selectedArticles[key] = !selectedArticles[key]; 
+                selectedArticles[key] = false;
+                // Store article ID in array
             }
         })
-        console.log('new article feed', articleFeed);
-
-        // Makes sure to turn the value of the articleID key to false, so that the article isn't
-        // 'checked', which removes the colored background once an article is approved or rejected
         
+        // Make asyncrhonous back-end call here with articleID list
+        
+        this.setState({articleFeed, selectedArticles});
+    }
+
+    rejectArticles = () => {
+        let articleFeed = {...this.state.articleFeed};
+        let selectedArticles = {...this.state.selectedArticles};
+
+        // Sames as approveArticles logic but opposite
+        Object.keys(this.state.selectedArticles).forEach((key) => {
+            const selectedStatus = this.state.selectedArticles[key]
+            if (selectedStatus === true){
+                articleFeed[key].mod_status = 'Rejected';
+                selectedArticles[key] = false;
+                // Store article ID in array
+            }
+        })
+        
+        // Make asyncrhonous back-end call here with articleID list
         
         this.setState({articleFeed, selectedArticles});
     }
@@ -382,6 +398,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
                 articleSelected={this.state.articleSelected} 
                 selectedArticleCounter={this.state.selectedArticleCounter}
                 approveArticles={this.approveArticles} 
+                rejectArticles={this.rejectArticles}
             />
             </FeedWrapper>
         )

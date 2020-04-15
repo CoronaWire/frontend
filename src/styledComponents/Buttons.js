@@ -6,13 +6,13 @@ import styled from 'styled-components';
 export const Button = styled.div`
     background-color: black;
     height: 30px;
-    width: 90px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     color: white;
     width: 120px;
+    min-width: 90px;
 `;
 
 
@@ -53,4 +53,5 @@ export const AcceptRejectButton = styled(Button)`
     font-weight: 500;
     font-size: 14px;
     border-radius: 5px;
+    min-width: 
 `

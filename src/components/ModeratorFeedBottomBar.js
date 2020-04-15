@@ -83,7 +83,7 @@ class ModeratorFeedBottomBar extends PureComponent {
                         </ArticleSelectedText>
                     </MiddleWrapper>
                     <RightSideWrapper>
-                        <AcceptRejectButton status={'reject'}>
+                        <AcceptRejectButton status={'reject'} onClick={this.props.rejectArticles}>
                             Reject
                         </AcceptRejectButton>
                         <AcceptRejectButton status={'approve'} onClick={this.props.approveArticles} >
