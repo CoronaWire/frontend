@@ -10,12 +10,11 @@ import styled from 'styled-components'
 import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
 import { LargeText, SmallText } from '../styledComponents/TextComponents';
 import GlobalTheme from '../styledComponents/GlobalTheme';
-import { CheckMarkIcon } from './core';
 
 
 const IndividualArticleWrapper = styled.div`
     background-color: transparent;
-    height: 150px;
+    height: 115px;
     width: 100%;
     display:flex;
     flex-direction: row;

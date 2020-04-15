@@ -30,6 +30,7 @@ const NavigationBarWrapper = styled.div`
     box-shadow: 0px 7px 10px -1px #D8D8D8;
     align-items: center;
     justify-content: space-between;
+    min-width: 640px;
 `
 
 const NavigationBarHeader = styled.h1`
@@ -103,6 +104,7 @@ const NavBarRightWrapper = styled.div`
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
+    min-width: 290px;
 `
 
 const NavBarButton = styled(TabularButton)`
@@ -146,7 +148,7 @@ class AuthenticatedNavigationBar extends Component {
                     > 
                     Curate
                     </NavBarButton>
-                    <NavBarButton 
+                    {/* <NavBarButton 
                     selectedState={this.state.buttonSelected}
                     onClick={this.handleButtonToggle}
                     id='moderate'
@@ -158,7 +160,7 @@ class AuthenticatedNavigationBar extends Component {
                     onClick={this.handleButtonToggle}
                     id='team'>
                     Team 
-                    </NavBarButton>
+                    </NavBarButton> */}
                     <NavBarButton 
                     selectedState={this.state.buttonSelected}
                     onClick={this.handleSignOut}

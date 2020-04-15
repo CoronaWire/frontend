@@ -12,7 +12,6 @@ export const Button = styled.div`
     align-items: center;
     cursor: pointer;
     color: white;
-    border-radius: 5px;
     width: 120px;
 `;
 
@@ -24,6 +23,7 @@ export const FilledButton = styled(Button)`
     margin-right: 40px;
     font-weight: 500;
     font-size: 14px;
+    border-radius: 5px;
 `;
 
 export const NoBorderButton = styled(Button)`
@@ -50,4 +50,5 @@ export const AcceptRejectButton = styled(Button)`
     margin-right: 20px;
     font-weight: 500;
     font-size: 14px;
+    border-radius: 5px;
 `

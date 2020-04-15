@@ -7,11 +7,13 @@ import styled from 'styled-components';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme'
 import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
-import { FilledButton, NoBorderButton, OutlineButton, AcceptRejectButton } from '../styledComponents/Buttons';
+import { NoBorderButton } from '../styledComponents/Buttons';
 // #toDo: create index.jsfile in styled components to get all of components out?
 import ModeratorArticleComponent from './ModeratorArticleComponent'
-import { MediumText, LargeText } from '../styledComponents/TextComponents';
+import { MediumText } from '../styledComponents/TextComponents';
 import TabularButton from '../styledComponents/TabularButton';
+import ModeratorFeedBottomBar from './ModeratorFeedBottomBar'
+
 
 const GreyMediumText = styled(MediumText)`
     color: #646464;
@@ -123,7 +125,6 @@ const StatusButton = styled.button`
 const CityButton = styled(TabularButton)`
 `
 
-
 const FeedSortingBar = styled.div`
     height: 40px;
     background-color: ${props => props.GlobalTheme.moderationPlatform.sharedLightGrey};
@@ -143,100 +144,17 @@ const ArticleFeedWrapper = styled.div`
 
 // Same as the one used in ./Checkbox in ./core folder, but here in order to trigger all of the checkboxes
 // to be checked
-const ParentCheckbox = styled.div`
-    height: 10px;
-    width: 10px;
-    background-color: ${props => props.allArticlesSelected === true ? 'black' : 'white'};
-    border: 1px black solid;
-    outline: none;
-    cursor: pointer;
-    border-radius: 3px;
-`
-
-const ArticleSelectedText = styled(LargeText)`
-    color: #293845;
-    visibility: 'visible';
-`
-
-const BottomBarWrapper = styled.div`
-    height: 67px;
-    background-color: ${props => props.selectedArticleCounter ? props.GlobalTheme.moderationPlatform.sharedLightGrey : 'transparent'};
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: ${props => props.selectedArticleCounter ? 'space-between' : 'flex-end'};
-    align-items: center;
-    border-top-width: 2px;
-    border-top-color: #C3CFD9;
-    border-top-style:solid;
-`
-
-const LeftSideWrapper = styled.div`
-    width: 10%;
-    height: 100%;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: 30px;
-`
-
-const MiddleWrapper = styled(LeftSideWrapper)`
-    background-color: transparent;
-    justify-content: center;
-`
-
-const RightSideWrapper = styled(LeftSideWrapper)`
-    background-color: transparent;
-    justify-content: flex-end;
-    width: 20%;
-    padding-right: 27px; 
-`;
+// const ParentCheckbox = styled.div`
+//     height: 10px;
+//     width: 10px;
+//     background-color: ${props => props.allArticlesSelected === true ? 'black' : 'white'};
+//     border: 1px black solid;
+//     outline: none;
+//     cursor: pointer;
+//     border-radius: 3px;
+// `
 
 
-class ModeratorFeedBottomBar extends PureComponent {
-    constructor(props){
-        super(props);
-        this.state = {
-            // Empty for now
-        }
-    }
-
-    render(){
-        return(
-            <>
-            {
-                this.props.selectedArticleCounter === 0 ?
-                <BottomBarWrapper GlobalTheme={GlobalTheme} >
-                    <FilledButton> Add Article </FilledButton>
-                </BottomBarWrapper>
-                : 
-                <BottomBarWrapper GlobalTheme={GlobalTheme} selectedArticleCounter={this.props.selectedArticleCounter} >
-                    <LeftSideWrapper>
-                        <OutlineButton>
-                            Cancel
-                        </OutlineButton>
-                    </LeftSideWrapper>
-                    <MiddleWrapper>
-                        <ArticleSelectedText>
-                            {this.props.selectedArticleCounter} selected
-                        </ArticleSelectedText>
-                    </MiddleWrapper>
-                    <RightSideWrapper>
-                        <AcceptRejectButton status={'reject'}>
-                            Reject
-                        </AcceptRejectButton>
-                        <AcceptRejectButton status={'approve'}>
-                            Approve
-                        </AcceptRejectButton>
-                    </RightSideWrapper>
-                </BottomBarWrapper>
-            }
-            </>
-
-        )
-    }
-}
 
 class ModeratorArticleFeedComponent extends PureComponent {
     constructor(props){
@@ -326,6 +244,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
         this.setState({selectedArticles})
     }
 
+    // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
     render(){
         console.log('Article selected', this.state.selectedArticleCounter)
         return(
@@ -353,11 +272,11 @@ class ModeratorArticleFeedComponent extends PureComponent {
                              All  
                             </CityButton>
                         </LeftFilterWrapper>
-                        <RightFilterWrapper>
+                        {/* <RightFilterWrapper>
                             <NoBorderButton>
                                 Add Area
                             </NoBorderButton>
-                        </RightFilterWrapper>
+                        </RightFilterWrapper> */}
                     </CityFilterWrapper>
                     <StatusFilterWrapper>
                         <LeftFilterWrapper>
@@ -384,7 +303,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
                             </StatusButton>
                         </LeftFilterWrapper>
                         <RightFilterWrapper>
-
+                            {/* Add code here for the Time Window Bar */}
                         </RightFilterWrapper>
                     </StatusFilterWrapper>
                 </FilterWrapper>
