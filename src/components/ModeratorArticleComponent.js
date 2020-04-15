@@ -10,6 +10,8 @@ import styled from 'styled-components'
 import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
 import { LargeText, SmallText } from '../styledComponents/TextComponents';
 import GlobalTheme from '../styledComponents/GlobalTheme';
+import { CheckMarkIcon } from './core';
+
 
 const IndividualArticleWrapper = styled.div`
     background-color: transparent;
@@ -18,10 +20,11 @@ const IndividualArticleWrapper = styled.div`
     display:flex;
     flex-direction: row;
     &:hover {
-        background-color: ${props => props.GlobalTheme.moderationPlatform.sharedLightGrey};;
+        background-color: ${props => props.checked === true ? '#B2ACFA' : props.GlobalTheme.moderationPlatform.sharedLightGrey};
     };
     cursor: pointer;
     padding-top: 10px;
+    background-color: ${props => props.checked === true ? '#B2ACFA' : 'white'};
 `
 
 const ArticleText = styled.div`
@@ -48,14 +51,16 @@ const ArticleMetaDataText = styled(LargeText)`
 `
 
 const Checkbox = styled.div`
-    height: 10px;
-    width: 10px;
-    background-color: ${props => props.checked === true ? 'black' : 'white'};
-    border: 1px black solid;
+    height: 20px;
+    width: 20px;
+    background-color: ${props => props.checked === true ? '#6558f5' : 'white'};
+    border: 1px #6558f5 solid;
     outline: none;
     cursor: pointer;
     border-radius: 3px;
+
 `
+
 
 class ModeratorArticleComponent extends Component {
     constructor(props){
@@ -72,9 +77,13 @@ class ModeratorArticleComponent extends Component {
     render() {
         return (
             <>
-                <IndividualArticleWrapper GlobalTheme={GlobalTheme} >
+                <IndividualArticleWrapper 
+                        GlobalTheme={GlobalTheme} 
+                        onClick={() => this.props.toggleArticleSelected(this.props.index)}
+                        checked={this.props.checked}
+                    >
                     <CheckboxWrapper>
-                        <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(this.props.index)} />
+                        <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(this.props.index)} />
                     </CheckboxWrapper>
                     <LeftTextWrapper>
                         <ArticleText>

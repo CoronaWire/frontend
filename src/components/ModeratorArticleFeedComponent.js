@@ -7,8 +7,10 @@ import styled from 'styled-components';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme'
 import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
+import { FilledButton, NoBorderButton, OutlineButton, AcceptRejectButton } from '../styledComponents/Buttons';
+// #toDo: create index.jsfile in styled components to get all of components out?
 import ModeratorArticleComponent from './ModeratorArticleComponent'
-import { MediumText } from '../styledComponents/TextComponents';
+import { MediumText, LargeText } from '../styledComponents/TextComponents';
 import TabularButton from '../styledComponents/TabularButton';
 
 const GreyMediumText = styled(MediumText)`
@@ -78,50 +80,6 @@ const MiddleFeedWrapper = styled.div`
     min-height: 330px;
 `
 
-const BottomBarWrapper = styled.div`
-    height: 67px;
-    background-color: transparent;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: ${props => props.articleSelected === true ? 'space-between' : 'flex-end'};
-    align-items: center;
-    border-top-width: 2px;
-    border-top-color: #C3CFD9;
-    border-top-style:solid;
-`
-
-const Button = styled.div`
-    background-color: ${props => props.buttonType === 'Publish' ? 'green' : 'red'};
-    height: 30px;
-    width: 90px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    text-align: center;
-`;
-
-const BottomBarButton = styled(Button)`
-    background-color: #6558f5;
-    margin-right: 40px;
-    border-radius: 3px;
-    color: white;
-    font-weight: 500;
-    width: 120px;
-    font-size: 14px;
-`;
-
-const TopBarButton = styled(Button)`
-    color: #6558f5;
-    background-color: transparent;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: #6558f5;
-    width: auto;
-    font-size: 15px;
-
-`
 
 const LeftFilterWrapper = styled.div`
     height: 100%;
@@ -132,6 +90,7 @@ const LeftFilterWrapper = styled.div`
     align-items: center;
     justify-content: center;
 `;
+
 
 const RightFilterWrapper = styled.div`
     height: 100%;
@@ -194,6 +153,91 @@ const ParentCheckbox = styled.div`
     border-radius: 3px;
 `
 
+const ArticleSelectedText = styled(LargeText)`
+    color: #293845;
+    visibility: 'visible';
+`
+
+const BottomBarWrapper = styled.div`
+    height: 67px;
+    background-color: ${props => props.selectedArticleCounter ? props.GlobalTheme.moderationPlatform.sharedLightGrey : 'transparent'};
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: ${props => props.selectedArticleCounter ? 'space-between' : 'flex-end'};
+    align-items: center;
+    border-top-width: 2px;
+    border-top-color: #C3CFD9;
+    border-top-style:solid;
+`
+
+const LeftSideWrapper = styled.div`
+    width: 10%;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 30px;
+`
+
+const MiddleWrapper = styled(LeftSideWrapper)`
+    background-color: transparent;
+    justify-content: center;
+`
+
+const RightSideWrapper = styled(LeftSideWrapper)`
+    background-color: transparent;
+    justify-content: flex-end;
+    width: 20%;
+    padding-right: 27px; 
+`;
+
+
+class ModeratorFeedBottomBar extends PureComponent {
+    constructor(props){
+        super(props);
+        this.state = {
+            // Empty for now
+        }
+    }
+
+    render(){
+        return(
+            <>
+            {
+                this.props.selectedArticleCounter === 0 ?
+                <BottomBarWrapper GlobalTheme={GlobalTheme} >
+                    <FilledButton> Add Article </FilledButton>
+                </BottomBarWrapper>
+                : 
+                <BottomBarWrapper GlobalTheme={GlobalTheme} selectedArticleCounter={this.props.selectedArticleCounter} >
+                    <LeftSideWrapper>
+                        <OutlineButton>
+                            Cancel
+                        </OutlineButton>
+                    </LeftSideWrapper>
+                    <MiddleWrapper>
+                        <ArticleSelectedText>
+                            {this.props.selectedArticleCounter} selected
+                        </ArticleSelectedText>
+                    </MiddleWrapper>
+                    <RightSideWrapper>
+                        <AcceptRejectButton status={'reject'}>
+                            Reject
+                        </AcceptRejectButton>
+                        <AcceptRejectButton status={'approve'}>
+                            Approve
+                        </AcceptRejectButton>
+                    </RightSideWrapper>
+                </BottomBarWrapper>
+            }
+            </>
+
+        )
+    }
+}
+
 class ModeratorArticleFeedComponent extends PureComponent {
     constructor(props){
         super(props);
@@ -202,27 +246,43 @@ class ModeratorArticleFeedComponent extends PureComponent {
             filterArticleStatus: '',
             sortBy: '',
             articleSelected: false, // Removed functionality for now
-            allArticlesSelected: false,
             statusFilter: 'pending',
+            locationFilter: 'sanfrancisco',
             articleFeed: {
                 1: {
                     title: 'COVID-19 finally eradicated',
                     summary: 'Finally, the day has come people. The day has come. This is not judgment day but a day of celebration, the celebration of our resilience but more importantly, the celebration of our victory over this deadly and insidious disease that has claimed the lives of so many of our compatriots.',
                     source: 'MLK TV',
                     date: '1 hour ago',
+                    mod_status: 'accepted',
                 },
                 2: {
                     title: 'COVID-19 death toll reaches 20 million',
                     summary: "In an unexpected turn of events, COVID-19 mutated into a more deadly form of itself, deemed by leading scientists as SUPER-COVID-19. After spreading rapidly throughout the African, Latin American, and Asian continents, the deadly virus' headcount has now reached 20 million people.",
                     source: 'The New York Times',
                     date: '4 days ago',
+                    mod_status: 'accepted'
+                },
+                3: {
+                    title: 'COVID-19 mutates into SUPER-COVID-19',
+                    summary: "Honestly, we don't really know what to say here. A month ago, scientists in Wuhan came up with a tested vaccine that was supposed to be shipped across the globe and finally put an end to this crisis, but we just learned yesterday that a new strain of COVID-19 has been rapidly spreading across Sub-saharian Africa. May we all wake up from this bad dream.",
+                    source: 'WHO',
+                    date: '5 days ago',
+                    mod_status: 'rejected'
+                },
+                4: {
+                    title: 'Tokyo Olympics delayed until further notice',
+                    summary: "It's all in the article. The board of directors tried to push for the olympics to take place in 2021, but let's be real here, it would be really stupid and no one would go. After months of deliberation, the board of trustees finally came to this painfully obvious realization and in an attempt to appear cautious and magnanimous, made their decision public yesterday at the Sony stadium.",
+                    source: 'Tokyo Dearly',
+                    date: '9 days ago',
+                    mod_status: 'pending'
                 }
             },
-            locationFilter: 'sanfrancisco',
             selectedArticles: {
                 1: false,
                 2: false,
-            }
+            },
+            selectedArticleCounter: 0
         }
         // #comment: articles will be either stored in redux state or locally.
     }
@@ -250,11 +310,24 @@ class ModeratorArticleFeedComponent extends PureComponent {
     // to be the simplest solution in order to ensure that we can update our components accordingly
     toggleArticleSelected = (articleID) => {
         let selectedArticles = {...this.state.selectedArticles};
+        let currentArticleState = selectedArticles[articleID]
+        
+        if (currentArticleState === true) {
+            this.setState({
+                selectedArticleCounter: this.state.selectedArticleCounter - 1
+            })
+        } else {
+            this.setState({
+                selectedArticleCounter: this.state.selectedArticleCounter + 1
+            })  
+        }
+
         selectedArticles[articleID] = !selectedArticles[articleID];
         this.setState({selectedArticles})
     }
 
     render(){
+        console.log('Article selected', this.state.selectedArticleCounter)
         return(
             <FeedWrapper>
             <FilterActionsWrapper>
@@ -281,9 +354,9 @@ class ModeratorArticleFeedComponent extends PureComponent {
                             </CityButton>
                         </LeftFilterWrapper>
                         <RightFilterWrapper>
-                            <TopBarButton>
+                            <NoBorderButton>
                                 Add Area
-                            </TopBarButton>
+                            </NoBorderButton>
                         </RightFilterWrapper>
                     </CityFilterWrapper>
                     <StatusFilterWrapper>
@@ -310,6 +383,9 @@ class ModeratorArticleFeedComponent extends PureComponent {
                             Rejected 
                             </StatusButton>
                         </LeftFilterWrapper>
+                        <RightFilterWrapper>
+
+                        </RightFilterWrapper>
                     </StatusFilterWrapper>
                 </FilterWrapper>
             </FilterActionsWrapper>
@@ -331,7 +407,6 @@ class ModeratorArticleFeedComponent extends PureComponent {
                 <ArticleFeedWrapper>
                     {
                         Object.keys(this.state.articleFeed).map((objectKey) => {
-                            console.log('Object keys', objectKey);
                             const articleObject = this.state.articleFeed[objectKey];
                             const articleKey = Number(objectKey)
                             return <ModeratorArticleComponent 
@@ -345,9 +420,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
                     }
                 </ArticleFeedWrapper>
             </MiddleFeedWrapper>
-            <BottomBarWrapper articleSelected={this.state.articleSelected} >
-                <BottomBarButton> Add Article </BottomBarButton>
-            </BottomBarWrapper>
+            <ModeratorFeedBottomBar articleSelected={this.state.articleSelected} selectedArticleCounter={this.state.selectedArticleCounter} />
             </FeedWrapper>
         )
     }
