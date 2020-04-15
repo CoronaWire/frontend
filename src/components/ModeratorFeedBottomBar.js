@@ -62,6 +62,7 @@ class ModeratorFeedBottomBar extends PureComponent {
     }
 
     render(){
+        console.log('props', this.props)
         return(
             <>
             {
@@ -85,7 +86,7 @@ class ModeratorFeedBottomBar extends PureComponent {
                         <AcceptRejectButton status={'reject'}>
                             Reject
                         </AcceptRejectButton>
-                        <AcceptRejectButton status={'approve'}>
+                        <AcceptRejectButton status={'approve'} onClick={this.props.approveArticles} >
                             Approve
                         </AcceptRejectButton>
                     </RightSideWrapper>

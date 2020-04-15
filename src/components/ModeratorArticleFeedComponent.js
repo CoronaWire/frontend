@@ -6,7 +6,8 @@ import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme'
-import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
+// #toFix: don't like those names, change them. grid is better name.
+import { TinyLayoutSpace, LargeLayoutSpace, SmallLayoutSpace } from '../styledComponents/ModeratorArticleFeed';
 import { NoBorderButton } from '../styledComponents/Buttons';
 // #toDo: create index.jsfile in styled components to get all of components out?
 import ModeratorArticleComponent from './ModeratorArticleComponent'
@@ -172,21 +173,21 @@ class ModeratorArticleFeedComponent extends PureComponent {
                     summary: 'Finally, the day has come people. The day has come. This is not judgment day but a day of celebration, the celebration of our resilience but more importantly, the celebration of our victory over this deadly and insidious disease that has claimed the lives of so many of our compatriots.',
                     source: 'MLK TV',
                     date: '1 hour ago',
-                    mod_status: 'accepted',
+                    mod_status: 'pending',
                 },
                 2: {
                     title: 'COVID-19 death toll reaches 20 million',
                     summary: "In an unexpected turn of events, COVID-19 mutated into a more deadly form of itself, deemed by leading scientists as SUPER-COVID-19. After spreading rapidly throughout the African, Latin American, and Asian continents, the deadly virus' headcount has now reached 20 million people.",
                     source: 'The New York Times',
                     date: '4 days ago',
-                    mod_status: 'accepted'
+                    mod_status: 'pending'
                 },
                 3: {
                     title: 'COVID-19 mutates into SUPER-COVID-19',
                     summary: "Honestly, we don't really know what to say here. A month ago, scientists in Wuhan came up with a tested vaccine that was supposed to be shipped across the globe and finally put an end to this crisis, but we just learned yesterday that a new strain of COVID-19 has been rapidly spreading across Sub-saharian Africa. May we all wake up from this bad dream.",
                     source: 'WHO',
                     date: '5 days ago',
-                    mod_status: 'rejected'
+                    mod_status: 'pending'
                 },
                 4: {
                     title: 'Tokyo Olympics delayed until further notice',
@@ -194,11 +195,21 @@ class ModeratorArticleFeedComponent extends PureComponent {
                     source: 'Tokyo Dearly',
                     date: '9 days ago',
                     mod_status: 'pending'
+                },
+                5: {
+                    title: 'Super Smash Bros Battle released',
+                    summary: "Some scientists have falsely and viciously declared that playing violent video games leads to more violent behavior throughout adulthood. We beg to differ. Nintendo has finally released a new Super Smash and this was the day that we've all been waiting for. Thank you.",
+                    source: 'Freaks & Geeks Games',
+                    date: '10 days ago',
+                    mod_status: 'pending'
                 }
             },
             selectedArticles: {
                 1: false,
                 2: false,
+                3: false,
+                4: false,
+                5: false,
             },
             selectedArticleCounter: 0
         }
@@ -230,23 +241,48 @@ class ModeratorArticleFeedComponent extends PureComponent {
         let selectedArticles = {...this.state.selectedArticles};
         let currentArticleState = selectedArticles[articleID]
         
-        if (currentArticleState === true) {
-            this.setState({
-                selectedArticleCounter: this.state.selectedArticleCounter - 1
-            })
-        } else {
-            this.setState({
-                selectedArticleCounter: this.state.selectedArticleCounter + 1
-            })  
-        }
+        // Ensures that only articles which haven't been approved yet increment the counter and are added
+        // to the list of selected articles. Also ensures that the background doesn't change when clicked.
+        if (this.state.articleFeed[articleID].mod_status !== 'Approved') {
+            if (currentArticleState === true) {
+                this.setState({
+                    selectedArticleCounter: this.state.selectedArticleCounter - 1
+                })
+            } else {
+                this.setState({
+                    selectedArticleCounter: this.state.selectedArticleCounter + 1
+                })  
+            }
 
-        selectedArticles[articleID] = !selectedArticles[articleID];
-        this.setState({selectedArticles})
+            selectedArticles[articleID] = !selectedArticles[articleID];
+            this.setState({selectedArticles})
+        }
+    }
+
+    approveArticles = (articleID) => {
+        console.log('approve article function called');
+        let articleFeed = {...this.state.articleFeed};
+        let selectedArticles = {...this.state.selectedArticles};
+
+        Object.keys(this.state.selectedArticles).forEach((key) => {
+            const selectedStatus = this.state.selectedArticles[key]
+            if (selectedStatus === true){
+                articleFeed[key].mod_status = 'Approved';
+                selectedArticles[key] = !selectedArticles[key]; 
+            }
+        })
+        console.log('new article feed', articleFeed);
+
+        // Makes sure to turn the value of the articleID key to false, so that the article isn't
+        // 'checked', which removes the colored background once an article is approved or rejected
+        
+        
+        this.setState({articleFeed, selectedArticles});
     }
 
     // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
     render(){
-        console.log('Article selected', this.state.selectedArticleCounter)
+        console.log('Article selected', this.state.selectedArticles)
         return(
             <FeedWrapper>
             <FilterActionsWrapper>
@@ -310,18 +346,21 @@ class ModeratorArticleFeedComponent extends PureComponent {
             </FilterActionsWrapper>
             <MiddleFeedWrapper>
                 <FeedSortingBar GlobalTheme={GlobalTheme} >
-                    <CheckboxWrapper >
+                    <TinyLayoutSpace >
                         {/* <ParentCheckbox  allArticlesSelected={this.state.allArticlesSelected} onClick={this.selectAllArticles} /> */}
-                    </CheckboxWrapper>
-                    <LeftTextWrapper> 
+                    </TinyLayoutSpace>
+                    <LargeLayoutSpace> 
                         <GreyMediumText> Article </GreyMediumText>
-                    </LeftTextWrapper>
-                    <MiddleTextWrapper>
+                    </LargeLayoutSpace>
+                    <SmallLayoutSpace>
                         <GreyMediumText> Source </GreyMediumText>
-                    </MiddleTextWrapper>
-                    <RightTextWrapper>
-                        <MediumText> Published </MediumText>
-                    </RightTextWrapper>
+                    </SmallLayoutSpace>
+                    <SmallLayoutSpace>
+                        <GreyMediumText> Published </GreyMediumText>
+                    </SmallLayoutSpace>
+                    <SmallLayoutSpace>
+                        <MediumText> Status </MediumText>
+                    </SmallLayoutSpace>
                 </FeedSortingBar>
                 <ArticleFeedWrapper>
                     {
@@ -339,7 +378,11 @@ class ModeratorArticleFeedComponent extends PureComponent {
                     }
                 </ArticleFeedWrapper>
             </MiddleFeedWrapper>
-            <ModeratorFeedBottomBar articleSelected={this.state.articleSelected} selectedArticleCounter={this.state.selectedArticleCounter} />
+            <ModeratorFeedBottomBar 
+                articleSelected={this.state.articleSelected} 
+                selectedArticleCounter={this.state.selectedArticleCounter}
+                approveArticles={this.approveArticles} 
+            />
             </FeedWrapper>
         )
     }

@@ -4,7 +4,7 @@
 
 import styled from 'styled-components';
 
-export const CheckboxWrapper = styled.div`
+export const TinyLayoutSpace = styled.div`
     width: 4%;
     height: 100%;
     background-color: transparent;
@@ -12,7 +12,7 @@ export const CheckboxWrapper = styled.div`
     justify-content: center;
     align-items: center;
 `
-export const LeftTextWrapper = styled.div`
+export const LargeLayoutSpace = styled.div`
     height: 100%;
     width: 46%;
     background-color: transparent;
@@ -22,7 +22,7 @@ export const LeftTextWrapper = styled.div`
     align-items: center;
 `
 
-export const MiddleTextWrapper = styled.div`
+export const MediumLayoutSpace = styled.div`
     height: 100%;
     width: 25%;
     background-color: transparent;
@@ -31,4 +31,11 @@ export const MiddleTextWrapper = styled.div`
     align-items: center;
 `
 
-export const RightTextWrapper = styled(MiddleTextWrapper)``;
+export const SmallLayoutSpace = styled.div`
+    height: 100%;
+    width: 16%;
+    background-color: transparent;
+    padding-left: 40px;
+    justify-content: center;
+    align-items: center;
+`

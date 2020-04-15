@@ -45,6 +45,8 @@ export const OutlineButton = styled(Button)`
     border-radius: 5px;
     font-size: 15px;
 `
+
+// #toDo: move this red and green to global theming
 export const AcceptRejectButton = styled(Button)`
     background-color: ${props => props.status === 'reject' ? '#D3455B': '#1AAE9F'};
     margin-right: 20px;

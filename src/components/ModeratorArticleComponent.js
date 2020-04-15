@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
 // Internal Modules
-import { CheckboxWrapper, LeftTextWrapper, MiddleTextWrapper, RightTextWrapper } from '../styledComponents/ModeratorArticleFeed';
+import { TinyLayoutSpace, LargeLayoutSpace, SmallLayoutSpace } from '../styledComponents/ModeratorArticleFeed';
 import { LargeText, SmallText } from '../styledComponents/TextComponents';
 import GlobalTheme from '../styledComponents/GlobalTheme';
 
@@ -49,6 +49,13 @@ const ArticleMetaDataText = styled(LargeText)`
     background-color: transparent;
 `
 
+// #toDo #globalTheme: move colors up to global theme
+const StatusText = styled(ArticleMetaDataText)`
+    visibility: ${props => props.status === 'Approved' ? 'visible' : 'hidden'};
+    color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B'};
+    font-weight: 500;
+`
+
 const Checkbox = styled.div`
     height: 20px;
     width: 20px;
@@ -57,7 +64,15 @@ const Checkbox = styled.div`
     outline: none;
     cursor: pointer;
     border-radius: 3px;
+`
 
+// #toDo #globalTheme: move colors up to global theme
+const StatusCircle = styled.div`
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    outline: none;
+    background-color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B'}
 `
 
 
@@ -74,6 +89,8 @@ class ModeratorArticleComponent extends Component {
     }
 
     render() {
+        console.log('articleObject', this.props.articleObject)
+        console.log('article index', this.props.index)
         return (
             <>
                 <IndividualArticleWrapper 
@@ -81,10 +98,16 @@ class ModeratorArticleComponent extends Component {
                         onClick={() => this.props.toggleArticleSelected(this.props.index)}
                         checked={this.props.checked}
                     >
-                    <CheckboxWrapper>
-                        <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(this.props.index)} />
-                    </CheckboxWrapper>
-                    <LeftTextWrapper>
+                    <TinyLayoutSpace>
+                        {
+                            this.props.articleObject.mod_status === 'Approved' ?
+                            <StatusCircle status={this.props.articleObject.mod_status} />
+                            :
+                            <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(this.props.index)} />
+
+                        }
+                    </TinyLayoutSpace>
+                    <LargeLayoutSpace>
                         <ArticleText>
                             <ArticleTitle>
                                 {this.props.articleObject.title}
@@ -93,13 +116,16 @@ class ModeratorArticleComponent extends Component {
                                 {this.props.articleObject.summary}
                             </ArticleSummary>
                         </ArticleText>
-                    </LeftTextWrapper>
-                    <MiddleTextWrapper>
+                    </LargeLayoutSpace>
+                    <SmallLayoutSpace>
                         <ArticleMetaDataText> {this.props.articleObject.source} </ArticleMetaDataText>
-                    </MiddleTextWrapper>
-                    <RightTextWrapper>
+                    </SmallLayoutSpace>
+                    <SmallLayoutSpace>
                         <ArticleMetaDataText> {this.props.articleObject.date} </ArticleMetaDataText>
-                    </RightTextWrapper>
+                    </SmallLayoutSpace>
+                    <SmallLayoutSpace>
+                        <StatusText status={this.props.articleObject.mod_status} > {this.props.articleObject.mod_status} </StatusText>
+                    </SmallLayoutSpace>
                 </IndividualArticleWrapper>
                 
             </>
