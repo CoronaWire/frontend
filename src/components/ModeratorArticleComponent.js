@@ -53,7 +53,7 @@ const ArticleMetaDataText = styled(LargeText)`
 
 // #toDo #globalTheme: move colors up to global theme
 const StatusText = styled(ArticleMetaDataText)`
-    color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B'};
+    color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B' };
     font-weight: 500;
     visibility: inherit;
     margin-bottom: 10px;
@@ -75,7 +75,7 @@ const StatusCircle = styled.div`
     width: 15px;
     border-radius: 50%;
     outline: none;
-    background-color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B'}
+    background-color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B' }
 `
 
 // #toFix #toDo: create a core component that styles column
@@ -133,7 +133,7 @@ class ModeratorArticleComponent extends Component {
                     </SmallLayoutSpace>
                     <SmallLayoutSpace>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >
-                            <StatusText> {this.props.articleObject.mod_status} </StatusText>
+                            <StatusText status={this.props.articleObject.mod_status}> {this.props.articleObject.mod_status} </StatusText>
                             <UnderlinedMediumText> Undo </UnderlinedMediumText>
                         </ColumnWrapper>
                     </SmallLayoutSpace>
