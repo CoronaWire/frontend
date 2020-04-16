@@ -13,6 +13,16 @@ export const Text = styled.p`
   letter-spacing: 0.18px;
 `;
 
+export const H1 = styled.h1`
+  ${normalizeCss};
+  font-family: serif;
+  ${({ theme }) => css`
+    font-weight: ${theme.fontWeight.bold};
+  `};
+  font-size: 24px;
+  line-height: 28px;
+`;
+
 export const H2 = styled.h2`
   ${normalizeCss};
   ${sansSerifFont};
@@ -63,4 +73,7 @@ export const Metadata = styled.p`
   ${({ theme }) => css`
     font-weight: ${theme.fontWeight.semiBold};
   `};
+  font-size: 10px;
+  line-height: 10px;
+  letter-spacing: 0.5px;
 `;

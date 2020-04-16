@@ -120,7 +120,6 @@ const NewsListWrapper = styled.div`
 `;
 
 const OuterWrapper = styled.div`
-  padding: 0 30px;
   ${media.mobile`
     padding: 0 16px;
   `};

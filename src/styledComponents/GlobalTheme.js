@@ -41,12 +41,13 @@ const GlobalTheme = {
     lightDarkGrey: '#DBDBDB',
   },
   newsColors: {
-    pink: '##FF335F',
+    pink: '#FF335F',
     navy: '#242A49',
     ivory: '#F5F5F3',
     darkGrey: '#4F536B',
     midGrey: '#9194A4',
     lightGrey: '#E9EAED',
+    white: '#ffffff',
   },
 	fontWeight: {
 		bold: 700,
