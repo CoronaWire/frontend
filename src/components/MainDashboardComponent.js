@@ -10,19 +10,6 @@ import GlobalTheme from '../styledComponents/GlobalTheme';
 import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
 
-const DashboardHeader = styled.h1`
-    font-size: 28px;
-    font-weight: 500;
-    color: black;
-    background-color: transparent;
-    text-align: left;
-    margin-bottom: 24px;
-    margin-top: ${props => props.theme.dashboardStyling.marginTop};
-    ${media.mobile`
-      margin: 20px 0 12px;
-    `};
-`;
-
 // #toDo: make paddingLeft and marginLeft below 30px
 
 const Button = styled(LoginButton)`
@@ -163,7 +150,6 @@ class MainDashboardComponent extends Component {
     render(){
         return(
           <OuterWrapper>
-            <DashboardHeader>News</DashboardHeader>
             {false && (
               <ButtonsContainer>
                 {this.state.categories.map((value, index) => (

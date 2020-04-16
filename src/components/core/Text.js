@@ -45,7 +45,7 @@ export const H3 = styled.h3`
   letter-spacing: 0.5px;
 `;
 
-export const H4 = styled.h3`
+export const H4 = styled.h4`
   ${normalizeCss};
   ${sansSerifFont};
   ${({ theme }) => css`

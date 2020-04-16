@@ -12,24 +12,25 @@ import { media } from './../helpers/media';
 
 const DashboardWrapper = styled.div`
   width: 100%;
-  padding-top: 70px;
+  margin-top: 70px;
+  padding-top: 40px;
   background-color: transparent;
   display: flex;
   flex-direction: row;
   ${media.mobile`
-    padding-top: 132px;
+    margin-top: 132px;
   `};
 `
 
 const LeftSideContainer = styled.div`
-  width: 18%;
+  width: 330px;
   background-color: transparent;
   ${media.mobile`
     display: none;
   `};
 `
 const MiddleContainer = styled.div`
-  width: 60%;
+  flex: 1;
   background-color: transparent;
   ${media.mobile`
     width: 100%;
@@ -37,7 +38,7 @@ const MiddleContainer = styled.div`
 `
 
 const RightSideContainer = styled.div`
-  width: 22%;
+  width: 330px;
   background-color: transparent;
   display: flex;
   justify-content: center;
