@@ -48,28 +48,28 @@ const RightSideContainer = styled.div`
 `
 
 class NewsDashboard extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            // Empty for now
-        }
+  constructor(props){
+    super(props);
+    this.state = {
+        // Empty for now
     }
+  }
 
-    render(){
-        return(
-            <DashboardWrapper>
-                <LeftSideContainer>
-                    <LeftClientMenuComponent />
-                </LeftSideContainer>
-                <MiddleContainer>
-                    <NewsDashboardComponent />
-                </MiddleContainer>
-                <RightSideContainer>
-                    <InformationFeedComponent />
-                </RightSideContainer>
-            </DashboardWrapper>
-        )
-    }
+  render(){
+    return (
+      <DashboardWrapper>
+        <LeftSideContainer>
+          <LeftClientMenuComponent />
+        </LeftSideContainer>
+        <MiddleContainer>
+          <NewsDashboardComponent />
+        </MiddleContainer>
+        <RightSideContainer>
+          <InformationFeedComponent />
+        </RightSideContainer>
+      </DashboardWrapper>
+    );
+  }
 }
 
 // #toUpgrade: Information Feed Component currently only holds one component (Global News) but needs
