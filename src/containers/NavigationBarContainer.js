@@ -34,17 +34,6 @@ const NavigationBarWrapper = styled.div`
     `};
 `
 
-const NavigationBarHeader = styled.h1`
-    font-weight: 900;
-    font-size: 30px;
-    letter-spacing: 1px;
-    background-color: transparent;
-    margin-left: 20px;
-    text-align: left;
-    position: relative;
-    font-family: oldEnglish;
-`;
-
 const SearchBarContainer = styled.div`
     width: 55%;
     background-color: transparent;
@@ -117,7 +106,7 @@ class NavigationBarContainer extends PureComponent{
     displayLocationInfo = (position) => {
         const lng = position.coords.longitude;
         const lat = position.coords.latitude;
-        
+
         console.log(`longitude: ${ lng } | latitude: ${ lat }`);
     }
 
