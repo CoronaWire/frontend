@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { H3, Container } from './core';
 
-const SelectorText = styled(H3)`
+const OptionText = styled(H3)`
   color: ${({ theme }) => theme.newsColors.midGrey};
 `;
 
-const Item = styled(Container)`
+const OptionWrapper = styled(Container)`
   padding-bottom: 8px;
   cursor: pointer;
   border-bottom: 2px solid ${({ theme }) => theme.newsColors.midGrey};
   ${({ active, theme }) => active && css`
     border-bottom: 2px solid ${({ theme }) => theme.newsColors.pink};
-    ${SelectorText} {
+    ${OptionText} {
       color: ${theme.newsColors.pink};
     }
   `};
@@ -29,9 +29,9 @@ const EndDivider = styled.div`
 `;
 
 const Option = ({ onClick, active, name }) => (
-  <Item onClick={onClick} active={active}>
-    <SelectorText>{name}</SelectorText>
-  </Item>
+  <OptionWrapper onClick={onClick} active={active}>
+    <OptionText>{name}</OptionText>
+  </OptionWrapper>
 );
 
 const options = [
