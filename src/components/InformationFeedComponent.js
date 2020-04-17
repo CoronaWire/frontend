@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import { H4, Metadata } from './core';
+import { FeedSelector } from './FeedSelector';
 
 // #toFix: make components responsive
 // #toDo: decide between show more button that extends feed (limits other features) or simple left and right
@@ -31,7 +32,6 @@ const ArticleMetaData = styled(Metadata)`
   color: ${({ theme }) => theme.newsColors.midGrey};
 `;
 
-
 class InformationFeedComponent extends Component{
   constructor(props){
     super(props);
@@ -54,6 +54,7 @@ class InformationFeedComponent extends Component{
   render() {
     return (
       <FeedWrapper>
+        <FeedSelector />
         {this.state.globalFeed.map((articleObject, index) => (
           <FeedArticle key={index}>
             <ArticleTitle> {articleObject.title} </ArticleTitle>
