@@ -99,12 +99,7 @@ const ScopeWrapper = styled.div`
 // # a common stylesheet for a single source of truth
 // #toFix: also centralize border-radius of article cards
 // #important #toFix: height now set as a static amount of pixels. should be proportions?
-const NewsListWrapper = styled.div`
-    background-color: transparent;
-    overflow-y: auto;
-    margin-top: 20px;
-
-`;
+const NewsListWrapper = styled.div``;
 
 const OuterWrapper = styled.div`
   ${media.mobile`
@@ -118,8 +113,6 @@ class MainDashboardComponent extends Component {
         super(props);
         this.state = {
             categories: ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor'], // #toDecide : Finalize number of categories and type of categories
-            scope: ['Local', 'National'], // #toDecide : is national news going to be on the side or is it going to be part of the main
-            scopeClicked: 'Local',
             news: [
               {
                 timeStamp: '12 min',
@@ -157,18 +150,6 @@ class MainDashboardComponent extends Component {
                 ))}
               </ButtonsContainer>
             )}
-            <ScopeWrapper>
-              {this.state.scope.map((value, index) => (
-                <ScopeButton
-                  key={index}
-                  value={value}
-                  onClick={e => this.handleScopeClick(e.target.value)}
-                  underlined={this.state.scopeClicked == value}
-                >
-                  {value}
-                </ScopeButton>
-              ))}
-            </ScopeWrapper>
             <NewsListWrapper>
               {this.state.news.map((newsObject, index) => (
                 <SingleNewsComponent key={index} props={newsObject} />
