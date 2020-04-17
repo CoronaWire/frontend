@@ -17,6 +17,9 @@ const SingleNewsWrapper = styled.div`
   flex-direction: column;
   ${({ theme }) => `background-color: ${theme.newsColors.white}`};
   margin-bottom: 16px;
+  ${media.mobile`
+    margin-bottom: 8px;
+  `};
   overflow: hidden;
 `;
 

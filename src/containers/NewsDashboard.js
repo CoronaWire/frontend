@@ -18,7 +18,8 @@ const DashboardWrapper = styled.div`
   display: flex;
   flex-direction: row;
   ${media.mobile`
-    margin-top: 132px;
+    padding-top: 8px;
+    margin-top: 138px;
   `};
 `
 

@@ -101,11 +101,7 @@ const ScopeWrapper = styled.div`
 // #important #toFix: height now set as a static amount of pixels. should be proportions?
 const NewsListWrapper = styled.div``;
 
-const OuterWrapper = styled.div`
-  ${media.mobile`
-    padding: 0 16px;
-  `};
-`;
+const OuterWrapper = styled.div``;
 
 // #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
 class MainDashboardComponent extends Component {
