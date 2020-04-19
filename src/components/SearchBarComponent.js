@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
@@ -8,16 +9,37 @@ const SearchBarStyling = {
     height: 40,
     backgroundColor: 'white'
 }
+
+const TextInput = styled.input`
+  .pac-container {
+    z-index: 10000 !important;
+  }
+`;
+
 export default function SearchBarComponent() {
+  const autocomplete = useRef(null);
+  const inputRef = useRef(null);
+
+  const handleSelect = () => {
+    const address = autocomplete.current.getPlace();
+    console.log(address);
+  };
+
+  useEffect(() => {
+    const options = {
+      types: ['(cities)'],
+      componentRestrictions: { country: 'us' }
+    };
+    autocomplete.current = new google.maps.places.Autocomplete(
+      inputRef.current,
+      options,
+    );
+    autocomplete.current.setFields(['name', 'geometry', 'formatted_address']);
+    autocomplete.current.addListener('place_changed', handleSelect);
+  }, []);
+
   return (
-    <Autocomplete
-      id="searchBarComponent"
-      options={topLocation}
-      getOptionLabel={(option) => option.location}
-      style={SearchBarStyling}
-      size="small"
-      renderInput={(params) => <TextField {...params} label="Choose City" variant="outlined" style={{height: 20}}/>}
-    />
+    <TextInput type="text" ref={inputRef} placeholder="Enter your address or city" />
   );
 }
 
