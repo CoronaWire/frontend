@@ -9,10 +9,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components'
 // Internal Modules
-import { TinyLayoutSpace, LargeLayoutSpace, SmallLayoutSpace } from '../styledComponents/ModeratorArticleFeed';
-import { LargeText, SmallText, UnderlinedMediumText } from '../styledComponents/TextComponents';
 import GlobalTheme from '../styledComponents/GlobalTheme';
-
+import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
+import { LargeText, SmallText, UnderlinedMediumText } from '../styledComponents/TextComponents';
 
 const IndividualArticleWrapper = styled.div`
     background-color: transparent;
@@ -109,7 +108,7 @@ class ModeratorArticleComponent extends Component {
                         // onClick={() => this.props.toggleArticleSelected(articleID)}
                         checked={this.props.checked}
                     >
-                    <TinyLayoutSpace>
+                    <TinyGrid>
                         {
                             (this.props.articleObject.mod_status === 'Approved' || this.props.articleObject.mod_status === 'Rejected') ?
                             <StatusCircle status={this.props.articleObject.mod_status} />
@@ -117,8 +116,8 @@ class ModeratorArticleComponent extends Component {
                             <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(articleID)} />
 
                         }
-                    </TinyLayoutSpace>
-                    <LargeLayoutSpace>
+                    </TinyGrid>
+                    <LargeGrid>
                         <ArticleText>
                             <ArticleTitle>
                                 {this.props.articleObject.title}
@@ -127,19 +126,19 @@ class ModeratorArticleComponent extends Component {
                                 {this.props.articleObject.summary}
                             </ArticleSummary>
                         </ArticleText>
-                    </LargeLayoutSpace>
-                    <SmallLayoutSpace>
+                    </LargeGrid>
+                    <SmallGrid>
                         <ArticleMetaDataText> {this.props.articleObject.source} </ArticleMetaDataText>
-                    </SmallLayoutSpace>
-                    <SmallLayoutSpace>
+                    </SmallGrid>
+                    <SmallGrid>
                         <ArticleMetaDataText> {this.props.articleObject.date} </ArticleMetaDataText>
-                    </SmallLayoutSpace>
-                    <SmallLayoutSpace>
+                    </SmallGrid>
+                    <SmallGrid>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >
                             <StatusText status={this.props.articleObject.mod_status}> {this.props.articleObject.mod_status} </StatusText>
                             <UnderlinedMediumText onClick={() => this.props.undoArticleApprovalRejection(articleID)} > Undo </UnderlinedMediumText>
                         </ColumnWrapper>
-                    </SmallLayoutSpace>
+                    </SmallGrid>
                 </IndividualArticleWrapper>
                 
             </>

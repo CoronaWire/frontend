@@ -9,7 +9,7 @@ import styled from 'styled-components';
 // import LeftModeratorMenuComponent from '../components/LeftModeratorMenuComponent';
 // import GlobalTheme from '../styledComponents/GlobalTheme';
 
-import ModeratorArticleFeedComponent from '../components/ModeratorArticleFeedComponent';
+import ModeratorCurateComponent from '../components/ModeratorCurateComponent';
 import AddArticleComponent from '../components/AddArticleComponent';
 
 // #toDo: move all of these to styledComponent folder 
@@ -59,7 +59,7 @@ class ModeratorDashboard extends Component {
                 </LeftSideContainer> */}
                 <MiddleContainer>
                     {
-                        this.state.pageDisplayed === 'ArticleFeed' && <ModeratorArticleFeedComponent /> 
+                        this.state.pageDisplayed === 'ArticleFeed' && <ModeratorCurateComponent /> 
                     }
                     
                     {

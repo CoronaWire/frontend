@@ -44,7 +44,7 @@ const MiddleWrapper = styled(LeftSideWrapper)`
 const RightSideWrapper = styled(LeftSideWrapper)`
     background-color: transparent;
     justify-content: flex-end;
-    width: 20%;
+    width: 25%;
     padding-right: 27px; 
 `;
 

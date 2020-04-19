@@ -1,10 +1,10 @@
 // Contains HTML wrapper used in both "ModeratorArticleFeedComponent"
 // and "ModeratorArticleComponent"
-// Used to divide the parent component in four sub-sections
+// Used to divide the parent component in sub-sections of differing sizes
 
 import styled from 'styled-components';
 
-export const TinyLayoutSpace = styled.div`
+export const TinyGrid = styled.div`
     width: 4%;
     height: 100%;
     background-color: transparent;
@@ -12,7 +12,7 @@ export const TinyLayoutSpace = styled.div`
     justify-content: center;
     align-items: center;
 `
-export const LargeLayoutSpace = styled.div`
+export const LargeGrid = styled.div`
     height: 100%;
     width: 46%;
     background-color: transparent;
@@ -22,7 +22,7 @@ export const LargeLayoutSpace = styled.div`
     align-items: center;
 `
 
-export const MediumLayoutSpace = styled.div`
+export const MediumGrid = styled.div`
     height: 100%;
     width: 25%;
     background-color: transparent;
@@ -31,7 +31,7 @@ export const MediumLayoutSpace = styled.div`
     align-items: center;
 `
 
-export const SmallLayoutSpace = styled.div`
+export const SmallGrid = styled.div`
     height: 100%;
     width: 16%;
     background-color: transparent;
