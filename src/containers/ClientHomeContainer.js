@@ -10,8 +10,7 @@ import NavigationBarContainer from './NavigationBarContainer';
 import NewsDashboard from './NewsDashboard';
 
 const ClientHomeWrapper = styled.div`
-    background-color: white;
-    height: 100%;
+    ${({ theme }) => `background-color: ${theme.newsColors.ivory}`};
     width: 100%;
     display: flex,
     justify-content: center;

@@ -6,7 +6,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 const SearchBarStyling = {
     width: 400,
     height: 40,
-    backgroundColor: 'transparent'
+    backgroundColor: 'white'
 }
 export default function SearchBarComponent() {
   return (

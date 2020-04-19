@@ -5,55 +5,67 @@ import React, { Component, PureComponent } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { LogoIcon } from './../components/core';
 
 // Internal Modules
 import SearchBarComponent from '../components/SearchBarComponent';
+import { MobileFeedSelector } from './../components/MobileFeedSelector';
 import { media } from './../helpers/media';
 
 // #toDo: move all exports to index.js file to make quicker imports?
 // #toDo #UIUX: figure out mobile responsiveness look
 
+const LogoContainer = styled.div`
+  width: 183px;
+  ${media.mobile`
+    margin-bottom: 21px;
+    width: 137px;
+  `};
+`;
+
 const NavigationBarWrapper = styled.div`
     width: 100%;
-    height: 70px;
-    background: ${props => props.isAuthenticated === true ? '#CCB9E9' : 'white'};
+    height: 80px;
+    background: ${({ isAuthenticated, theme }) => isAuthenticated ? '#CCB9E9' : theme.newsColors.ivory};
+    padding: 0 24px;
     position: fixed;
     top: 0;
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     z-index: 5;
     flex-direction: row;
-    -webkit-box-shadow: 0px 7px 10px -1px #D8D8D8;
-    -moz-box-shadow: 0px 7px 10px -1px #D8D8D8;
-    box-shadow: 0px 7px 10px -1px #D8D8D8;
+    box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
+
     ${media.mobile`
       flex-direction: column;
+      padding: 13px 0 0;
       height: auto;
-      padding-bottom: 16px;
     `};
 `
 
-const NavigationBarHeader = styled.h1`
-    font-weight: 900;
-    font-size: 30px;
-    letter-spacing: 1px;
-    background-color: transparent;
-    margin-left: 20px;
-    text-align: left;
-    position: relative;
-    font-family: oldEnglish;
-`;
-
 const SearchBarContainer = styled.div`
     width: 55%;
-    padding: 0 20px;
     background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
     ${media.mobile`
-      width: auto;
+      width: 100%;
       padding: 0 16px;
+      margin-bottom: 18px;
     `};
+`;
+
+const Spacer = styled.div`
+  width: 183px;
+`
+
+const SelectorWrapper = styled.div`
+  width: 100%;
+  ${media.aboveMobile`
+    display: none;
+  `};
 `;
 
 // #toFix: styling of height between nav bar text and nav bar header
@@ -112,7 +124,7 @@ class NavigationBarContainer extends PureComponent{
     displayLocationInfo = (position) => {
         const lng = position.coords.longitude;
         const lat = position.coords.latitude;
-        
+
         console.log(`longitude: ${ lng } | latitude: ${ lat }`);
     }
 
@@ -121,24 +133,25 @@ class NavigationBarContainer extends PureComponent{
         console.log('state', this.state);
 
         return(
-            <NavigationBarWrapper isAuthenticated={isAuthenticated} >
-                <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
-                {
-                        isAuthenticated === true ?
-                        <AuthenticationNavigationText>
-                            Editor
-                        </AuthenticationNavigationText>
-                        :
-                        <SearchBarContainer>
-                            <SearchBarComponent />
-                            {
-                                this.state.isBrowserAdvanced 
-                                && 
-                                <Button onClick={this.findUserLocation}> Find News Near me </Button>
-                            }
-                            </SearchBarContainer>
-                }
-            </NavigationBarWrapper>
+          <NavigationBarWrapper isAuthenticated={isAuthenticated} >
+            <LogoContainer>
+              <LogoIcon width="100%" />
+            </LogoContainer>
+            {isAuthenticated ? (
+                <AuthenticationNavigationText>Editor</AuthenticationNavigationText>
+            ) : (
+              <SearchBarContainer>
+                <SearchBarComponent />
+                {this.state.isBrowserAdvanced && (
+                  <Button onClick={this.findUserLocation}> Find News Near me </Button>
+                )}
+              </SearchBarContainer>
+            )}
+            <Spacer />
+            <SelectorWrapper>
+              <MobileFeedSelector />
+            </SelectorWrapper>
+          </NavigationBarWrapper>
         )
     }
 }

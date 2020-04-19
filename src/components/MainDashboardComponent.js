@@ -10,19 +10,6 @@ import GlobalTheme from '../styledComponents/GlobalTheme';
 import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
 
-const DashboardHeader = styled.h1`
-    font-size: 28px;
-    font-weight: 500;
-    color: black;
-    background-color: transparent;
-    text-align: left;
-    margin-bottom: 24px;
-    margin-top: ${props => props.theme.dashboardStyling.marginTop};
-    ${media.mobile`
-      margin: 20px 0 12px;
-    `};
-`;
-
 // #toDo: make paddingLeft and marginLeft below 30px
 
 const Button = styled(LoginButton)`
@@ -112,19 +99,9 @@ const ScopeWrapper = styled.div`
 // # a common stylesheet for a single source of truth
 // #toFix: also centralize border-radius of article cards
 // #important #toFix: height now set as a static amount of pixels. should be proportions?
-const NewsListWrapper = styled.div`
-    background-color: transparent;
-    overflow-y: auto;
-    margin-top: 20px;
+const NewsListWrapper = styled.div``;
 
-`;
-
-const OuterWrapper = styled.div`
-  padding: 0 30px;
-  ${media.mobile`
-    padding: 0 16px;
-  `};
-`;
+const OuterWrapper = styled.div``;
 
 // #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
 class MainDashboardComponent extends Component {
@@ -132,8 +109,6 @@ class MainDashboardComponent extends Component {
         super(props);
         this.state = {
             categories: ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor'], // #toDecide : Finalize number of categories and type of categories
-            scope: ['Local', 'National'], // #toDecide : is national news going to be on the side or is it going to be part of the main
-            scopeClicked: 'Local',
             news: [
               {
                 timeStamp: '12 min',
@@ -164,7 +139,6 @@ class MainDashboardComponent extends Component {
     render(){
         return(
           <OuterWrapper>
-            <DashboardHeader>News</DashboardHeader>
             {false && (
               <ButtonsContainer>
                 {this.state.categories.map((value, index) => (
@@ -172,18 +146,6 @@ class MainDashboardComponent extends Component {
                 ))}
               </ButtonsContainer>
             )}
-            <ScopeWrapper>
-              {this.state.scope.map((value, index) => (
-                <ScopeButton
-                  key={index}
-                  value={value}
-                  onClick={e => this.handleScopeClick(e.target.value)}
-                  underlined={this.state.scopeClicked == value}
-                >
-                  {value}
-                </ScopeButton>
-              ))}
-            </ScopeWrapper>
             <NewsListWrapper>
               {this.state.news.map((newsObject, index) => (
                 <SingleNewsComponent key={index} props={newsObject} />

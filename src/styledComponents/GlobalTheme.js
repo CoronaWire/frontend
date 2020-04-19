@@ -40,8 +40,22 @@ const GlobalTheme = {
     greenTurquoise: '#00E880',
     lightDarkGrey: '#DBDBDB',
   },
-  navigationBar: {
+  newsColors: {
+    pink: '#FF335F',
+    navy: '#242A49',
+    ivory: '#F5F5F3',
+    darkGrey: '#4F536B',
+    midGrey: '#9194A4',
+    lightGrey: '#E9EAED',
+    white: '#ffffff',
   },
+	fontWeight: {
+		bold: 700,
+		semiBold: 600,
+    medium: 500,
+    regular: 400,
+	},
+  navigationBar: {},
   singleNewsComponent: {
     newsDataHeight: 72,
     padding: '15px'

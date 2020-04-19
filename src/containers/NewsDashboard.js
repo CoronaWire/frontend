@@ -12,24 +12,26 @@ import { media } from './../helpers/media';
 
 const DashboardWrapper = styled.div`
   width: 100%;
-  padding-top: 70px;
+  margin-top: 70px;
+  padding-top: 40px;
   background-color: transparent;
   display: flex;
   flex-direction: row;
   ${media.mobile`
-    padding-top: 132px;
+    padding-top: 8px;
+    margin-top: 138px;
   `};
 `
 
 const LeftSideContainer = styled.div`
-  width: 18%;
+  width: 330px;
   background-color: transparent;
   ${media.mobile`
     display: none;
   `};
 `
 const MiddleContainer = styled.div`
-  width: 60%;
+  flex: 1;
   background-color: transparent;
   ${media.mobile`
     width: 100%;
@@ -37,7 +39,7 @@ const MiddleContainer = styled.div`
 `
 
 const RightSideContainer = styled.div`
-  width: 22%;
+  width: 330px;
   background-color: transparent;
   display: flex;
   justify-content: center;
@@ -47,28 +49,28 @@ const RightSideContainer = styled.div`
 `
 
 class NewsDashboard extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            // Empty for now
-        }
+  constructor(props){
+    super(props);
+    this.state = {
+        // Empty for now
     }
+  }
 
-    render(){
-        return(
-            <DashboardWrapper>
-                <LeftSideContainer>
-                    <LeftClientMenuComponent />
-                </LeftSideContainer>
-                <MiddleContainer>
-                    <NewsDashboardComponent />
-                </MiddleContainer>
-                <RightSideContainer>
-                    <InformationFeedComponent />
-                </RightSideContainer>
-            </DashboardWrapper>
-        )
-    }
+  render(){
+    return (
+      <DashboardWrapper>
+        <LeftSideContainer>
+          <LeftClientMenuComponent />
+        </LeftSideContainer>
+        <MiddleContainer>
+          <NewsDashboardComponent />
+        </MiddleContainer>
+        <RightSideContainer>
+          <InformationFeedComponent />
+        </RightSideContainer>
+      </DashboardWrapper>
+    );
+  }
 }
 
 // #toUpgrade: Information Feed Component currently only holds one component (Global News) but needs

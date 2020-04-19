@@ -5,74 +5,49 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-import { UpArrowIcon, DownArrowIcon, Text } from './core';
+import { Container, UpArrowIcon, DownArrowIcon, Text, B1, H1, Metadata, H4 } from './core';
 import { media } from './../helpers/media';
 
 // #toAsk #UIUX: how is width / height going to change with mobile responsiveness?
 const SingleNewsWrapper = styled.div`
-    border-radius: 5px;
-    border: 1px solid #B0B0B0;
-    display: flex,
-    flex-direction: column;
-    background-color: transparent;
-    margin-bottom: 15px;
-    overflow: hidden;
-`;
-
-const NewsData = styled.div`
-  border-bottom: 1px solid #B0B0B0;
-  padding: 24px 45px;
-  ${media.mobile`
-    padding: 20px 16px;
-  `};
-  overflow: hidden;
+  border-radius: 2px;
+  ${({ theme }) => `border: 1px solid ${theme.newsColors.lightGrey}`};
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  position: relative;
+  ${({ theme }) => `background-color: ${theme.newsColors.white}`};
+  margin-bottom: 16px;
+  ${media.mobile`
+    margin-bottom: 8px;
+  `};
+  overflow: hidden;
+`;
+
+
+const NewsTimeStamp = styled(Metadata)`
+  ${({ theme }) => `color: ${theme.newsColors.midGrey}`};
 `
 
-// #toDo: set up URL container and above component's height so they automatically complement each other
-const URLContainer = styled.div`
-    background-color: transparent;
-    height: 40px;
-    padding: 11px 46px;
-    ${media.mobile`
-      padding: 11px 16px;
-    `};
-`
-const NewsTimeStamp = styled(Text)`
-    font-size: 14px;
-    color: grey;
-    margin-bottom: 20px;
-`
-const lineHeight = 24;
+const lineHeight = 22;
 
 // #toDo #UIUX: what happens if title/text too long? Cut off at X amount of characters. Or set overflow-x hidden.
-const NewsText = styled(Text)`
-  color: black;
-  font-size: 18px;
-  line-height: ${lineHeight}px;
-  font-family: ${props => props.theme.generalApplication.articleSummaryFont};
+const NewsText = styled(B1)`
+  ${({ theme }) => `color: ${theme.newsColors.navy}`};
 `;
 
 const NewsTextContainer = styled.div`
   overflow: hidden;
-  ${({ expanded }) => !expanded && `height: ${2 * lineHeight}px`};
+  ${({ expanded }) => !expanded && `max-height: ${3 * lineHeight}px`};
+  margin-bottom: 14px;
 `;
 
-const NewsTitle = styled(Text)`
-  color: black;
-  font-style: bold;
-  font-size: 16px;
-  font-weight: 600;
+const NewsTitle = styled(H1)`
+  ${({ theme }) => `color: ${theme.newsColors.navy}`};
   margin-bottom: 16px;
-  font-family: ${props => props.theme.generalApplication.articleTitleFont};
 `
 
-const DataSource = styled(Text)`
-  font-size: 14px;
-  color: black;
+const DataSource = styled(H4)`
+  ${({ theme }) => `color: ${theme.newsColors.pink}`};
 `
 
 // #toDo #UIUX #UXUI: is the whole URL container a link or just the website / twitter text?
@@ -88,50 +63,25 @@ const ExpandWrapper = styled.div`
   cursor: pointer;
 `;
 
+const SourceContainer = styled(Container)`
+  margin-bottom: 14px;
+`;
+
 const SingleNewsComponent = ({
   props: { timeStamp, title, summary, source, newsType } = {},
-}) => {
-  const [expanded, setExpanded] = useState(false);
-  const [isExpandable, setExpandable] = useState(false);
-  const summaryRef = useRef(null);
-
-  useEffect(() => {
-    const numberOfLines = summaryRef.current.clientHeight / lineHeight;
-    if (numberOfLines > 2) {
-      setExpandable(true);
-    }
-  }, []);
-
-  return (
-    <SingleNewsWrapper>
-        <NewsData>
-          <NewsTimeStamp>{timeStamp}</NewsTimeStamp>
-          <NewsTitle>{title}</NewsTitle>
-          <NewsTextContainer expanded={expanded}>
-            <NewsText ref={summaryRef}>
-              {summary}
-            </NewsText>
-          </NewsTextContainer>
-          {isExpandable && (
-            <ExpandWrapper
-              onClick={() => {
-                setExpanded(!expanded);
-              }}
-            >
-              {expanded ? <UpArrowIcon /> : <DownArrowIcon />}
-            </ExpandWrapper>
-          )}
-        </NewsData>
-        <URLContainer>
-          <DataSource>
-            {source}
-            <DataType>
-              {` - ${newsType}`}
-            </DataType>
-          </DataSource>
-        </URLContainer>
-    </SingleNewsWrapper>
-  );
-}
+}) => (
+  <SingleNewsWrapper>
+    <SourceContainer>
+      <DataSource>
+        {`${source} - ${newsType}`}
+      </DataSource>
+    </SourceContainer>
+    <NewsTitle>{title}</NewsTitle>
+    <NewsTextContainer>
+      <NewsText>{summary}</NewsText>
+    </NewsTextContainer>
+    <NewsTimeStamp>{timeStamp}</NewsTimeStamp>
+  </SingleNewsWrapper>
+);
 
 export default SingleNewsComponent;
