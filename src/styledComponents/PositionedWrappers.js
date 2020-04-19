@@ -17,7 +17,7 @@ export const LeftPositionedWrapper = styled.div`
 export const RightPositionedWrapper = styled.div`
     height: 100%;
     background-color: transparent;
-    margin-right: 40px;
+    margin-right: 30px;
     display: flex;
     justify-content: flex-end;
     align-items: center;

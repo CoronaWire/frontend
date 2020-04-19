@@ -12,6 +12,7 @@ import React, { PureComponent } from 'react';
 import GlobalTheme from '../styledComponents/GlobalTheme'
 import { LargeText } from '../styledComponents/TextComponents';
 import { FilledButton, OutlineButton, AcceptRejectButton } from '../styledComponents/Buttons';
+import { LeftPositionedWrapper, RightPositionedWrapper } from '../styledComponents/PositionedWrappers';
 
 const BottomBarWrapper = styled.div`
     height: 67px;
@@ -26,34 +27,17 @@ const BottomBarWrapper = styled.div`
     border-top-style:solid;
 `
 
-const LeftSideWrapper = styled.div`
-    width: 10%;
-    height: 100%;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: 30px;
-`
-
-const MiddleWrapper = styled(LeftSideWrapper)`
+const MiddleWrapper = styled(LeftPositionedWrapper)`
     background-color: transparent;
     justify-content: center;
 `
-
-const RightSideWrapper = styled(LeftSideWrapper)`
-    background-color: transparent;
-    justify-content: flex-end;
-    width: 25%;
-    padding-right: 27px; 
-`;
 
 const ArticleSelectedText = styled(LargeText)`
     color: #293845;
 `
 
 
-class ModeratorFeedBottomBar extends PureComponent {
+class ModeratorArticleFeedBottomBar extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
@@ -68,28 +52,30 @@ class ModeratorFeedBottomBar extends PureComponent {
             {
                 this.props.selectedArticleCounter === 0 ?
                 <BottomBarWrapper GlobalTheme={GlobalTheme} >
-                    <FilledButton> Add Article </FilledButton>
+                    <RightPositionedWrapper>
+                        <FilledButton onClick={this.props.togglePageDisplayed}> Add Article </FilledButton>
+                    </RightPositionedWrapper>
                 </BottomBarWrapper>
                 : 
                 <BottomBarWrapper GlobalTheme={GlobalTheme} selectedArticleCounter={this.props.selectedArticleCounter} >
-                    <LeftSideWrapper>
-                        <OutlineButton>
+                    <LeftPositionedWrapper>
+                        <OutlineButton >
                             Cancel
                         </OutlineButton>
-                    </LeftSideWrapper>
+                    </LeftPositionedWrapper>
                     <MiddleWrapper>
                         <ArticleSelectedText>
                             {this.props.selectedArticleCounter} selected
                         </ArticleSelectedText>
                     </MiddleWrapper>
-                    <RightSideWrapper>
+                    <RightPositionedWrapper>
                         <AcceptRejectButton status={'reject'} onClick={this.props.rejectArticles}>
                             Reject
                         </AcceptRejectButton>
                         <AcceptRejectButton status={'approve'} onClick={this.props.approveArticles} >
                             Approve
                         </AcceptRejectButton>
-                    </RightSideWrapper>
+                    </RightPositionedWrapper>
                 </BottomBarWrapper>
             }
             </>
@@ -98,4 +84,4 @@ class ModeratorFeedBottomBar extends PureComponent {
     }
 }
 
-export default ModeratorFeedBottomBar;
+export default ModeratorArticleFeedBottomBar;

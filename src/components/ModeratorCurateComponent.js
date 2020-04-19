@@ -10,8 +10,11 @@ import styled from 'styled-components';
 // Sub-Components
 import CityFilterComponent from './CityFilterComponent'
 import ModeratorArticleFeedComponent from './ModeratorArticleFeedComponent';
-import ModeratorFeedBottomBar from './ModeratorFeedBottomBar'
+import ModeratorIndividualArticleComponent from './ModeratorIndividualArticleComponent';
+import ModeratorArticleFeedBottomBar from './ModeratorArticleFeedBottomBar'
+import ModeratorIndividualArticleBottomBar from './ModeratorIndividualArticleBottomBar';
 import ArticleStatusFilterComponent from './ArticleStatusFilterComponent';
+import IndividualArticleTopActionComponent from './IndividualArticleTopActionComponent';
 
 // #toDo: create index.jsfile in styled components to get all of components out
 
@@ -76,6 +79,7 @@ class ModeratorCurateComponent extends PureComponent {
             articleSelected: false, // Removed functionality for now
             statusFilter: 'pending',
             locationFilter: 'sanfrancisco',
+            pageDisplayed: "articleFeed",
             articleFeed: {
                 1: {
                     title: 'COVID-19 finally eradicated',
@@ -223,30 +227,54 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({articleFeed});
     }
 
+    togglePageDisplayed = () => {
+        this.setState({
+            pageDisplayed: this.state.pageDisplayed === 'articleFeed' ? 'individualArticle' : 'articleFeed'
+        })
+    }
     // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
     render(){
+        console.log('Page displayed changed', this.state.pageDisplayed);
         return(
             <FeedWrapper>
                 <FilterActionsWrapper>
                     <FilterWrapper>
                         <CityFilterComponent locationFilter={this.state.locationFilter} toggleLocationFilter={this.toggleLocationFilter} />
-                        <ArticleStatusFilterComponent statusFilter={this.state.statusFilter} changeStatusFilter={this.changeStatusFilter} />
+                        {
+                            this.state.pageDisplayed === 'articleFeed' ?
+                            <ArticleStatusFilterComponent statusFilter={this.state.statusFilter} changeStatusFilter={this.changeStatusFilter} />   
+                            :
+                            <IndividualArticleTopActionComponent togglePageDisplayed={this.togglePageDisplayed} />
+                        }
                     </FilterWrapper>
                 </FilterActionsWrapper>
                 <MiddleFeedWrapper>
-                    <ModeratorArticleFeedComponent 
+                    {
+                        this.state.pageDisplayed === 'articleFeed' ?
+                        <ModeratorArticleFeedComponent 
                         toggleArticleSelected={this.toggleArticleSelected}
                         undoArticleApprovalRejection={this.undoArticleApprovalRejection}
                         selectedArticles={this.state.selectedArticles}
                         articleFeed={this.state.articleFeed}
-                    />
+                        />
+                        :
+                        <ModeratorIndividualArticleComponent />
+                    }
+
                 </MiddleFeedWrapper>
-                <ModeratorFeedBottomBar 
-                    articleSelected={this.state.articleSelected} 
-                    selectedArticleCounter={this.state.selectedArticleCounter}
-                    approveArticles={this.approveArticles} 
-                    rejectArticles={this.rejectArticles}
-                />
+                {
+                    this.state.pageDisplayed === 'articleFeed' ?
+                    <ModeratorArticleFeedBottomBar 
+                        articleSelected={this.state.articleSelected} 
+                        selectedArticleCounter={this.state.selectedArticleCounter}
+                        approveArticles={this.approveArticles} 
+                        rejectArticles={this.rejectArticles}
+                        togglePageDisplayed={this.togglePageDisplayed}
+                    />
+                    :
+                    <ModeratorIndividualArticleBottomBar />
+            }
+
             </FeedWrapper>
         )
     }

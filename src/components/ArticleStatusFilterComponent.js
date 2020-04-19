@@ -42,7 +42,7 @@ class ArticleStatusFilterComponent extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            // Emtpy for now
+            // Empty for now
         }
     }
 

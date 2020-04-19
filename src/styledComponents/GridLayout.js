@@ -39,3 +39,11 @@ export const SmallGrid = styled.div`
     justify-content: center;
     align-items: center;
 `
+
+export const HalfGrid = styled.div`
+    height: 100%;
+    width: 50%;
+    background-color: green;
+    display: flex;
+    flex-direction: column;
+`

@@ -37,7 +37,7 @@ export const NoBorderButton = styled(Button)`
 `
 
 export const OutlineButton = styled(Button)`
-    color: #B3B3F0;
+    color: #8779F1;
     background-color: white;
     border-color: #B3B3F0;
     border-style: solid;
@@ -53,12 +53,11 @@ export const OutlineButton = styled(Button)`
 // #toDo: move this red and green to global theming
 export const AcceptRejectButton = styled(Button)`
     background-color: ${props => props.status === 'reject' ? '#D3455B': '#1AAE9F'};
-    margin-right: 20px;
+    margin-left: 20px;
     font-weight: 500;
     font-size: 14px;
     border-radius: 5px;
     &:hover {
         background-color: ${props => props.status === 'reject' ? '#BF3449': '#139487'};
-        
     }
 `

@@ -6,15 +6,15 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
+import { HalfGrid } from '../styledComponents/GridLayout';
 
 const IndividualArticleWrapper = styled.div`
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
     background-color: red;
     display: flex;
     flex-direction: row;
 `;
-
 
 class ModeratorIndividualArticleComponent extends Component {
     constructor(props) {
@@ -27,9 +27,11 @@ class ModeratorIndividualArticleComponent extends Component {
     render(){
         return (
             <IndividualArticleWrapper>
+                <HalfGrid>
+                </HalfGrid>
             </IndividualArticleWrapper>
         )
     }
 }
 
-export ModeratorIndividualArticleComponent;
+export default ModeratorIndividualArticleComponent;
