@@ -99,8 +99,8 @@ class ModeratorArticleComponent extends Component {
 
     render() {
         console.log('articleObject', this.props.articleObject)
-        console.log('article index', this.props.index)
-        const articleID = this.props.index;
+        const { articleID, articleIndex } = this.props;
+        console.log('article index', articleIndex);
         return (
             <>
                 <IndividualArticleWrapper 
@@ -117,7 +117,7 @@ class ModeratorArticleComponent extends Component {
 
                         }
                     </TinyGrid>
-                    <LargeGrid>
+                    <LargeGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex)} id={articleID}>
                         <ArticleText>
                             <ArticleTitle>
                                 {this.props.articleObject.title}

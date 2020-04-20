@@ -43,7 +43,7 @@ export const SmallGrid = styled.div`
 export const HalfGrid = styled.div`
     height: 100%;
     width: 50%;
-    background-color: green;
+    background-color: transparent;
     display: flex;
     flex-direction: column;
 `

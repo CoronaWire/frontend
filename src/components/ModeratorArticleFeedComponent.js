@@ -40,6 +40,8 @@ class ModeratorArticleFeedComponent extends PureComponent {
     }
 
     render(){
+        const arr = Object.keys(this.props.articleFeed);
+        console.log('Article feed array', arr);
         return(
             <>
             <ArticleFeedTitleBar GlobalTheme={GlobalTheme} >
@@ -61,17 +63,19 @@ class ModeratorArticleFeedComponent extends PureComponent {
             </ArticleFeedTitleBar>
             <ArticleFeedWrapper>
                 {
-                    Object.keys(this.props.articleFeed).map((objectKey) => {
+                    Object.keys(this.props.articleFeed).map((objectKey, index) => {
                         const articleObject = this.props.articleFeed[objectKey];
                         const articleKey = Number(objectKey)
                         return <ModeratorArticleComponent 
-                            articleObject={articleObject} 
-                            key={objectKey} 
-                            toggleArticleSelected={this.props.toggleArticleSelected}
-                            checked={this.props.selectedArticles[articleKey]}
-                            index={articleKey}
-                            undoArticleApprovalRejection={this.props.undoArticleApprovalRejection}
-                            />
+                                articleObject={articleObject} 
+                                key={objectKey} 
+                                toggleArticleSelected={this.props.toggleArticleSelected}
+                                checked={this.props.selectedArticles[articleKey]}
+                                articleID={articleKey}
+                                articleIndex={index}
+                                undoArticleApprovalRejection={this.props.undoArticleApprovalRejection}
+                                selectIndividualArticle={this.props.selectIndividualArticle}
+                                />
                     })
                 }
             </ArticleFeedWrapper>

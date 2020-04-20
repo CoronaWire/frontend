@@ -45,10 +45,10 @@ class ModeratorIndividualArticleBottomBar extends PureComponent {
                         </OutlineButton>
                     </LeftPositionedWrapper>
                     <RightPositionedWrapper>
-                        <LargeAcceptRejectButton status={'reject'}>
+                        <LargeAcceptRejectButton status={'reject'} onClick={this.props.rejectAndNextArticle} >
                             Reject and Next
                         </LargeAcceptRejectButton>
-                        <LargeAcceptRejectButton status={'approve'}>
+                        <LargeAcceptRejectButton status={'approve'} onClick={this.props.approveAndNextArticle} >
                             Approve and Next
                         </LargeAcceptRejectButton>
                     </RightPositionedWrapper>

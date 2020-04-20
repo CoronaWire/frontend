@@ -79,7 +79,7 @@ class ModeratorCurateComponent extends PureComponent {
             articleSelected: false, // Removed functionality for now
             statusFilter: 'pending',
             locationFilter: 'sanfrancisco',
-            pageDisplayed: "articleFeed",
+            pageDisplayed: 'articleFeed',
             articleFeed: {
                 1: {
                     title: 'COVID-19 finally eradicated',
@@ -124,7 +124,47 @@ class ModeratorCurateComponent extends PureComponent {
                 4: false,
                 5: false,
             },
-            selectedArticleCounter: 0
+            articleFeedArray: [
+                {
+                    title: 'COVID-19 finally eradicated',
+                    summary: 'Finally, the day has come people. The day has come. This is not judgment day but a day of celebration, the celebration of our resilience but more importantly, the celebration of our victory over this deadly and insidious disease that has claimed the lives of so many of our compatriots.',
+                    source: 'MLK TV',
+                    date: '1 hour ago',
+                    mod_status: 'pending',
+                },
+                {
+                    title: 'COVID-19 death toll reaches 20 million',
+                    summary: "In an unexpected turn of events, COVID-19 mutated into a more deadly form of itself, deemed by leading scientists as SUPER-COVID-19. After spreading rapidly throughout the African, Latin American, and Asian continents, the deadly virus' headcount has now reached 20 million people.",
+                    source: 'The New York Times',
+                    date: '4 days ago',
+                    mod_status: 'pending'
+                },
+                {
+                    title: 'COVID-19 mutates into SUPER-COVID-19',
+                    summary: "Honestly, we don't really know what to say here. A month ago, scientists in Wuhan came up with a tested vaccine that was supposed to be shipped across the globe and finally put an end to this crisis, but we just learned yesterday that a new strain of COVID-19 has been rapidly spreading across Sub-saharian Africa. May we all wake up from this bad dream.",
+                    source: 'WHO',
+                    date: '5 days ago',
+                    mod_status: 'pending'
+                },
+                {
+                    title: 'Tokyo Olympics delayed until further notice',
+                    summary: "It's all in the article. The board of directors tried to push for the olympics to take place in 2021, but let's be real here, it would be really stupid and no one would go. After months of deliberation, the board of trustees finally came to this painfully obvious realization and in an attempt to appear cautious and magnanimous, made their decision public yesterday at the Sony stadium.",
+                    source: 'Tokyo Dearly',
+                    date: '9 days ago',
+                    mod_status: 'pending'
+                },
+                {
+                    title: 'Super Smash Bros Battle released',
+                    summary: "Some scientists have falsely and viciously declared that playing violent video games leads to more violent behavior throughout adulthood. We beg to differ. Nintendo has finally released a new Super Smash and this was the day that we've all been waiting for. Thank you.",
+                    source: 'Freaks & Geeks Games',
+                    date: '10 days ago',
+                    mod_status: 'pending'
+                }
+            ],
+            selectedArticleCounter: 0,
+            articleCurrentlyDisplayed: null,
+            articleDisplayedIndex: null,
+
         }
         // #comment: articles will be either stored in redux state or locally.
     }
@@ -232,9 +272,38 @@ class ModeratorCurateComponent extends PureComponent {
             pageDisplayed: this.state.pageDisplayed === 'articleFeed' ? 'individualArticle' : 'articleFeed'
         })
     }
+
+    selectIndividualArticle = (articleID, articleIndex) => {
+        this.setState({
+            articleCurrentlyDisplayed: articleID,
+            pageDisplayed: this.state.pageDisplayed === 'articleFeed' ? 'individualArticle' : 'articleFeed',
+            articleDisplayedIndex: articleIndex,
+        })
+    }
+
+    approveAndNextArticle = () => {
+        const { articleDisplayedIndex } = this.state;
+        const feedLength = Object.keys(this.state.articleFeed).length;
+        this.setState({
+            articleDisplayedIndex: articleDisplayedIndex === feedLength-1 ? 0 : articleDisplayedIndex + 1
+        })
+    }
+
+    // #toDo: ensure that calculations for length are only done once.
+    rejectAndNextArticle = () => {
+        const { articleDisplayedIndex } = this.state;
+        const feedLength = Object.keys(this.state.articleFeed).length;
+        this.setState({
+            articleDisplayedIndex:  articleDisplayedIndex === 0 ? feedLength - 1 : articleDisplayedIndex-1
+        })
+    }
+
     // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
     render(){
-        console.log('Page displayed changed', this.state.pageDisplayed);
+        const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
+        const currentArticle = this.state.articleFeed[Number(articleFeedArrayKeys[this.state.articleDisplayedIndex])]
+        console.log('Article currently displayed index', this.state.articleDisplayedIndex);
+        console.log('Current article', currentArticle);
         return(
             <FeedWrapper>
                 <FilterActionsWrapper>
@@ -256,11 +325,11 @@ class ModeratorCurateComponent extends PureComponent {
                         undoArticleApprovalRejection={this.undoArticleApprovalRejection}
                         selectedArticles={this.state.selectedArticles}
                         articleFeed={this.state.articleFeed}
+                        selectIndividualArticle={this.selectIndividualArticle}
                         />
                         :
-                        <ModeratorIndividualArticleComponent />
+                        <ModeratorIndividualArticleComponent articleObject={currentArticle} />
                     }
-
                 </MiddleFeedWrapper>
                 {
                     this.state.pageDisplayed === 'articleFeed' ?
@@ -269,12 +338,13 @@ class ModeratorCurateComponent extends PureComponent {
                         selectedArticleCounter={this.state.selectedArticleCounter}
                         approveArticles={this.approveArticles} 
                         rejectArticles={this.rejectArticles}
-                        togglePageDisplayed={this.togglePageDisplayed}
                     />
                     :
-                    <ModeratorIndividualArticleBottomBar />
-            }
-
+                    <ModeratorIndividualArticleBottomBar 
+                        approveAndNextArticle={this.approveAndNextArticle}
+                        rejectAndNextArticle={this.rejectAndNextArticle}
+                    />
+                }
             </FeedWrapper>
         )
     }

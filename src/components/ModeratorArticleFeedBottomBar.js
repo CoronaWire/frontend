@@ -53,7 +53,7 @@ class ModeratorArticleFeedBottomBar extends PureComponent {
                 this.props.selectedArticleCounter === 0 ?
                 <BottomBarWrapper GlobalTheme={GlobalTheme} >
                     <RightPositionedWrapper>
-                        <FilledButton onClick={this.props.togglePageDisplayed}> Add Article </FilledButton>
+                        <FilledButton> Add Article </FilledButton>
                     </RightPositionedWrapper>
                 </BottomBarWrapper>
                 : 
