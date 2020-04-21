@@ -1,33 +1,44 @@
 /* eslint-disable no-use-before-define */
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Input, b1Css, SearchIcon } from './core';
 
-const SearchBarStyling = {
-    width: 400,
-    height: 40,
-    backgroundColor: 'white'
-}
+const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
 
-const TextInput = styled.input`
+  svg {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
   .pac-container {
     z-index: 10000 !important;
   }
 `;
 
-export default function SearchBarComponent() {
+const TextInput = styled(Input)`
+  padding-left: 46px;
+`;
+
+export const SearchBarComponent = ({ handleSelect }) => {
   const autocomplete = useRef(null);
   const inputRef = useRef(null);
 
-  const handleSelect = () => {
+  const onSelect = () => {
     const address = autocomplete.current.getPlace();
     console.log(address);
+    if (handleSelect) {
+      // do something with address
+      handleSelect(address);
+    }
   };
 
   useEffect(() => {
     const options = {
-      types: ['(cities)'],
+      types: ['(regions)'],
       componentRestrictions: { country: 'us' }
     };
     autocomplete.current = new google.maps.places.Autocomplete(
@@ -35,18 +46,15 @@ export default function SearchBarComponent() {
       options,
     );
     autocomplete.current.setFields(['name', 'geometry', 'formatted_address']);
-    autocomplete.current.addListener('place_changed', handleSelect);
+    autocomplete.current.addListener('place_changed', onSelect);
   }, []);
 
   return (
-    <TextInput type="text" ref={inputRef} placeholder="Enter your address or city" />
+    <InputWrapper>
+      <SearchIcon />
+      <TextInput type="text" ref={inputRef} placeholder="Enter your city" />
+    </InputWrapper>
   );
 }
 
-// ToDo: Move to redux store after and connect to redux store
-
-const topLocation = [
-    {location: 'New York City'},
-    {location: 'San Francisco'},
-    {location: 'Seattle'},
-]
+export default SearchBarComponent;

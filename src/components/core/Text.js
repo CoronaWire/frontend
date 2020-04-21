@@ -56,7 +56,7 @@ export const H4 = styled.h4`
   letter-spacing: -0.2px;
 `;
 
-export const B1 = styled.p`
+export const b1Css = css`
   ${normalizeCss};
   ${sansSerifFont};
   ${({ theme }) => css`
@@ -65,6 +65,10 @@ export const B1 = styled.p`
   font-size: 16px;
   line-height: 22px;
   letter-spacing: -0.2px;
+`;
+
+export const B1 = styled.p`
+  ${b1Css};
 `;
 
 export const Metadata = styled.p`
