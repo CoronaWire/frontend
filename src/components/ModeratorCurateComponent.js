@@ -82,6 +82,7 @@ class ModeratorCurateComponent extends PureComponent {
             pageDisplayed: 'articleFeed',
             articleFeed: {
                 1: {
+                    id: 1,
                     title: 'COVID-19 finally eradicated',
                     summary: 'Finally, the day has come people. The day has come. This is not judgment day but a day of celebration, the celebration of our resilience but more importantly, the celebration of our victory over this deadly and insidious disease that has claimed the lives of so many of our compatriots.',
                     source: 'MLK TV',
@@ -89,6 +90,7 @@ class ModeratorCurateComponent extends PureComponent {
                     mod_status: 'pending',
                 },
                 2: {
+                    id: 2,
                     title: 'COVID-19 death toll reaches 20 million',
                     summary: "In an unexpected turn of events, COVID-19 mutated into a more deadly form of itself, deemed by leading scientists as SUPER-COVID-19. After spreading rapidly throughout the African, Latin American, and Asian continents, the deadly virus' headcount has now reached 20 million people.",
                     source: 'The New York Times',
@@ -96,6 +98,7 @@ class ModeratorCurateComponent extends PureComponent {
                     mod_status: 'pending'
                 },
                 3: {
+                    id: 3,
                     title: 'COVID-19 mutates into SUPER-COVID-19',
                     summary: "Honestly, we don't really know what to say here. A month ago, scientists in Wuhan came up with a tested vaccine that was supposed to be shipped across the globe and finally put an end to this crisis, but we just learned yesterday that a new strain of COVID-19 has been rapidly spreading across Sub-saharian Africa. May we all wake up from this bad dream.",
                     source: 'WHO',
@@ -103,6 +106,7 @@ class ModeratorCurateComponent extends PureComponent {
                     mod_status: 'pending'
                 },
                 4: {
+                    id: 4,
                     title: 'Tokyo Olympics delayed until further notice',
                     summary: "It's all in the article. The board of directors tried to push for the olympics to take place in 2021, but let's be real here, it would be really stupid and no one would go. After months of deliberation, the board of trustees finally came to this painfully obvious realization and in an attempt to appear cautious and magnanimous, made their decision public yesterday at the Sony stadium.",
                     source: 'Tokyo Dearly',
@@ -110,6 +114,7 @@ class ModeratorCurateComponent extends PureComponent {
                     mod_status: 'pending'
                 },
                 5: {
+                    id: 5,
                     title: 'Super Smash Bros Battle released',
                     summary: "Some scientists have falsely and viciously declared that playing violent video games leads to more violent behavior throughout adulthood. We beg to differ. Nintendo has finally released a new Super Smash and this was the day that we've all been waiting for. Thank you.",
                     source: 'Freaks & Geeks Games',
@@ -125,7 +130,7 @@ class ModeratorCurateComponent extends PureComponent {
                 5: false,
             },
             articleFeedArray: [
-                {
+                {   
                     title: 'COVID-19 finally eradicated',
                     summary: 'Finally, the day has come people. The day has come. This is not judgment day but a day of celebration, the celebration of our resilience but more importantly, the celebration of our victory over this deadly and insidious disease that has claimed the lives of so many of our compatriots.',
                     source: 'MLK TV',
@@ -211,7 +216,7 @@ class ModeratorCurateComponent extends PureComponent {
         }
     }
 
-    approveArticles = () => {
+    approveSeveralArticles = () => {
         let articleFeed = {...this.state.articleFeed};
         let selectedArticles = {...this.state.selectedArticles};
         let countToSubtract = 0;
@@ -230,7 +235,7 @@ class ModeratorCurateComponent extends PureComponent {
             }
         })
         
-        // Make asyncrhonous back-end call here with articleID list
+        // Make asynchronous back-end call here with articleID list
         
         // #toResearch: why did one asynchronous call to setState on same property work instead of
         // a few one after the other
@@ -238,12 +243,12 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({articleFeed, selectedArticles});
     }
 
-    rejectArticles = () => {
+    rejectSeveralArticles = () => {
         let articleFeed = {...this.state.articleFeed};
         let selectedArticles = {...this.state.selectedArticles};
         let countToSubtract = 0;
 
-        // Sames as approveArticles logic but opposite
+        // Sames as approveSeveralArticles logic but opposite
         Object.keys(this.state.selectedArticles).forEach((key) => {
             const selectedStatus = this.state.selectedArticles[key]
             if (selectedStatus === true){
@@ -261,6 +266,18 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({articleFeed, selectedArticles});
     }
 
+    approveIndividualArticle = (articleID) => {
+        const articleFeed = {...this.state.articleFeed};
+        articleFeed[articleID].mod_status = 'Approved';
+        this.setState({articleFeed})
+    }
+
+    rejetIndividualArticle = (articleID) => {
+        const articleFeed = {...this.state.articleFeed};
+        articleFeed[articleID].mod_status = 'Rejected';
+        this.setState({articleFeed})
+    }
+    
     undoArticleApprovalRejection = (articleID) => {
         let articleFeed = {...this.state.articleFeed};
         articleFeed[articleID].mod_status = 'pending';
@@ -281,7 +298,7 @@ class ModeratorCurateComponent extends PureComponent {
         })
     }
 
-    approveAndNextArticle = () => {
+    nextArticle = () => {
         const { articleDisplayedIndex } = this.state;
         const feedLength = Object.keys(this.state.articleFeed).length;
         this.setState({
@@ -289,13 +306,31 @@ class ModeratorCurateComponent extends PureComponent {
         })
     }
 
-    // #toDo: ensure that calculations for length are only done once.
-    rejectAndNextArticle = () => {
+    previousArticle = () => {
         const { articleDisplayedIndex } = this.state;
         const feedLength = Object.keys(this.state.articleFeed).length;
         this.setState({
             articleDisplayedIndex:  articleDisplayedIndex === 0 ? feedLength - 1 : articleDisplayedIndex-1
         })
+    }
+
+    approveAndNextArticle = () => {
+        const { articleDisplayedIndex, articleFeed } = this.state;
+        const articleKey = Object.keys(articleFeed)[Number(articleDisplayedIndex)];
+        const articleObject = articleFeed[articleKey]
+        const articleID = articleObject.id;
+        this.nextArticle();
+        this.approveIndividualArticle(articleID);
+    }
+
+    // #toDo: ensure that calculations for length are only done once.
+    rejectAndNextArticle = () => {
+        const { articleDisplayedIndex, articleFeed } = this.state;
+        const articleKey = Object.keys(articleFeed)[Number(articleDisplayedIndex)];
+        const articleObject = articleFeed[articleKey]
+        const articleID = articleObject.id;
+        this.nextArticle();
+        this.rejetIndividualArticle(articleID);
     }
 
     // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
@@ -313,7 +348,11 @@ class ModeratorCurateComponent extends PureComponent {
                             this.state.pageDisplayed === 'articleFeed' ?
                             <ArticleStatusFilterComponent statusFilter={this.state.statusFilter} changeStatusFilter={this.changeStatusFilter} />   
                             :
-                            <IndividualArticleTopActionComponent togglePageDisplayed={this.togglePageDisplayed} />
+                            <IndividualArticleTopActionComponent 
+                            togglePageDisplayed={this.togglePageDisplayed}
+                            nextArticle={this.nextArticle}
+                            previousArticle={this.previousArticle} 
+                            />
                         }
                     </FilterWrapper>
                 </FilterActionsWrapper>
@@ -336,8 +375,8 @@ class ModeratorCurateComponent extends PureComponent {
                     <ModeratorArticleFeedBottomBar 
                         articleSelected={this.state.articleSelected} 
                         selectedArticleCounter={this.state.selectedArticleCounter}
-                        approveArticles={this.approveArticles} 
-                        rejectArticles={this.rejectArticles}
+                        approveSeveralArticles={this.approveSeveralArticles} 
+                        rejectSeveralArticles={this.rejectSeveralArticles}
                     />
                     :
                     <ModeratorIndividualArticleBottomBar 

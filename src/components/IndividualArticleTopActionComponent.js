@@ -42,8 +42,8 @@ class IndividualArticleTopActionComponent extends PureComponent {
                 <UnderlinedMediumText onClick={this.props.togglePageDisplayed}> Back to Article </UnderlinedMediumText>
             </LeftPositionedWrapper>
             <RightPositionedWrapper>
-                <SmallOutlineButton> Previous </SmallOutlineButton>
-                <SmallOutlineButton> Next </SmallOutlineButton>
+                <SmallOutlineButton onClick={this.props.previousArticle}> Previous </SmallOutlineButton>
+                <SmallOutlineButton onClick={this.props.nextArticle}> Next </SmallOutlineButton>
             </RightPositionedWrapper>
             </ActionsWrapper>
         )

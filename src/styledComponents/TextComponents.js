@@ -22,7 +22,7 @@ export const LargeText = styled(MediumText)`
     font-size: 16px;
 `
 
-export const UnderlinedMediumText = styled.p`
+export const UnderlinedMediumText = styled.div`
     font-size: 15px;
     color: #8779F1;
     background-color: transparent;
@@ -37,4 +37,5 @@ export const UnderlinedMediumText = styled.p`
         border-bottom-color: #8779F1;
     }
     cursor: pointer;
+    width: auto;
 `
