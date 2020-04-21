@@ -15,6 +15,8 @@ const LargeAcceptRejectButton = styled(AcceptRejectButton)`
     width: 140px;
 `
 
+// Same as BottomBarWrapper as in the ModeratorArticleFeedBottomBar but requires less customization
+// #toDo: maybe move it to one location to keep the code DRY? 
 const BottomBarWrapper = styled.div`
     height: 67px;
     background-color: transparent;

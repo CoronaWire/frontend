@@ -3,8 +3,7 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import firebase from 'firebase';
-
+import axios from 'axios';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import LoginInput from '../styledComponents/LoginInput';
@@ -19,18 +18,7 @@ import {
     authenticateUser 
 } from '../actionCreators/actions';
 
-let firebaseConfig = {
-    apiKey: "AIzaSyBioAKQzfRargmo8bAM-fuKRmYTdtgQxSw",
-    authDomain: "coronawire-2020.firebaseapp.com",
-    databaseURL: "https://coronawire-2020.firebaseio.com",
-    projectId: "coronawire-2020",
-    storageBucket: "coronawire-2020.appspot.com",
-    messagingSenderId: "464179001029",
-    appId: "1:464179001029:web:6590be0326ab59b6f962ac",
-    measurementId: "G-Q47EB979TP"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
+
 
 // #toDo #toFix:
 // - Change the name of the styled components
@@ -199,11 +187,16 @@ class ModeratorLoginContainer extends Component{
         event.preventDefault();
         console.log('Sign in button clicked');
         let  { email, password } = this.state;
-
+        const url = 'https://authenticationapi-dot-coronawire-2020.uc.r.appspot.com/authenticate'
         if (this.validateEmail(email)) {
             try { 
-                let firebaseAuthenticationResult = await firebase.auth().signInWithEmailAndPassword(email, password);
-                // console.log('Firebase Authentication ?', firebaseAuthenticationResult);
+                console.log('Attempting authentication')
+                let authenticationResult = await axios.post(url, {
+                    email: email, //varEmail is a variable which holds the email
+                    password: password
+                })
+                console.log('Authentication result?');
+                console.log(authenticationResult)
                 store.dispatch(authenticateUser(true));
                 try {
                     this.storeEmailInLocalStorage(); // Makes sure that the email is stored in local storage for the future
@@ -213,6 +206,8 @@ class ModeratorLoginContainer extends Component{
                 }
             } catch (error) {
                 // console.error('Firebase authentication unsuccessful');
+                console.error(`Error caught in authentication function`)
+                console.log(error);
                 this.toggleConnectionStatus()
                 setTimeout(this.toggleConnectionStatus, 4000); // Ensures that the red error text disappears
                 // UXdecision: Do I leave the error message so that the user always knows or remove it? 
