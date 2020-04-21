@@ -28,11 +28,32 @@ const BottomBarWrapper = styled.div`
     border-top-style:solid;
 `
 
+const DelayOutlineButton = styled(OutlineButton)`
+    opacity: ${props => props.disabled === true ? 0.7 : 1};
+    cursor: ${props => props.disabled === true ? 'not-allowed' : 'pointer'};
+`;
+
 class ModeratorIndividualArticleBottomBar extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
             // Empty for now
+            disabled: false,
+        }
+    }
+
+
+    toggleDisabled = () => {
+        this.setState({
+            disabled: !this.state.disabled
+        })
+    }
+
+    handleSaveButton = () => {
+        // Make sure to disable it for a few seconds once an article is saved
+        if (this.state.disabled === false) {
+            this.toggleDisabled();
+            setTimeout(this.toggleDisabled, 5000);
         }
     }
 
@@ -40,9 +61,9 @@ class ModeratorIndividualArticleBottomBar extends PureComponent {
         return(
                 <BottomBarWrapper >
                     <LeftPositionedWrapper>
-                        <OutlineButton >
+                        <DelayOutlineButton onClick={this.handleSaveButton} disabled={this.state.disabled} >
                             Save
-                        </OutlineButton>
+                        </DelayOutlineButton>
                     </LeftPositionedWrapper>
                     <RightPositionedWrapper>
                         <LargeAcceptRejectButton status={'reject'} onClick={this.props.rejectAndNextArticle} >

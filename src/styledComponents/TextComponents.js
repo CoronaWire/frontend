@@ -26,16 +26,18 @@ export const UnderlinedMediumText = styled.div`
     font-size: 15px;
     color: #8779F1;
     background-color: transparent;
-    border-bottom-style: solid;
-    border-bottom-color: #6558F5;
-    border-bottom-width: 2px;
     margin-top: 0px;
     margin-bottom: 0px;
-    display: inline-block;
-    text-align: center;
+    display: inline;
+    width: auto;
+    text-align: left;
     &:hover {
         border-bottom-color: #8779F1;
+        font-weight: 600;
     }
     cursor: pointer;
-    width: auto;
 `
+
+// border-bottom-style: solid;
+// border-bottom-color: #6558F5;
+// border-bottom-width: 2px;

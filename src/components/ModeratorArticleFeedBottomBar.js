@@ -45,6 +45,7 @@ class ModeratorArticleFeedBottomBar extends PureComponent {
         }
     }
 
+
     render(){
         console.log('props', this.props)
         return(

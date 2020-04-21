@@ -85,7 +85,6 @@ const ColumnWrapper = styled.div`
     display: flex;
     flex-direction: column;
     visibility: ${props => (props.status === 'Approved' || props.status === 'Rejected')? 'visible' : 'hidden'};
-    z-index: 10;
 `
 
 class ModeratorArticleComponent extends Component {
