@@ -13,8 +13,7 @@ export const Input = styled.input`
   border 1px solid ${({ theme }) => theme.newsColors.lightGrey};
   height: 48px;
   text-decoration: none;
-
-  .pac-container {
-    z-index: 10000 !important;
+  &:focus {
+    outline: none;
   }
 `;
