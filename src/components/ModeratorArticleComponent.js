@@ -8,6 +8,7 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components'
+import moment from 'moment';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
@@ -100,8 +101,10 @@ class ModeratorArticleComponent extends Component {
     render() {
         console.log('articleObject', this.props.articleObject)
         const { articleID, articleIndex } = this.props;
-        console.log('article index', articleIndex);
-        const published_at = removeHoursFromDate(this.props.articleObject.published_at);
+        const publishedTime = this.props.articleObject.published_at;
+        console.log('published time', publishedTime);
+        const publishedAt = removeHoursFromDate(this.props.articleObject.published_at);
+        const relativeTime = moment(`${publishedAt}`, "YYYY-MM-DD").fromNow();
         return (
             <>
                 <IndividualArticleWrapper 
@@ -132,7 +135,7 @@ class ModeratorArticleComponent extends Component {
                         <ArticleMetaDataText> {this.props.articleObject.source_id} </ArticleMetaDataText>
                     </SmallGrid>
                     <SmallGrid>
-                        <ArticleMetaDataText> {published_at} </ArticleMetaDataText>
+                        <ArticleMetaDataText> {relativeTime} </ArticleMetaDataText>
                     </SmallGrid>
                     <SmallGrid>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >

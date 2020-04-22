@@ -11,7 +11,8 @@ export const Button = styled.div`
     align-items: center;
     cursor: pointer;
     color: white;
-    width: 120px;
+    padding-left: 20px;
+    padding-right: 20px;
     min-width: 90px;
 `;
 
