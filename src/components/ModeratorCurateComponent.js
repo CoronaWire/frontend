@@ -122,6 +122,7 @@ class ModeratorCurateComponent extends PureComponent {
             returnedResponse = await axios.get(articlesWithinRegionURL);
         }
         const articlesArray = returnedResponse.data;
+        // #toDo: this needs to be done either on back-end or within the individual component
         const articleFeedObject = transformIntoArticleObject(articlesArray)
         const articleIDObject = createObjectOfArticleIDs(articlesArray);
         console.log('Returned response', returnedResponse);

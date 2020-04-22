@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
 import { LargeText, SmallText, UnderlinedMediumText, MediumText } from '../styledComponents/TextComponents';
+import { removeHoursFromDate } from '../utilityFunctions';
 
 const IndividualArticleWrapper = styled.div`
     background-color: transparent;
@@ -100,6 +101,7 @@ class ModeratorArticleComponent extends Component {
         console.log('articleObject', this.props.articleObject)
         const { articleID, articleIndex } = this.props;
         console.log('article index', articleIndex);
+        const published_at = removeHoursFromDate(this.props.articleObject.published_at);
         return (
             <>
                 <IndividualArticleWrapper 
@@ -130,7 +132,7 @@ class ModeratorArticleComponent extends Component {
                         <ArticleMetaDataText> {this.props.articleObject.source_id} </ArticleMetaDataText>
                     </SmallGrid>
                     <SmallGrid>
-                        <ArticleMetaDataText> {this.props.articleObject.published_at} </ArticleMetaDataText>
+                        <ArticleMetaDataText> {published_at} </ArticleMetaDataText>
                     </SmallGrid>
                     <SmallGrid>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >

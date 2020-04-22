@@ -45,3 +45,9 @@ export const createObjectOfArticleIDs = (articleArray) => {
     }
     return articlesObject;
 }
+
+export const removeHoursFromDate = (dateString) => {
+    const dateArray = dateString.split('T');
+    const actualDate = dateArray[0];
+    return actualDate;
+}

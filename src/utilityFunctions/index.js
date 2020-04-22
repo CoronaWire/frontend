@@ -1,2 +1,2 @@
 
-export { transformIntoArticleObject, createObjectOfArticleIDs } from './articleFeed';
+export { transformIntoArticleObject, createObjectOfArticleIDs, removeHoursFromDate } from './articleFeed';
