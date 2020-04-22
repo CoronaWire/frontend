@@ -11,11 +11,11 @@ import styled from 'styled-components'
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
-import { LargeText, SmallText, UnderlinedMediumText } from '../styledComponents/TextComponents';
+import { LargeText, SmallText, UnderlinedMediumText, MediumText } from '../styledComponents/TextComponents';
 
 const IndividualArticleWrapper = styled.div`
     background-color: transparent;
-    height: 115px;
+    height: 125px;
     width: 100%;
     display:flex;
     flex-direction: row;
@@ -46,7 +46,7 @@ const ArticleSummary = styled(SmallText)`
     color: #646464;
 `;
 
-const ArticleMetaDataText = styled(LargeText)`
+const ArticleMetaDataText = styled(MediumText)`
     background-color: transparent;
 `
 

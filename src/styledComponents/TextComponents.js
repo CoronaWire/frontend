@@ -19,7 +19,7 @@ export const SmallText = styled(MediumText)`
     font-size: 12px;
 `
 export const LargeText = styled(MediumText)`
-    font-size: 16px;
+    font-size: 15px;
 `
 
 export const UnderlinedMediumText = styled.div`

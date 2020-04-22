@@ -97,8 +97,30 @@ class ModeratorCurateComponent extends PureComponent {
 
 
     componentDidMount = async () => {
-        const initialArticlesURL = MODERATOR_API_URL + 'pending';
-        const returnedResponse = await axios.get(initialArticlesURL);
+        const paramObject = {
+            status: 'pending', 
+            region: undefined
+        }
+        this.retrieveArticle(paramObject);
+    }
+
+    selectAllArticles = () => {
+        this.setState({
+            allArticlesSelected: !this.state.allArticlesSelected
+        })
+    }
+
+    retrieveArticle = async (paramObject) => {
+        const { status, region } = paramObject;
+        let returnedResponse;
+        if (region == undefined) {
+            const allArticlesURL = MODERATOR_API_URL + `${status}`;
+            returnedResponse = await axios.get(allArticlesURL);
+        } else {
+            const articlesWithinRegionURL = MODERATOR_API_URL + `${status}` + '/region/' + `${region}`;
+            console.log('about to make call to ', articlesWithinRegionURL);
+            returnedResponse = await axios.get(articlesWithinRegionURL);
+        }
         const articlesArray = returnedResponse.data;
         const articleFeedObject = transformIntoArticleObject(articlesArray)
         const articleIDObject = createObjectOfArticleIDs(articlesArray);
@@ -110,22 +132,37 @@ class ModeratorCurateComponent extends PureComponent {
         })
     }
 
-    selectAllArticles = () => {
-        this.setState({
-            allArticlesSelected: !this.state.allArticlesSelected
-        })
-    }
-
+    // #toDo: use the same verbs. change or toggle. toggle is more for buttons, change is better here.
     changeStatusFilter = (event) => {
+        const status = event.target.id;
         this.setState({
-            statusFilter: event.target.id
+            statusFilter: status
         })
+        
+        // Object passed in order to retrieve articles by status
+        const paramObject = {
+            status: status,
+            region: this.state.locationFilter === "all" ? undefined : this.state.locationFilter
+        }
+        // Call the retrieveArticle function to retrieve articles
+        this.retrieveArticle(paramObject);
     }
 
     toggleLocationFilter = (event) => {
+        const location = event.target.id;
         this.setState({
-            locationFilter: event.target.id
+            locationFilter: location
         })
+        console.log('location shifted', location)
+
+        // #toDo: function name and location in state should be changed
+        // Object passed in order to retrieve articles by status
+        const paramObject = {
+            status: this.state.statusFilter,
+            region: location === "all" ? undefined : location
+        }
+        // Call the retrieveArticle function to retrieve articles
+        this.retrieveArticle(paramObject);
     }
 
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
