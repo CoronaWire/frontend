@@ -59,7 +59,8 @@ const GlobalTheme = {
   singleNewsComponent: {
     newsDataHeight: 72,
     padding: '15px'
-  }
+  },
+  sidebarWidth: '330px',
 };
 
 
