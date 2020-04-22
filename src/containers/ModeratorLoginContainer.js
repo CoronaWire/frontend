@@ -18,8 +18,6 @@ import {
     authenticateUser 
 } from '../actionCreators/actions';
 
-
-
 // #toDo #toFix:
 // - Change the name of the styled components
 // - figure out why login message re-renders 8 times
@@ -103,7 +101,7 @@ class ModeratorLoginContainer extends Component{
             password: '',
             unsuccessfulConnection: false,
             emailValidated: 'neutral',
-            headerText: 'CoronaWire Login',
+            headerText: 'Covid Wire Login',
             rememberMeClicked: false
         }
     }
@@ -185,12 +183,11 @@ class ModeratorLoginContainer extends Component{
 
     handleSignIn = async (event) => {
         event.preventDefault();
-        console.log('Sign in button clicked');
         let  { email, password } = this.state;
+        // #toDo: move this URL to .env variables
         const url = 'https://authenticationapi-dot-coronawire-2020.uc.r.appspot.com/authenticate'
         if (this.validateEmail(email)) {
             try { 
-                console.log('Attempting authentication')
                 let authenticationResult = await axios.post(url, {
                     email: email, //varEmail is a variable which holds the email
                     password: password

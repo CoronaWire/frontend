@@ -65,10 +65,10 @@ class ModeratorArticleFeedComponent extends PureComponent {
                 {
                     Object.keys(this.props.articleFeed).map((objectKey, index) => {
                         const articleObject = this.props.articleFeed[objectKey];
-                        const articleKey = Number(objectKey)
+                        const articleKey = objectKey;
                         return <ModeratorArticleComponent 
                                 articleObject={articleObject} 
-                                key={objectKey} 
+                                key={articleKey} 
                                 toggleArticleSelected={this.props.toggleArticleSelected}
                                 checked={this.props.selectedArticles[articleKey]}
                                 articleID={articleKey}

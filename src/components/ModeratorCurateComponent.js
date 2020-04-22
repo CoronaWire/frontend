@@ -4,6 +4,7 @@
 // External Packages
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 // Internal Modules
 // Styled Components
 // import { NoBorderButton } from '../styledComponents/Buttons';
@@ -15,8 +16,11 @@ import ModeratorArticleFeedBottomBar from './ModeratorArticleFeedBottomBar'
 import ModeratorIndividualArticleBottomBar from './ModeratorIndividualArticleBottomBar';
 import ArticleStatusFilterComponent from './ArticleStatusFilterComponent';
 import IndividualArticleTopActionComponent from './IndividualArticleTopActionComponent';
+// Utility Function
+import { transformIntoArticleObject, createObjectOfArticleIDs } from '../utilityFunctions';
 
 // #toDo: create index.jsfile in styled components to get all of components out
+const MODERATOR_API_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/';
 
 const FeedWrapper = styled.div`
     height: 100%;
@@ -78,57 +82,10 @@ class ModeratorCurateComponent extends PureComponent {
             sortBy: '',
             articleSelected: false, // Removed functionality for now
             statusFilter: 'pending',
-            locationFilter: 'sanfrancisco',
+            locationFilter: 'all',
             pageDisplayed: 'articleFeed',
-            articleFeed: {
-                1: {
-                    id: 1,
-                    title: 'COVID-19 finally eradicated',
-                    summary: 'Finally, the day has come people. The day has come. This is not judgment day but a day of celebration, the celebration of our resilience but more importantly, the celebration of our victory over this deadly and insidious disease that has claimed the lives of so many of our compatriots.',
-                    source: 'MLK TV',
-                    date: '1 hour ago',
-                    mod_status: 'pending',
-                },
-                2: {
-                    id: 2,
-                    title: 'COVID-19 death toll reaches 20 million',
-                    summary: "In an unexpected turn of events, COVID-19 mutated into a more deadly form of itself, deemed by leading scientists as SUPER-COVID-19. After spreading rapidly throughout the African, Latin American, and Asian continents, the deadly virus' headcount has now reached 20 million people.",
-                    source: 'The New York Times',
-                    date: '4 days ago',
-                    mod_status: 'pending'
-                },
-                3: {
-                    id: 3,
-                    title: 'COVID-19 mutates into SUPER-COVID-19',
-                    summary: "Honestly, we don't really know what to say here. A month ago, scientists in Wuhan came up with a tested vaccine that was supposed to be shipped across the globe and finally put an end to this crisis, but we just learned yesterday that a new strain of COVID-19 has been rapidly spreading across Sub-saharian Africa. May we all wake up from this bad dream.",
-                    source: 'WHO',
-                    date: '5 days ago',
-                    mod_status: 'pending'
-                },
-                4: {
-                    id: 4,
-                    title: 'Tokyo Olympics delayed until further notice',
-                    summary: "It's all in the article. The board of directors tried to push for the olympics to take place in 2021, but let's be real here, it would be really stupid and no one would go. After months of deliberation, the board of trustees finally came to this painfully obvious realization and in an attempt to appear cautious and magnanimous, made their decision public yesterday at the Sony stadium.",
-                    source: 'From Tokyo With Love?',
-                    date: '9 days ago',
-                    mod_status: 'pending'
-                },
-                5: {
-                    id: 5,
-                    title: 'Super Smash Bros Battle released',
-                    summary: "Some scientists have falsely and viciously declared that playing violent video games leads to more violent behavior throughout adulthood. We beg to differ. Nintendo has finally released a new Super Smash and this was the day that we've all been waiting for. Thank you.",
-                    source: 'Freaks & Geeks Games',
-                    date: '10 days ago',
-                    mod_status: 'pending'
-                }
-            },
-            selectedArticles: {
-                1: false,
-                2: false,
-                3: false,
-                4: false,
-                5: false,
-            },
+            articleFeed: {},
+            selectedArticles: {},
             articleFeedArray: [],
             selectedArticleCounter: 0,
             articleCurrentlyDisplayed: null,
@@ -138,6 +95,20 @@ class ModeratorCurateComponent extends PureComponent {
         // #comment: articles will be either stored in redux state or locally.
     }
 
+
+    componentDidMount = async () => {
+        const initialArticlesURL = MODERATOR_API_URL + 'pending';
+        const returnedResponse = await axios.get(initialArticlesURL);
+        const articlesArray = returnedResponse.data;
+        const articleFeedObject = transformIntoArticleObject(articlesArray)
+        const articleIDObject = createObjectOfArticleIDs(articlesArray);
+        console.log('Returned response', returnedResponse);
+        console.log('Article object', articleFeedObject)
+        this.setState({
+            articleFeed: articleFeedObject,
+            selectedArticles: articleIDObject
+        })
+    }
 
     selectAllArticles = () => {
         this.setState({
@@ -299,8 +270,11 @@ class ModeratorCurateComponent extends PureComponent {
 
     // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
     render(){
+        // Array of all the different article_ids for the articles displayed. Allows us to loop through
+        // list of articles when attempting to edit
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
-        const currentArticle = this.state.articleFeed[Number(articleFeedArrayKeys[this.state.articleDisplayedIndex])]
+        // Current article chosen by the user
+        const currentArticle = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
         console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         console.log('Current article', currentArticle);
         return(

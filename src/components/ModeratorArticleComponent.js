@@ -52,7 +52,7 @@ const ArticleMetaDataText = styled(LargeText)`
 
 // #toDo #globalTheme: move colors up to global theme
 const StatusText = styled(ArticleMetaDataText)`
-    color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B' };
+    color: ${props => props.status === 'approved' ? '#1AAE9F' : '#D3455B' };
     font-weight: 500;
     visibility: inherit;
     margin-bottom: 10px;
@@ -74,7 +74,7 @@ const StatusCircle = styled.div`
     width: 15px;
     border-radius: 50%;
     outline: none;
-    background-color: ${props => props.status === 'Approved' ? '#1AAE9F' : '#D3455B' }
+    background-color: ${props => props.status === 'approved' ? '#1AAE9F' : '#D3455B' }
 `
 
 // #toFix #toDo: create a core component that styles column
@@ -84,7 +84,7 @@ const ColumnWrapper = styled.div`
     background-color: transparent;
     display: flex;
     flex-direction: column;
-    visibility: ${props => (props.status === 'Approved' || props.status === 'Rejected')? 'visible' : 'hidden'};
+    visibility: ${props => (props.status === 'approved' || props.status === 'rejected')? 'visible' : 'hidden'};
 `
 
 class ModeratorArticleComponent extends Component {
@@ -109,7 +109,7 @@ class ModeratorArticleComponent extends Component {
                     >
                     <TinyGrid>
                         {
-                            (this.props.articleObject.mod_status === 'Approved' || this.props.articleObject.mod_status === 'Rejected') ?
+                            (this.props.articleObject.mod_status === 'approved' || this.props.articleObject.mod_status === 'rejected') ?
                             <StatusCircle status={this.props.articleObject.mod_status} />
                             :
                             <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(articleID)} />
@@ -122,15 +122,15 @@ class ModeratorArticleComponent extends Component {
                                 {this.props.articleObject.title}
                             </ArticleTitle>
                             <ArticleSummary>
-                                {this.props.articleObject.summary}
+                                {this.props.articleObject.content}
                             </ArticleSummary>
                         </ArticleText>
                     </LargeGrid>
                     <SmallGrid>
-                        <ArticleMetaDataText> {this.props.articleObject.source} </ArticleMetaDataText>
+                        <ArticleMetaDataText> {this.props.articleObject.source_id} </ArticleMetaDataText>
                     </SmallGrid>
                     <SmallGrid>
-                        <ArticleMetaDataText> {this.props.articleObject.date} </ArticleMetaDataText>
+                        <ArticleMetaDataText> {this.props.articleObject.published_at} </ArticleMetaDataText>
                     </SmallGrid>
                     <SmallGrid>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >

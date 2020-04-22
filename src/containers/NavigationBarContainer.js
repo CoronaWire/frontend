@@ -137,7 +137,7 @@ class AuthenticatedNavigationBar extends Component {
         return (
             <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} GlobalTheme={GlobalTheme} >
                 <NavBarLeftWrapper>
-                    <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
+                    <NavigationBarHeader> CovidWire </NavigationBarHeader>
                     <AuthenticationNavigationText> Editor </AuthenticationNavigationText>
                 </NavBarLeftWrapper>
                 <NavBarRightWrapper>

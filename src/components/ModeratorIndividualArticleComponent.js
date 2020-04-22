@@ -86,8 +86,7 @@ class ModeratorIndividualArticleComponent extends Component {
         super(props);
         this.state = {
             // Empty for now
-            headline: props.articleObject.title,
-            description: props.articleObject.summary,
+
         }
     }
 
@@ -120,7 +119,7 @@ class ModeratorIndividualArticleComponent extends Component {
                             <InputTitle>
                             Description
                             </InputTitle>
-                            <MediumTextField id='description' value={this.props.articleObject.summary} onChange={this.handleChange} />
+                            <MediumTextField id='description' value={this.props.articleObject.content} onChange={this.handleChange} />
                         </InputWrapper>
                         {/* <InputWrapper>
                             <InputTitle>
@@ -132,7 +131,7 @@ class ModeratorIndividualArticleComponent extends Component {
                     </ArticleDataWrapper>
                 </HalfGrid>
                 <HalfGrid>
-                    <IFrame src='https://www.wikipedia.org/' />
+                    <IFrame src={`${this.props.articleObject.article_url}`} />
                 </HalfGrid>
             </IndividualArticleWrapper>
         )

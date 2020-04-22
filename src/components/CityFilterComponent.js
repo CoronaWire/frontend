@@ -1,8 +1,11 @@
 // City Filter Component
 // Component that will have the different location / area filters used by moderators to display the correct
 // articles
-// #currently - only two cities and "all"
-// #later - extended so that there's scope selection (city, state, etc.) and a drop down for each
+// Used in /ModeratorCurateComponent
+
+// Comments
+// Currently - only two cities and "all"
+// Later - extended so that there's scope selection (city, state, etc.) and a drop down for each
 
 // External Packages
 import React, { PureComponent } from 'react';
@@ -40,23 +43,23 @@ class CityFilterComponent extends PureComponent {
         return(
                 <CityFilterWrapper>
                     <LeftPositionedWrapper>
-                        <CityButton id='sanfrancisco' 
-                        selectedState={this.props.locationFilter} 
-                        onClick={this.props.toggleLocationFilter}
-                        > 
-                        San Francisco 
-                        </CityButton>
-                        <CityButton id='seattle'
-                        selectedState={this.props.locationFilter} 
-                        onClick={this.props.toggleLocationFilter}
-                        > 
-                        Seattle 
-                        </CityButton>
                         <CityButton id='all' 
-                        selectedState={this.props.locationFilter} 
+                        selectedID={this.props.locationFilter} 
                         onClick={this.props.toggleLocationFilter}
                         >
                             All  
+                        </CityButton>
+                        <CityButton id='california' 
+                        selectedID={this.props.locationFilter} 
+                        onClick={this.props.toggleLocationFilter}
+                        > 
+                        California 
+                        </CityButton>
+                        <CityButton id='washington'
+                        selectedID={this.props.locationFilter} 
+                        onClick={this.props.toggleLocationFilter}
+                        > 
+                        Washington
                         </CityButton>
                     </LeftPositionedWrapper>
                     {/* <RightPositionedWrapper>

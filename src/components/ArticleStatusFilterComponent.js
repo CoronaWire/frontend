@@ -55,7 +55,7 @@ class ArticleStatusFilterComponent extends PureComponent {
                 onClick={this.props.changeStatusFilter} 
                 chosenStatus={this.props.statusFilter}
                 > 
-                Needs Review 
+                Needs Review
                 </StatusButton>
                 <StatusButton 
                 id='approved' 
