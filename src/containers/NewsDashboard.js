@@ -25,7 +25,9 @@ const DashboardWrapper = styled.div`
 
 const LeftSideContainer = styled.div`
   width: 330px;
-  background-color: transparent;
+  position: fixed;
+  left: 0;
+  top: 112px;
   ${media.mobile`
     display: none;
   `};
@@ -33,6 +35,7 @@ const LeftSideContainer = styled.div`
 const MiddleContainer = styled.div`
   flex: 1;
   background-color: transparent;
+  padding: 0 330px;
   ${media.mobile`
     width: 100%;
   `};
@@ -40,7 +43,9 @@ const MiddleContainer = styled.div`
 
 const RightSideContainer = styled.div`
   width: 330px;
-  background-color: transparent;
+  top: 112px;
+  position: fixed;
+  right: 0;
   display: flex;
   justify-content: center;
   ${media.mobile`
