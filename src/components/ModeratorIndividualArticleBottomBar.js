@@ -11,10 +11,6 @@ import styled from 'styled-components';
 import { OutlineButton, AcceptRejectButton } from '../styledComponents/Buttons';
 import { LeftPositionedWrapper, RightPositionedWrapper } from '../styledComponents/PositionedWrappers';
 
-const LargeAcceptRejectButton = styled(AcceptRejectButton)`
-    width: 140px;
-`
-
 // Same as BottomBarWrapper as in the ModeratorArticleFeedBottomBar but requires less customization
 // #toDo: maybe move it to one location to keep the code DRY? 
 const BottomBarWrapper = styled.div`
@@ -68,12 +64,12 @@ class ModeratorIndividualArticleBottomBar extends PureComponent {
                         </DelayOutlineButton>
                     </LeftPositionedWrapper>
                     <RightPositionedWrapper>
-                        <LargeAcceptRejectButton status={'reject'} onClick={this.props.rejectAndNextArticle} >
+                        <AcceptRejectButton status={'reject'} onClick={this.props.rejectAndNextArticle} >
                             Reject and Next
-                        </LargeAcceptRejectButton>
-                        <LargeAcceptRejectButton status={'approve'} onClick={this.props.approveAndNextArticle} >
+                        </AcceptRejectButton>
+                        <AcceptRejectButton status={'approve'} onClick={this.props.approveAndNextArticle} >
                             Approve and Next
-                        </LargeAcceptRejectButton>
+                        </AcceptRejectButton>
                     </RightPositionedWrapper>
                 </BottomBarWrapper>
         )

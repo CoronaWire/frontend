@@ -142,7 +142,7 @@ class AuthenticatedNavigationBar extends Component {
                 </NavBarLeftWrapper>
                 <NavBarRightWrapper>
                     <NavBarButton 
-                    selectedState={this.state.buttonSelected}
+                    selectedID={this.state.buttonSelected}
                     onClick={this.handleButtonToggle}
                     id='curate'
                     > 
