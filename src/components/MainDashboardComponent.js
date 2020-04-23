@@ -138,6 +138,7 @@ class MainDashboardComponent extends Component {
 
     render(){
         return(
+
           <OuterWrapper>
             {false && (
               <ButtonsContainer>

@@ -49,6 +49,9 @@ const GlobalTheme = {
     lightGrey: '#E9EAED',
     white: '#ffffff',
   },
+  moderationPlatform: {
+    sharedLightGrey: '#DFE6ED',
+  },
 	fontWeight: {
 		bold: 700,
 		semiBold: 600,

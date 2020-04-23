@@ -1,119 +1,85 @@
 // Moderator Article Feed Component
-// Component that shows the moderator the article feeds, whether they are approved, rejected, or pending
+// Component that lists all of the articles displayed to the moderators
 
 // External Packages
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 // Internal Modules
+import GlobalTheme from '../styledComponents/GlobalTheme';
+import { MediumText } from '../styledComponents/TextComponents';
+import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
+// Sub-Components
+import ModeratorArticleComponent from './ModeratorArticleComponent'
 
-const ActionAndFilterWrapper = styled.div`
-    width: 100%;
-    height: 110px;
-    background-color: white;
-    display: flex;
-    flex-direction: row;
-    padding-top: 20px;
+const GreyMediumText = styled(MediumText)`
+    color: #646464;
 `
 
-const FilterWrapper = styled.div`
-    width: 70%;
-    height: auto;
-    box-sizing: content-box;
+const ArticleFeedTitleBar = styled.div`
+    height: 40px;
+    background-color: ${props => props.GlobalTheme.moderationPlatform.sharedLightGrey};
+    display: flex;
+    flex-direction: row;
+`;
+
+const ArticleFeedWrapper = styled.div`
     background-color: transparent;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-`
+`;
 
-const DropDownMenuWrapper = styled.div`
-    width: auto;
-    height: 50px;
-    background-color: transparent;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-`
-
-const DropDownText = styled.h3`
-    width: 80px;
-    font-size: 17px;
-    color: black;
-    font-weight: 600;
-    display: inline-block;
-    background-color: transparent;
-    margin-left: 20px;
-    margin-right: 10px;
-`
-
-const DropDownMenuPlaceholder = styled.div`
-    height: 30px;
-    width: 200px;
-    background-color: transparent;
-    border-radius: 5px;
-    display: inline-block;
-    margin-left: 25px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: black;
-`
-
-const PublishRejectWrapper = styled(FilterWrapper)`
-    width: 30%;
-`
-
-const ButtonWrapper = styled(DropDownMenuWrapper)`
-    justify-content: flex-end;
-    padding-right: 14px;
-`
-
-// #toRemember: height of drop down and button needs to be the same
-// store in global theme?
-
-const Button = styled.div`
-    background-color: ${props => props.buttonType === 'Publish' ? 'purple' : 'red'};
-    height: 30px;
-    width: 90px;
-    border-radius: 5px;
-    margin-right: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-`
-
-class ModeratorArticleFeedComponent extends Component {
-    constructor(props){
+class ModeratorArticleFeedComponent extends PureComponent {
+    constructor(props) {
         super(props);
-        this.state = {
-            filterLocation: '',
-            filterArticleStatus: '',
-            sortBy: '',
+        this.state = {
+            // Empty for now
         }
     }
 
     render(){
+        const arr = Object.keys(this.props.articleFeed);
+        console.log('Article feed array', arr);
         return(
             <>
-            <ActionAndFilterWrapper>
-                <FilterWrapper>
-                    <DropDownMenuWrapper>
-                        <DropDownText> Show: </DropDownText>
-                        <DropDownMenuPlaceholder />
-                        <DropDownMenuPlaceholder />
-                    </DropDownMenuWrapper>
-                    <DropDownMenuWrapper>
-                        <DropDownText> Sort by: </DropDownText>
-                        <DropDownMenuPlaceholder />
-                    </DropDownMenuWrapper>
-                </FilterWrapper>
-                <PublishRejectWrapper>
-                    <ButtonWrapper>
-                        <Button buttonType={'Reject'}> Reject </Button>
-                        <Button buttonType={'Publish'}> Publish </Button>
-                    </ButtonWrapper>
-                </PublishRejectWrapper>
-            </ActionAndFilterWrapper>
-            </>
+            <ArticleFeedTitleBar GlobalTheme={GlobalTheme} >
+                <TinyGrid >
+                    {/* <ParentCheckbox  allArticlesSelected={this.state.allArticlesSelected} onClick={this.selectAllArticles} /> */}
+                </TinyGrid>
+                <LargeGrid> 
+                    <GreyMediumText> Article </GreyMediumText>
+                </LargeGrid>
+                <SmallGrid>
+                    <GreyMediumText> Source </GreyMediumText>
+                </SmallGrid>
+                <SmallGrid>
+                    <GreyMediumText> Published </GreyMediumText>
+                </SmallGrid>
+                <SmallGrid>
+                    <MediumText> Status </MediumText>
+                </SmallGrid>
+            </ArticleFeedTitleBar>
+            <ArticleFeedWrapper>
+                {
+                    Object.keys(this.props.articleFeed).map((objectKey, index) => {
+                        const articleObject = this.props.articleFeed[objectKey];
+                        const articleKey = objectKey;
+                        return <ModeratorArticleComponent 
+                                articleObject={articleObject} 
+                                key={articleKey} 
+                                toggleArticleSelected={this.props.toggleArticleSelected}
+                                checked={this.props.selectedArticles[articleKey]}
+                                articleID={articleKey}
+                                articleIndex={index}
+                                undoArticleApprovalRejection={this.props.undoArticleApprovalRejection}
+                                selectIndividualArticle={this.props.selectIndividualArticle}
+                                />
+                    })
+                }
+            </ArticleFeedWrapper>
+        </>
         )
     }
 }

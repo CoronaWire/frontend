@@ -3,15 +3,14 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import firebase from 'firebase';
-
+import axios from 'axios';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import LoginInput from '../styledComponents/LoginInput';
 import LoginButton from '../styledComponents/LoginButton';
 import LoginForm from '../styledComponents/LoginForm';
 import LinkTypeText from '../styledComponents/LinkTypeText';
-import ErrorText from '../styledComponents/ErrorText';
+import { ErrorText } from '../styledComponents/TextComponents';
 
 // Redux-related
 import store from '../store/store';
@@ -19,21 +18,11 @@ import {
     authenticateUser 
 } from '../actionCreators/actions';
 
-let firebaseConfig = {
-    apiKey: "AIzaSyBioAKQzfRargmo8bAM-fuKRmYTdtgQxSw",
-    authDomain: "coronawire-2020.firebaseapp.com",
-    databaseURL: "https://coronawire-2020.firebaseio.com",
-    projectId: "coronawire-2020",
-    storageBucket: "coronawire-2020.appspot.com",
-    messagingSenderId: "464179001029",
-    appId: "1:464179001029:web:6590be0326ab59b6f962ac",
-    measurementId: "G-Q47EB979TP"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-
-// #toDo:
-// Change the name of the styled components
+// #toDo #toFix:
+// - Change the name of the styled components
+// - figure out why login message re-renders 8 times
+// - fix input checkbox and turn it into a div
+// - remove console.logs returned when user successfully logs in
 
 const ModeratorContainerWrapper = styled.div`
     background: rgb(24,11,255);
@@ -93,14 +82,6 @@ const LoginButtonWithGradient = styled(LoginButton)`
     background: linear-gradient(90deg, rgba(121,9,119,1) 0%, rgba(24,11,255,1) 100%);
 `
 
-const LoginFormWithGradient = styled(LoginForm)`
-    border-color: rgb(24,11,255);
-    boder-color: linear-gradient(90deg, rgba(24,11,255,1) 0%, rgba(121,9,119,1) 100%);
-    border-width: 3px;
-    border-style: solid;
-    border-radius: 5px;
-`
-
 const LoginErrorText = styled(ErrorText)`
   visibility: ${props => props.unsuccessfulConnectionStatus === true ? 'visible' : 'hidden'};
   font-size: 13px;
@@ -120,7 +101,7 @@ class ModeratorLoginContainer extends Component{
             password: '',
             unsuccessfulConnection: false,
             emailValidated: 'neutral',
-            headerText: 'CoronaWire Login',
+            headerText: 'Covid Wire Login',
             rememberMeClicked: false
         }
     }
@@ -202,13 +183,17 @@ class ModeratorLoginContainer extends Component{
 
     handleSignIn = async (event) => {
         event.preventDefault();
-        console.log('Sign in button clicked');
         let  { email, password } = this.state;
-
+        // #toDo: move this URL to .env variables
+        const url = 'https://authenticationapi-dot-coronawire-2020.uc.r.appspot.com/authenticate'
         if (this.validateEmail(email)) {
             try { 
-                let firebaseAuthenticationResult = await firebase.auth().signInWithEmailAndPassword(email, password);
-                // console.log('Firebase Authentication ?', firebaseAuthenticationResult);
+                let authenticationResult = await axios.post(url, {
+                    email: email, //varEmail is a variable which holds the email
+                    password: password
+                })
+                console.log('Authentication result?');
+                console.log(authenticationResult)
                 store.dispatch(authenticateUser(true));
                 try {
                     this.storeEmailInLocalStorage(); // Makes sure that the email is stored in local storage for the future
@@ -218,6 +203,8 @@ class ModeratorLoginContainer extends Component{
                 }
             } catch (error) {
                 // console.error('Firebase authentication unsuccessful');
+                console.error(`Error caught in authentication function`)
+                console.log(error);
                 this.toggleConnectionStatus()
                 setTimeout(this.toggleConnectionStatus, 4000); // Ensures that the red error text disappears
                 // UXdecision: Do I leave the error message so that the user always knows or remove it? 

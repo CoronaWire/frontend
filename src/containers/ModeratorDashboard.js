@@ -4,10 +4,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-import LeftModeratorMenuComponent from '../components/LeftModeratorMenuComponent';
-import GlobalTheme from '../styledComponents/GlobalTheme';
 
-import ModeratorArticleFeedComponent from '../components/ModeratorArticleFeedComponent';
+// #altCode #altDesign: previous design for menu. will delete when UX finalized.
+// import LeftModeratorMenuComponent from '../components/LeftModeratorMenuComponent';
+// import GlobalTheme from '../styledComponents/GlobalTheme';
+
+import ModeratorCurateComponent from '../components/ModeratorCurateComponent';
 import AddArticleComponent from '../components/AddArticleComponent';
 
 // #toDo: move all of these to styledComponent folder 
@@ -15,28 +17,23 @@ import AddArticleComponent from '../components/AddArticleComponent';
 const DashboardWrapper = styled.div`
     width: 100%;
     height: 100%;
-    background-color: transparent;
+    background-color: white;
     display: flex;
     flex-direction: row;
 `
 
-const LeftSideContainer = styled.div`
-    width: 20%;
-    height: 100%;
-    background-color: ${props => props.GlobalTheme.leftMenuStyling.backgroundColor} ;
-`
-const MiddleContainer = styled.div`
-    width: 80%;
-    height: 100%;
-    background-color: transparent;
-`
+// #altCode #altDesign
+// const LeftSideContainer = styled.div`
+//     width: 20%;
+//     height: 100%;
+//     background-color: white;
+// `
 
-const RightSideContainer = styled.div`
-    width: 22%;
+const MiddleContainer = styled.div`
+    width: 100%;
     height: 100%;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
+    background-color: white;
+    overflow-y: scroll;
 `
 
 class ModeratorDashboard extends Component {
@@ -44,7 +41,7 @@ class ModeratorDashboard extends Component {
         super(props);
         this.state = {
             // Empty for now
-            pageDisplayed: 'AddArticle'
+            pageDisplayed: 'ArticleFeed'
         }
     }
 
@@ -57,16 +54,16 @@ class ModeratorDashboard extends Component {
     render(){
         return(
             <DashboardWrapper>
-                <LeftSideContainer GlobalTheme={GlobalTheme} >
+                {/* <LeftSideContainer GlobalTheme={GlobalTheme} >
                     <LeftModeratorMenuComponent handlePageChange={this.handlePageChange} />
-                </LeftSideContainer>
+                </LeftSideContainer> */}
                 <MiddleContainer>
                     {
-                        this.state.pageDisplayed == 'ArticleFeed' && <ModeratorArticleFeedComponent /> 
+                        this.state.pageDisplayed === 'ArticleFeed' && <ModeratorCurateComponent /> 
                     }
                     
                     {
-                        this.state.pageDisplayed == 'AddArticle'  && <AddArticleComponent />
+                        this.state.pageDisplayed === 'AddArticle'  && <AddArticleComponent />
                     }
                 </MiddleContainer>
             </DashboardWrapper>

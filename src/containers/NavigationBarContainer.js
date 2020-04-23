@@ -9,11 +9,18 @@ import { LogoIcon } from './../components/core';
 
 // Internal Modules
 import SearchBarComponent from '../components/SearchBarComponent';
+import GlobalTheme from '../styledComponents/GlobalTheme';
+import TabularButton from '../styledComponents/TabularButton';
+
+// React-Redux
+import store from '../store/store';
+import { signoutUser } from '../actionCreators/actions';
 import { MobileFeedSelector } from './../components/MobileFeedSelector';
 import { media } from './../helpers/media';
 
 // #toDo: move all exports to index.js file to make quicker imports?
 // #toDo #UIUX: figure out mobile responsiveness look
+// #toDo #toFix: every component re-renders twice
 
 const LogoContainer = styled.div`
   width: 183px;
@@ -26,7 +33,7 @@ const LogoContainer = styled.div`
 const NavigationBarWrapper = styled.div`
     width: 100%;
     height: 80px;
-    background: ${({ isAuthenticated, theme }) => isAuthenticated ? '#CCB9E9' : theme.newsColors.ivory};
+    background: ${({ isAuthenticated, theme }) => isAuthenticated ? theme.moderationPlatform.sharedLightGrey : theme.newsColors.ivory};
     padding: 0 24px;
     position: fixed;
     top: 0;
@@ -35,14 +42,26 @@ const NavigationBarWrapper = styled.div`
     align-items: center;
     z-index: 5;
     flex-direction: row;
+    -webkit-box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
+    -moz-box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
     box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
-
+    min-width: 640px;
     ${media.mobile`
       flex-direction: column;
       padding: 13px 0 0;
       height: auto;
     `};
 `
+
+const NavigationBarHeader = styled.h1`
+    font-weight: 900;
+    font-size: 26px;
+    background-color: transparent;
+    margin-left: 20px;
+    text-align: left;
+    height: auto;
+`;
+// font-family: oldEnglish;
 
 const SearchBarContainer = styled.div`
     width: 55%;
@@ -71,14 +90,18 @@ const SelectorWrapper = styled.div`
 
 // #toFix: styling of height between nav bar text and nav bar header
 
-const AuthenticationNavigationText = styled.h2`
+const AuthenticationNavigationText = styled.h4`
     display: inline-block:
     font-size: 13px;
+    height: 36px;
+    box-sizing: border-box;
     color: black;
     font-weight: 400;
     background-color: transparent;
-    margin-left: 14px;
     text-align: center;
+    height: auto;
+    margin-top: 29px;
+    margin-left: 16px;
 `;
 
 const Button = styled.button`
@@ -94,6 +117,118 @@ const Button = styled.button`
     width: 140px;
     border-radius: 5px;
 `
+
+const NavBarLeftWrapper = styled.div`
+    width: 350px;
+    height: auto;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+`
+
+const NavBarRightWrapper = styled.div`
+    margin-right: 40px;
+    width: auto;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: 290px;
+`
+
+const NavBarButton = styled(TabularButton)`
+    height: 100%;
+    font-weight: 600;
+    padding-top: 30px;
+    margin-right: 15px;
+    background-color: transparent
+`
+
+class AuthenticatedNavigationBar extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            buttonSelected: 'curate'
+        }
+    }
+
+    handleButtonToggle = (event) => {
+        this.setState({
+            buttonSelected: event.target.id
+        })
+    }
+
+    handleSignOut = () => {
+        store.dispatch(signoutUser());
+    }
+
+    render(){
+        return (
+            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} GlobalTheme={GlobalTheme} >
+                <NavBarLeftWrapper>
+                    <NavigationBarHeader> CovidWire </NavigationBarHeader>
+                    <AuthenticationNavigationText> Editor </AuthenticationNavigationText>
+                </NavBarLeftWrapper>
+                <NavBarRightWrapper>
+                    <NavBarButton 
+                    selectedID={this.state.buttonSelected}
+                    onClick={this.handleButtonToggle}
+                    id='curate'
+                    > 
+                    Curate
+                    </NavBarButton>
+                    {/* <NavBarButton 
+                    selectedState={this.state.buttonSelected}
+                    onClick={this.handleButtonToggle}
+                    id='moderate'
+                    > 
+                    Moderate 
+                    </NavBarButton>
+                    <NavBarButton 
+                    selectedState={this.state.buttonSelected}
+                    onClick={this.handleButtonToggle}
+                    id='team'>
+                    Team 
+                    </NavBarButton> */}
+                    <NavBarButton 
+                    selectedState={this.state.buttonSelected}
+                    onClick={this.handleSignOut}
+                    id='signout'
+                    > 
+                    Sign Out 
+                    </NavBarButton>
+                </NavBarRightWrapper>
+            </NavigationBarWrapper>
+        )
+    }
+}
+
+class UnauthenticatedNavigationBar extends Component {
+    render(){
+        return (
+            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} >
+            <LogoContainer>
+              <LogoIcon width="100%" />
+            </LogoContainer>
+
+              <SearchBarContainer>
+                <SearchBarComponent />
+                {false && this.props.isBrowserAdvanced && (
+                  <Button onClick={this.props.findUserLocation}> Find News Near me </Button>
+                )}
+              </SearchBarContainer>
+            <Spacer />
+            <SelectorWrapper>
+              <MobileFeedSelector />
+            </SelectorWrapper>
+          </NavigationBarWrapper>
+        )
+    }
+}
 
 class NavigationBarContainer extends PureComponent{
     constructor(props){
@@ -131,28 +266,16 @@ class NavigationBarContainer extends PureComponent{
 
     render() {
         const isAuthenticated = this.props.isAuthenticated;
-        console.log('state', this.state);
-
         return(
-          <NavigationBarWrapper isAuthenticated={isAuthenticated} >
-            <LogoContainer>
-              <LogoIcon width="100%" />
-            </LogoContainer>
-            {isAuthenticated ? (
-                <AuthenticationNavigationText>Editor</AuthenticationNavigationText>
-            ) : (
-              <SearchBarContainer>
-                <SearchBarComponent />
-                {false && this.state.isBrowserAdvanced && (
-                  <Button onClick={this.findUserLocation}> Find News Near me </Button>
-                )}
-              </SearchBarContainer>
-            )}
-            <Spacer />
-            <SelectorWrapper>
-              <MobileFeedSelector />
-            </SelectorWrapper>
-          </NavigationBarWrapper>
+            <>
+            {
+                isAuthenticated === true ? 
+                <AuthenticatedNavigationBar findUserLocation={this.findUserLocation} isAuthenticated={isAuthenticated} /> 
+                : 
+                <UnauthenticatedNavigationBar findUserLocation={this.findUserLocation} isAuthenticated={isAuthenticated} isBrowserAdvanced={this.state.isBrowserAdvanced} />
+            }
+            </>
+            
         )
     }
 }
