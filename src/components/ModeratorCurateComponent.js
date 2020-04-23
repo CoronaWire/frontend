@@ -17,7 +17,7 @@ import ModeratorIndividualArticleBottomBar from './ModeratorIndividualArticleBot
 import ArticleStatusFilterComponent from './ArticleStatusFilterComponent';
 import IndividualArticleTopActionComponent from './IndividualArticleTopActionComponent';
 // Utility Function
-import { transformIntoArticleObject, createObjectOfArticleIDs } from '../utilityFunctions';
+import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles} from '../utilityFunctions';
 
 // #toDo: create index.jsfile in styled components to get all of components out
 const MODERATOR_API_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/';
@@ -189,10 +189,20 @@ class ModeratorCurateComponent extends PureComponent {
         }
     }
 
-    approveSeveralArticles = () => {
+    approveSeveralArticles = async () => {
         let articleFeed = {...this.state.articleFeed};
         let selectedArticles = {...this.state.selectedArticles};
         let countToSubtract = 0;
+
+        // Get an array of all the article_ids of the articles selected
+        const articleIDArray = getSelectedArticles(this.state.selectedArticles);
+        const url = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/approve';
+        // Send request with array of article_ids to server to approve individual or several articles
+        let approveArticlesResponse = await axios.put(url, {
+            articleIDArray: articleIDArray, 
+        })
+        console.log('Approve Article Response', approveArticlesResponse)
+
         // Traverse list of selected articles. If article status is true, it is selected by user, therefore
         // we change the status of that article to 'Approved', revert it's selected status to false,
         // and finally make a call to the back-end to change the status
@@ -200,7 +210,7 @@ class ModeratorCurateComponent extends PureComponent {
             const selectedStatus = this.state.selectedArticles[key]
             if (selectedStatus === true){
                 articleFeed[key].mod_status = 'Approved';
-                // Re-set selection to false
+                // Re-set selection state to false
                 selectedArticles[key] = false;
                 // Ensure to decrement the counter
                 countToSubtract += 1
@@ -216,10 +226,19 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({articleFeed, selectedArticles});
     }
 
-    rejectSeveralArticles = () => {
+    rejectSeveralArticles = async () => {
         let articleFeed = {...this.state.articleFeed};
         let selectedArticles = {...this.state.selectedArticles};
         let countToSubtract = 0;
+
+        // Get an array of all the article_ids of the articles selected
+        const articleIDArray = getSelectedArticles(this.state.selectedArticles);
+        const url = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/reject';
+        // Send request with array of article_ids to server to reject individual or several articles
+        let approveArticlesResponse = await axios.put(url, {
+            articleIDArray: articleIDArray, 
+        })
+        console.log('Reject Article Response', approveArticlesResponse)
 
         // Sames as approveSeveralArticles logic but opposite
         Object.keys(this.state.selectedArticles).forEach((key) => {
