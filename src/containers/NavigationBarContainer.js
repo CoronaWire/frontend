@@ -46,6 +46,7 @@ const NavigationBarWrapper = styled.div`
 
 const SearchBarContainer = styled.div`
     width: 55%;
+    max-width: 684px;
     background-color: transparent;
     display: flex;
     justify-content: center;
@@ -142,7 +143,7 @@ class NavigationBarContainer extends PureComponent{
             ) : (
               <SearchBarContainer>
                 <SearchBarComponent />
-                {this.state.isBrowserAdvanced && (
+                {false && this.state.isBrowserAdvanced && (
                   <Button onClick={this.findUserLocation}> Find News Near me </Button>
                 )}
               </SearchBarContainer>
