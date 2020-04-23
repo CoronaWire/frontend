@@ -5,6 +5,7 @@ import React, { Component, PureComponent } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { LogoIcon } from './../components/core';
 
 // Internal Modules
 import SearchBarComponent from '../components/SearchBarComponent';
@@ -14,23 +15,42 @@ import TabularButton from '../styledComponents/TabularButton';
 // React-Redux
 import store from '../store/store';
 import { signoutUser } from '../actionCreators/actions';
+import { MobileFeedSelector } from './../components/MobileFeedSelector';
+import { media } from './../helpers/media';
 
 // #toDo: move all exports to index.js file to make quicker imports?
 // #toDo #UIUX: figure out mobile responsiveness look
 // #toDo #toFix: every component re-renders twice
 
+const LogoContainer = styled.div`
+  width: 183px;
+  ${media.mobile`
+    margin-bottom: 21px;
+    width: 137px;
+  `};
+`;
+
 const NavigationBarWrapper = styled.div`
     width: 100%;
-    height: 70px;
-    background-color: ${props => props.isAuthenticated === true ? `${props.GlobalTheme.moderationPlatform.sharedLightGrey}` : 'white'};
+    height: 80px;
+    background: ${({ isAuthenticated, theme }) => isAuthenticated ? theme.moderationPlatform.sharedLightGrey : theme.newsColors.ivory};
+    padding: 0 24px;
+    position: fixed;
+    top: 0;
     display: flex;
-    flex-direction: row;
-    -webkit-box-shadow: 0px 7px 10px -1px #D8D8D8;
-    -moz-box-shadow: 0px 7px 10px -1px #D8D8D8;
-    box-shadow: 0px 7px 10px -1px #D8D8D8;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    z-index: 5;
+    flex-direction: row;
+    -webkit-box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
+    -moz-box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
+    box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
     min-width: 640px;
+    ${media.mobile`
+      flex-direction: column;
+      padding: 13px 0 0;
+      height: auto;
+    `};
 `
 
 const NavigationBarHeader = styled.h1`
@@ -43,15 +63,29 @@ const NavigationBarHeader = styled.h1`
 `;
 // font-family: oldEnglish;
 
-
 const SearchBarContainer = styled.div`
     width: 55%;
-    padding-left: 20px;
-    padding-right: 20px;
+    max-width: 684px;
     background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
+    ${media.mobile`
+      width: 100%;
+      padding: 0 16px;
+      margin-bottom: 18px;
+    `};
+`;
+
+const Spacer = styled.div`
+  width: 183px;
+`
+
+const SelectorWrapper = styled.div`
+  width: 100%;
+  ${media.aboveMobile`
+    display: none;
+  `};
 `;
 
 // #toFix: styling of height between nav bar text and nav bar header
@@ -72,10 +106,9 @@ const AuthenticationNavigationText = styled.h4`
 
 const Button = styled.button`
     background-color: transparent;
-    border-style: solid;
-    border-width: black;
-    border-color: black;
+    border 1px solid black;
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     margin-left: 30px;
@@ -177,18 +210,22 @@ class AuthenticatedNavigationBar extends Component {
 class UnauthenticatedNavigationBar extends Component {
     render(){
         return (
-            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} GlobalTheme={GlobalTheme} >
-                <NavigationBarHeader> CoronavirusWire </NavigationBarHeader>
-                <SearchBarContainer>
-                    <SearchBarComponent />
-                    {
-                        this.props.isBrowserAdvanced 
-                        && 
-                        <Button onClick={this.props.findUserLocation}> Find News Near me </Button>
-                    }
-                </SearchBarContainer>
-                }
-            </NavigationBarWrapper>
+            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} >
+            <LogoContainer>
+              <LogoIcon width="100%" />
+            </LogoContainer>
+
+              <SearchBarContainer>
+                <SearchBarComponent />
+                {false && this.props.isBrowserAdvanced && (
+                  <Button onClick={this.props.findUserLocation}> Find News Near me </Button>
+                )}
+              </SearchBarContainer>
+            <Spacer />
+            <SelectorWrapper>
+              <MobileFeedSelector />
+            </SelectorWrapper>
+          </NavigationBarWrapper>
         )
     }
 }
@@ -223,7 +260,7 @@ class NavigationBarContainer extends PureComponent{
     displayLocationInfo = (position) => {
         const lng = position.coords.longitude;
         const lat = position.coords.latitude;
-        
+
         console.log(`longitude: ${ lng } | latitude: ${ lat }`);
     }
 
