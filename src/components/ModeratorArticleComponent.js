@@ -101,10 +101,13 @@ class ModeratorArticleComponent extends Component {
     render() {
         console.log('articleObject', this.props.articleObject)
         const { articleID, articleIndex } = this.props;
+        const status = this.props.articleObject.mod_status
         const publishedTime = this.props.articleObject.published_at;
         console.log('published time', publishedTime);
         const publishedAt = removeHoursFromDate(this.props.articleObject.published_at);
         const relativeTime = moment(`${publishedAt}`, "YYYY-MM-DD").fromNow();
+        // Capitalizes mod_status
+        const mod_status =  status.charAt(0).toUpperCase() + status.slice(1)
         return (
             <>
                 <IndividualArticleWrapper 
@@ -139,7 +142,7 @@ class ModeratorArticleComponent extends Component {
                     </SmallGrid>
                     <SmallGrid>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >
-                            <StatusText status={this.props.articleObject.mod_status}> {this.props.articleObject.mod_status} </StatusText>
+                            <StatusText status={this.props.articleObject.mod_status}> {mod_status} </StatusText>
                             <UnderlinedMediumText onClick={() => this.props.undoArticleApprovalRejection(articleID)} > Undo </UnderlinedMediumText>
                         </ColumnWrapper>
                     </SmallGrid>

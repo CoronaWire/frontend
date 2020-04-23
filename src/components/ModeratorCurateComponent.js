@@ -209,7 +209,7 @@ class ModeratorCurateComponent extends PureComponent {
         Object.keys(this.state.selectedArticles).forEach((key) => {
             const selectedStatus = this.state.selectedArticles[key]
             if (selectedStatus === true){
-                articleFeed[key].mod_status = 'Approved';
+                articleFeed[key].mod_status = 'approved';
                 // Re-set selection state to false
                 selectedArticles[key] = false;
                 // Ensure to decrement the counter
@@ -244,7 +244,7 @@ class ModeratorCurateComponent extends PureComponent {
         Object.keys(this.state.selectedArticles).forEach((key) => {
             const selectedStatus = this.state.selectedArticles[key]
             if (selectedStatus === true){
-                articleFeed[key].mod_status = 'Rejected';
+                articleFeed[key].mod_status = 'rejected';
                 // Re-set selection to false
                 selectedArticles[key] = false;
                 // Ensure to decrement the counter
@@ -346,6 +346,7 @@ class ModeratorCurateComponent extends PureComponent {
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
         // Current article chosen by the user
         const currentArticle = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
+        console.log('ARTICLE FEED STATE', this.state.articleFeed)
         console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         console.log('Current article', currentArticle);
         return(
