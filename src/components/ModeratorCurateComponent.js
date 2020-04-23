@@ -258,6 +258,7 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({articleFeed, selectedArticles});
     }
 
+
     approveIndividualArticle = (articleID) => {
         const articleFeed = {...this.state.articleFeed};
         articleFeed[articleID].mod_status = 'Approved';
@@ -270,7 +271,20 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({articleFeed})
     }
     
-    undoArticleApprovalRejection = (articleID) => {
+    undoArticleApprovalRejection = async (articleID) => {
+        const url = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/review'
+
+        // Send call to back-end to ensure article mod_status is changed to pending
+        try {
+            let makeArticlePendingResponse = await axios.put(url, {
+                articleID: articleID, 
+            })
+            console.log(`makeArticlePending response ${makeArticlePendingResponse}`)
+        } catch (error) {
+            console.error(`Error caught while attempting to make article ${articleID} pending`)
+        }
+
+        // Reflect change in the internal state
         let articleFeed = {...this.state.articleFeed};
         articleFeed[articleID].mod_status = 'pending';
         this.setState({articleFeed});
