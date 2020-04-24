@@ -52,11 +52,11 @@ export const SearchBarComponent = ({ handleSelect }) => {
 
   return (
     <InputWrapper>
-      <Script
-        url={`https://maps.googleapis.com/maps/api/js?key=AIzaSyC8K2pvt-4CSCWa_qgPi5DOj0caFrDdw2k&libraries=places`}
+      {/* <Script
+        url={`https://maps.googleapis.com/maps/api/js?key=REACT_APP_API_KEY&libraries=places`}
         onLoad={setupAutocomplete}
         onError={() => console.log('error')}
-      />
+      /> */}
       <SearchIcon />
       <TextInput type="text" ref={inputRef} placeholder="Enter your city" />
     </InputWrapper>
