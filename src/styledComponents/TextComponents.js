@@ -18,6 +18,7 @@ export const MediumText = styled.p`
 export const SmallText = styled(MediumText)`
     font-size: 12px;
 `
+
 export const LargeText = styled(MediumText)`
     font-size: 15px;
 `
