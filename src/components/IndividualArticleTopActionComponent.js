@@ -8,7 +8,7 @@ import styled from 'styled-components';
 // Internal Modules
 import { LeftPositionedWrapper, RightPositionedWrapper } from '../styledComponents/PositionedWrappers';
 import { OutlineButton } from '../styledComponents/Buttons';
-import { UnderlinedMediumText } from '../styledComponents/TextComponents';
+import { UnderlinedMediumText } from '../styledComponents/Text';
 
 const ActionsWrapper = styled.div`
     background-color: transparent;

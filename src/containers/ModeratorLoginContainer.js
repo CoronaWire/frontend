@@ -10,7 +10,7 @@ import LoginInput from '../styledComponents/LoginInput';
 import LoginButton from '../styledComponents/LoginButton';
 import LoginForm from '../styledComponents/LoginForm';
 import LinkTypeText from '../styledComponents/LinkTypeText';
-import { ErrorText } from '../styledComponents/TextComponents';
+import { ErrorText } from '../styledComponents/Text';
 
 // Redux-related
 import store from '../store/store';
@@ -175,7 +175,7 @@ class ModeratorLoginContainer extends Component{
     // Function used to let the user know that an unsuccessful connection has been made
     // Allows us to create an error user message
     toggleConnectionStatus = () => {
-        console.log('Connection status', this.state.unsuccessfulConnection)
+        // console.log('Connection status', this.state.unsuccessfulConnection)
         this.setState({
             unsuccessfulConnection: !this.state.unsuccessfulConnection
         })
@@ -192,8 +192,8 @@ class ModeratorLoginContainer extends Component{
                     email: email, //varEmail is a variable which holds the email
                     password: password
                 })
-                console.log('Authentication result?');
-                console.log(authenticationResult)
+                // console.log('Authentication result?');
+                // console.log(authenticationResult)
                 store.dispatch(authenticateUser(true));
                 try {
                     this.storeEmailInLocalStorage(); // Makes sure that the email is stored in local storage for the future
@@ -217,7 +217,7 @@ class ModeratorLoginContainer extends Component{
     }
 
     render() {
-        console.log('Re-rendered unsuccessfulConnectionStatus', this.state.unsuccessfulConnection)
+        // console.log('Re-rendered unsuccessfulConnectionStatus', this.state.unsuccessfulConnection)
         return(
             <ModeratorContainerWrapper>
             <LoginContainerBox GlobalTheme={GlobalTheme} >

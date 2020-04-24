@@ -12,7 +12,7 @@ import moment from 'moment';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
-import { LargeText, SmallText, UnderlinedMediumText, MediumText } from '../styledComponents/TextComponents';
+import { LargeText, SmallText, UnderlinedMediumText, MediumText } from '../styledComponents/Text';
 import { removeHoursFromDate } from '../utilityFunctions';
 
 const IndividualArticleWrapper = styled.div`
@@ -99,11 +99,9 @@ class ModeratorArticleComponent extends Component {
     }
 
     render() {
-        console.log('articleObject', this.props.articleObject)
         const { articleID, articleIndex } = this.props;
         const status = this.props.articleObject.mod_status
         const publishedTime = this.props.articleObject.published_at;
-        console.log('published time', publishedTime);
         const publishedAt = removeHoursFromDate(this.props.articleObject.published_at);
         const relativeTime = moment(`${publishedAt}`, "YYYY-MM-DD").fromNow();
         // Capitalizes mod_status

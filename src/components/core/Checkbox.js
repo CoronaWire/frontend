@@ -25,7 +25,6 @@ export class Checkbox extends Component {
         this.setState({
             checked: !this.state.checked
         })
-        console.log('This props passed', this.props);
     }
 
     render(){

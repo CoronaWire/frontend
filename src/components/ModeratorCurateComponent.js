@@ -119,15 +119,14 @@ class ModeratorCurateComponent extends PureComponent {
             returnedResponse = await axios.get(allArticlesURL);
         } else {
             const articlesWithinRegionURL = MODERATOR_API_URL + `${status}` + '/region/' + `${region}`;
-            console.log('about to make call to ', articlesWithinRegionURL);
             returnedResponse = await axios.get(articlesWithinRegionURL);
         }
         const articlesArray = returnedResponse.data;
         // #toDo: this needs to be done either on back-end or within the individual component
         const articleFeedObject = transformIntoArticleObject(articlesArray)
         const articleIDObject = createObjectOfArticleIDs(articlesArray);
-        console.log('Returned response', returnedResponse);
-        console.log('Article object', articleFeedObject)
+        // console.log('Returned response', returnedResponse);
+        // console.log('Article object', articleFeedObject)
         this.setState({
             articleFeed: articleFeedObject,
             selectedArticles: articleIDObject
@@ -155,7 +154,6 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({
             locationFilter: location
         })
-        console.log('location shifted', location)
 
         // #toDo: function name and location in state should be changed
         // Object passed in order to retrieve articles by status
@@ -202,7 +200,7 @@ class ModeratorCurateComponent extends PureComponent {
         let approveArticlesResponse = await axios.put(url, {
             articleIDArray: articleIDArray, 
         })
-        console.log('Approve Article Response', approveArticlesResponse)
+        // console.log('Approve Article Response', approveArticlesResponse)
 
         // Traverse list of selected articles. If article status is true, it is selected by user, therefore
         // we change the status of that article to 'Approved', revert it's selected status to false,
@@ -239,7 +237,7 @@ class ModeratorCurateComponent extends PureComponent {
         let approveArticlesResponse = await axios.put(url, {
             articleIDArray: articleIDArray, 
         })
-        console.log('Reject Article Response', approveArticlesResponse)
+        // console.log('Reject Article Response', approveArticlesResponse)
 
         // Sames as approveSeveralArticles logic but opposite
         Object.keys(this.state.selectedArticles).forEach((key) => {
@@ -280,7 +278,6 @@ class ModeratorCurateComponent extends PureComponent {
             let makeArticlePendingResponse = await axios.put(url, {
                 articleID: articleID, 
             })
-            console.log(`makeArticlePending response ${makeArticlePendingResponse}`)
         } catch (error) {
             console.error(`Error caught while attempting to make article ${articleID} pending`)
         }
@@ -347,9 +344,9 @@ class ModeratorCurateComponent extends PureComponent {
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
         // Current article chosen by the user
         const currentArticle = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
-        console.log('ARTICLE FEED STATE', this.state.articleFeed)
-        console.log('Article currently displayed index', this.state.articleDisplayedIndex);
-        console.log('Current article', currentArticle);
+        // console.log('ARTICLE FEED STATE', this.state.articleFeed)
+        // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
+        // console.log('Current article', currentArticle);
         return(
             <FeedWrapper>
                 <FilterActionsWrapper>

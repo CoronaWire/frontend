@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import React, { PureComponent } from 'react';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme'
-import { LargeText } from '../styledComponents/TextComponents';
+import { LargeText } from '../styledComponents/Text';
 import { FilledButton, OutlineButton, AcceptRejectButton } from '../styledComponents/Buttons';
 import { LeftPositionedWrapper, RightPositionedWrapper } from '../styledComponents/PositionedWrappers';
 

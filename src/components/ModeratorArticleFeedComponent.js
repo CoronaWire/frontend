@@ -6,7 +6,7 @@ import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
-import { MediumText } from '../styledComponents/TextComponents';
+import { MediumText } from '../styledComponents/Text';
 import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
 // Sub-Components
 import ModeratorArticleComponent from './ModeratorArticleComponent'
@@ -41,7 +41,6 @@ class ModeratorArticleFeedComponent extends PureComponent {
 
     render(){
         const arr = Object.keys(this.props.articleFeed);
-        console.log('Article feed array', arr);
         return(
             <>
             <ArticleFeedTitleBar GlobalTheme={GlobalTheme} >
