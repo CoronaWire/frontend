@@ -35,6 +35,7 @@ const NavigationBarWrapper = styled.div`
     height: 80px;
     background: ${({ isAuthenticated, theme }) => isAuthenticated ? theme.moderationPlatform.sharedLightGrey : theme.newsColors.ivory};
     padding: 0 24px;
+    position: fixed;
     top: 0;
     display: flex;
     justify-content: space-between;

@@ -12,7 +12,6 @@ body {
 }
 
 html, body, #root, .class {
-  height: 100%;
   width: 100%;
 }
 
