@@ -52,6 +52,7 @@ const GlobalTheme = {
   moderationPlatform: {
     sharedLightGrey: '#DFE6ED',
   },
+  moderatorHeaderHeight: '70px',
 	fontWeight: {
 		bold: 700,
 		semiBold: 600,

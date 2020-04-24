@@ -55,8 +55,7 @@ const NavigationBarWrapper = styled.div`
 
 const AuthenticatedNavBarWrapper = styled.div`
     width: 100%;
-    height: 8%;
-    min-height: 70px;
+    height: ${({ theme }) => theme.moderatorHeaderHeight};
     background: ${({ isAuthenticated, theme }) => isAuthenticated ? theme.moderationPlatform.sharedLightGrey : theme.newsColors.ivory};
     padding: 0 24px;
     top: 0;
