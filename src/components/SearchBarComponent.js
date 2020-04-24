@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Input, b1Css, SearchIcon } from './core';
+import Script from 'react-load-script';
 
 const InputWrapper = styled.div`
   position: relative;
@@ -36,7 +37,7 @@ export const SearchBarComponent = ({ handleSelect }) => {
     }
   };
 
-  useEffect(() => {
+  const setupAutocomplete = () => {
     const options = {
       types: ['(regions)'],
       componentRestrictions: { country: 'us' }
@@ -47,14 +48,21 @@ export const SearchBarComponent = ({ handleSelect }) => {
     );
     autocomplete.current.setFields(['name', 'geometry', 'formatted_address']);
     autocomplete.current.addListener('place_changed', onSelect);
-  }, []);
+  };
 
   return (
     <InputWrapper>
+      <Script
+        url={`https://maps.googleapis.com/maps/api/js?key=${
+          process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+        }&libraries=places`}
+        onLoad={setupAutocomplete}
+        onError={() => console.log('error')}
+      />
       <SearchIcon />
       <TextInput type="text" ref={inputRef} placeholder="Enter your city" />
     </InputWrapper>
   );
-}
+};
 
 export default SearchBarComponent;
