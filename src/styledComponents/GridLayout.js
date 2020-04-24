@@ -12,6 +12,7 @@ export const TinyGrid = styled.div`
     justify-content: center;
     align-items: center;
 `
+
 export const LargeGrid = styled.div`
     height: 100%;
     width: 46%;

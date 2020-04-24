@@ -9,7 +9,7 @@ import ModeratorDashboard from './ModeratorDashboard';
 
 // Same as 'ClientHomeWrapper', create a global one that you store in StyledComponents
 const ModeratorHomeWrapper = styled.div`
-    background-color: #E5E5E5;
+    background-color: transparent;
     height: 100%;
     width: 100%;
     display: flex,

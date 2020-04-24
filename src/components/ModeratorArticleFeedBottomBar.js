@@ -15,7 +15,8 @@ import { FilledButton, OutlineButton, AcceptRejectButton } from '../styledCompon
 import { LeftPositionedWrapper, RightPositionedWrapper } from '../styledComponents/PositionedWrappers';
 
 const BottomBarWrapper = styled.div`
-    height: 67px;
+    height: 10%;
+    min-height: 65px;
     background-color: ${props => props.selectedArticleCounter ? props.GlobalTheme.moderationPlatform.sharedLightGrey : 'transparent'};
     width: 100%;
     display: flex;
