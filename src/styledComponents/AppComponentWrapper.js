@@ -6,6 +6,7 @@ import { media } from './../helpers/media';
 
 const AppComponentWrapper = styled.div`
   width: 100% !important;
+  height: 100%;
   background-color: transparent;
   display: flex;
   justify-content: center;

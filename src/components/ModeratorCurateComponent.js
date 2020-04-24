@@ -31,6 +31,7 @@ const FeedWrapper = styled.div`
     overflow-y: scroll;
 `
 
+// #toDo: change names
 const FilterActionsWrapper = styled.div`
     width: 100%;
     height: 16%;
@@ -54,7 +55,7 @@ const FilterWrapper = styled.div`
 // fixed
 const MiddleFeedWrapper = styled.div`
     width: 100%;
-    height: 66%;
+    height: 74%;
     background-color: transparent;
     display: flex;
     flex-direction: column;

@@ -13,6 +13,7 @@ import { LeftPositionedWrapper, RightPositionedWrapper } from '../styledComponen
 
 // Same as BottomBarWrapper as in the ModeratorArticleFeedBottomBar but requires less customization
 // #toDo: maybe move it to one location to keep the code DRY? 
+// #unlike the ModeratorArticleBottomBar, height here is set as px instead of %. choose one.
 const BottomBarWrapper = styled.div`
     height: 67px;
     background-color: transparent;
@@ -57,7 +58,7 @@ class ModeratorIndividualArticleBottomBar extends PureComponent {
 
     render(){
         return(
-                <BottomBarWrapper >
+                <BottomBarWrapper>
                     <LeftPositionedWrapper>
                         <DelayOutlineButton onClick={this.handleSaveButton} disabled={this.state.disabled} >
                             Save

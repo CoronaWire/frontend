@@ -16,8 +16,8 @@ import AddArticleComponent from '../components/AddArticleComponent';
 
 const DashboardWrapper = styled.div`
     width: 100%;
-    height: 100%;
-    background-color: white;
+    height: 91%;
+    background-color: transparent;
     display: flex;
     flex-direction: row;
 `
@@ -32,7 +32,7 @@ const DashboardWrapper = styled.div`
 const MiddleContainer = styled.div`
     width: 100%;
     height: 100%;
-    background-color: white;
+    background-color: transparent;
     overflow-y: scroll;
 `
 
@@ -51,21 +51,22 @@ class ModeratorDashboard extends Component {
         })
     }
 
+    // #toDo: remove one of the wrappers, it's repetitive. 
     render(){
         return(
             <DashboardWrapper>
                 {/* <LeftSideContainer GlobalTheme={GlobalTheme} >
                     <LeftModeratorMenuComponent handlePageChange={this.handlePageChange} />
                 </LeftSideContainer> */}
-                <MiddleContainer>
+                {/* <MiddleContainer> */}
                     {
                         this.state.pageDisplayed === 'ArticleFeed' && <ModeratorCurateComponent /> 
                     }
                     
                     {
-                        this.state.pageDisplayed === 'AddArticle'  && <AddArticleComponent />
+                        this.state.pageDisplayed === 'AddArticle'  && false && <AddArticleComponent />
                     }
-                </MiddleContainer>
+                {/* </MiddleContainer> */}
             </DashboardWrapper>
         )
     }

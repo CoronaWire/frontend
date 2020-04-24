@@ -35,7 +35,6 @@ const NavigationBarWrapper = styled.div`
     height: 80px;
     background: ${({ isAuthenticated, theme }) => isAuthenticated ? theme.moderationPlatform.sharedLightGrey : theme.newsColors.ivory};
     padding: 0 24px;
-    position: fixed;
     top: 0;
     display: flex;
     justify-content: space-between;
@@ -46,6 +45,30 @@ const NavigationBarWrapper = styled.div`
     -moz-box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
     box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
     min-width: 640px;
+    ${media.mobile`
+      flex-direction: column;
+      padding: 13px 0 0;
+      height: auto;
+    `};
+`
+
+const AuthenticatedNavBarWrapper = styled.div`
+    width: 100%;
+    height: 8%;
+    min-height: 70px;
+    background: ${({ isAuthenticated, theme }) => isAuthenticated ? theme.moderationPlatform.sharedLightGrey : theme.newsColors.ivory};
+    padding: 0 24px;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 5;
+    flex-direction: row;
+    -webkit-box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
+    -moz-box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
+    box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
+    min-width: 640px;
+    box-sizing: border-width;
     ${media.mobile`
       flex-direction: column;
       padding: 13px 0 0;
@@ -168,7 +191,7 @@ class AuthenticatedNavigationBar extends Component {
 
     render(){
         return (
-            <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} GlobalTheme={GlobalTheme} >
+            <AuthenticatedNavBarWrapper isAuthenticated={this.props.isAuthenticated} GlobalTheme={GlobalTheme} >
                 <NavBarLeftWrapper>
                     <NavigationBarHeader> CovidWire </NavigationBarHeader>
                     <AuthenticationNavigationText> Editor </AuthenticationNavigationText>
@@ -202,7 +225,7 @@ class AuthenticatedNavigationBar extends Component {
                     Sign Out 
                     </NavBarButton>
                 </NavBarRightWrapper>
-            </NavigationBarWrapper>
+            </AuthenticatedNavBarWrapper>
         )
     }
 }
