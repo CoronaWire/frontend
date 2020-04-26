@@ -12,11 +12,11 @@ import styled from 'styled-components';
 import ModeratorCurateComponent from '../components/ModeratorCurateComponent';
 import AddArticleComponent from '../components/AddArticleComponent';
 
-// #toDo: move all of these to styledComponent folder 
+// #toDo: move all of these to styledComponent folder
 
 const DashboardWrapper = styled.div`
     width: 100%;
-    height: 91%;
+    height: ${({ theme }) => `calc(100vh - ${theme.moderatorHeaderHeight})`};
     background-color: transparent;
     display: flex;
     flex-direction: row;
