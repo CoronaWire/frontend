@@ -116,9 +116,7 @@ class ModeratorCurateComponent extends PureComponent {
         const { status, region, offset} = paramObject;
         let returnedResponse;
         const MODERATOR_API_URL = `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/${status}/region/${region}/offset/${offset}`;
-        console.log('Making call to', MODERATOR_API_URL);
         returnedResponse = await axios.get(MODERATOR_API_URL);
-        console.log('Returned response')
         console.log(returnedResponse);
         const articlesArray = returnedResponse.data;
         // #toDo: this needs to be done either on back-end or within the individual component
@@ -143,7 +141,7 @@ class ModeratorCurateComponent extends PureComponent {
         // Object passed in order to retrieve articles by status
         const paramObject = {
             status: status,
-            region: this.state.locationFilter === "all" ? 'all' : this.state.locationFilter,
+            region: this.state.locationFilter,
             offset: 0,
         }
         // Call the retrieveArticle function to retrieve articles
@@ -167,7 +165,7 @@ class ModeratorCurateComponent extends PureComponent {
         // Object passed in order to retrieve articles by status
         const paramObject = {
             status: this.state.statusFilter,
-            region: location === "all" ? 'all' : location, // #toDo: get rid of this useless ternary operator,
+            region: location, // #toDo: get rid of this useless ternary operator,
             offset: 0,
         }
 
@@ -189,21 +187,27 @@ class ModeratorCurateComponent extends PureComponent {
         let returnedResponse;
         const MODERATOR_API_URL = `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/${status}/region/${region}/offset/${offset}`;
         returnedResponse = await axios.get(MODERATOR_API_URL);
-        console.log('Returned response')
-        console.log(returnedResponse);
+        console.log(`Returned response ${returnedResponse}`)
         const articlesArray = returnedResponse.data;
         // #toDo: this needs to be done either on back-end or within the individual component
         let articleFeedObject = transformIntoArticleObject(articlesArray)
         let articleIDObject = createObjectOfArticleIDs(articlesArray);
-        // console.log('Returned response', returnedResponse);
-        // console.log('Article object', articleFeedObject)
-
-        // Merge the objects togethr
+ 
+        // Merge the objects together
         const previousArticleFeed = this.state.articleFeed;
         const previousSelectedArticles = this.state.selectedArticles;
         
         articleFeedObject = Object.assign({}, previousArticleFeed, articleFeedObject);
         articleIDObject = Object.assign({}, previousSelectedArticles, articleIDObject);
+
+        // const newArticleFeedLength = Object.keys(articleFeedObject).length;
+
+        // if (newArticleFeedLength !== articleLength) {
+
+        // }
+
+        // console.log('old article length', articleLength);
+        // console.log('new article feed length', newArticleFeedLength);
 
         this.setState({
             articleFeed: articleFeedObject,
@@ -220,7 +224,8 @@ class ModeratorCurateComponent extends PureComponent {
         
         // Ensures that only articles which haven't been approved or rejected yet increment the counter and are added
         // to the list of selected articles. Also ensures that the background doesn't change when clicked.
-        if (this.state.articleFeed[articleID].mod_status !== 'Approved' && this.state.articleFeed[articleID].mod_status !== 'Rejected' ) {
+        if (this.state.articleFeed[articleID].mod_status !== 'approved' && this.state.articleFeed[articleID].mod_status !== 'rejected' ) {
+            console.log('toggle runnnnnnnnn')
             if (articleSelectedState === true) {
                 this.setState({
                     selectedArticleCounter: this.state.selectedArticleCounter - 1
@@ -250,7 +255,7 @@ class ModeratorCurateComponent extends PureComponent {
         // console.log('Approve Article Response', approveArticlesResponse)
 
         // Traverse list of selected articles. If article status is true, it is selected by user, therefore
-        // we change the status of that article to 'Approved', revert it's selected status to false,
+        // we change the status of that article to 'approved', revert it's selected status to false,
         // and finally make a call to the back-end to change the status
         Object.keys(this.state.selectedArticles).forEach((key) => {
             const selectedStatus = this.state.selectedArticles[key]
@@ -273,7 +278,7 @@ class ModeratorCurateComponent extends PureComponent {
         
         // #toResearch: why did one asynchronous call to setState on same property work instead of
         // a few one after the other
-        this.setState({selectedArticleCounter: this.state.selectedArticleCounter-countToSubtract});
+        this.setState({selectedArticleCounter: 0});
         this.setState({articleFeed, selectedArticles});
     }
 
@@ -295,16 +300,22 @@ class ModeratorCurateComponent extends PureComponent {
         Object.keys(this.state.selectedArticles).forEach((key) => {
             const selectedStatus = this.state.selectedArticles[key]
             if (selectedStatus === true){
-                articleFeed[key].mod_status = 'rejected';
+
+                // First method, which modified the state of the article object to ensure that newly rejected articles
+                // were displayed with a specific UI based on the 'mod_status' being rejected
+                // articleFeed[key].mod_status = 'rejected';
                 // Re-set selection to false
-                selectedArticles[key] = false;
+                // selectedArticles[key] = false;
                 // Ensure to decrement the counter
-                countToSubtract += 1
+                // countToSubtract += 1
                 // Store article ID in array
+
+                // Deletes article from article object
+                delete articleFeed[key];
             }
         })
         
-        this.setState({selectedArticleCounter: this.state.selectedArticleCounter-countToSubtract});
+        this.setState({selectedArticleCounter: 0});
         // Make asynchronous back-end call here with articleID list
         this.setState({articleFeed, selectedArticles});
     }

@@ -39,6 +39,13 @@ export const UnderlinedMediumText = styled.div`
     cursor: pointer;
 `
 
-// border-bottom-style: solid;
-// border-bottom-color: #6558F5;
-// border-bottom-width: 2px;
+export const GradientText = styled.p`
+    color: rgb(24,11,255);
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline-block;
+    outline: none;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+`
