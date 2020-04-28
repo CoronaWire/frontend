@@ -8,8 +8,8 @@ export const fetchArticles = async (scope, location = {}) => {
       case 'national':
         return await axios.get(`${apiUrl}/articles/scope/${scope}/`);
       case 'local':
-        const { lat, long } = location;
-        return await axios.get(`${apiUrl}/articles/scope/local/${lat},${long}/`);
+        const { lat, lng } = location;
+        return await axios.get(`${apiUrl}/articles/scope/local/${lat},${lng}/`);
       default:
         return [];
     }

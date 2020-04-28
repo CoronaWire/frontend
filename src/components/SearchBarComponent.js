@@ -1,6 +1,8 @@
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { setLocationAction } from './../actionCreators/actions';
 import { Input, b1Css, SearchIcon } from './core';
 import Script from 'react-load-script';
 
@@ -27,16 +29,23 @@ const TextInput = styled(Input)`
 export const SearchBarComponent = ({ handleSelect }) => {
   const autocomplete = useRef(null);
   const inputRef = useRef(null);
+  const dispatch = useDispatch();
 
   const onSelect = () => {
     const address = autocomplete.current.getPlace();
-    console.log(address);
-    if (handleSelect) {
-      // do something with address
-      handleSelect(address);
+    if (address) {
+      const { geometry: { location } , formatted_address } = address;
+      dispatch(
+        setLocationAction({
+          lat: location.lat(),
+          lng: location.lng(),
+          name: formatted_address,
+        }),
+      );
     }
   };
 
+  // todo change try again logic and move script to index
   const setupAutocomplete = () => {
     const options = {
       types: ['(regions)'],
@@ -53,7 +62,7 @@ export const SearchBarComponent = ({ handleSelect }) => {
   return (
     <InputWrapper>
       <Script
-        url={`https://maps.googleapis.com/maps/api/js?key=AIzaSyC8K2pvt-4CSCWa_qgPi5DOj0caFrDdw2k&libraries=places`}
+        url={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`}
         onLoad={setupAutocomplete}
         onError={() => console.log('error')}
       />
