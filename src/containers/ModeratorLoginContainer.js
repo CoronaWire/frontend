@@ -28,7 +28,7 @@ const ModeratorContainerWrapper = styled.div`
     background: rgb(24,11,255);
     background: linear-gradient(90deg, rgba(24,11,255,1) 0%, rgba(121,9,119,1) 100%);
     width: 100%;
-    height: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
