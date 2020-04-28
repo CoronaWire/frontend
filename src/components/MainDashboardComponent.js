@@ -126,6 +126,10 @@ class MainDashboardComponent extends Component {
         }
     }
 
+  componentDidMount() {
+
+  }
+
     // handleChange = (event, newValue) => {
     //     setValue(newValue);
     // };

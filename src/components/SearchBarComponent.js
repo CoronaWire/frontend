@@ -42,12 +42,12 @@ export const SearchBarComponent = ({ handleSelect }) => {
       types: ['(regions)'],
       componentRestrictions: { country: 'us' }
     };
-    // autocomplete.current = new google.maps.places.Autocomplete(
-    //   inputRef.current,
-    //   options,
-    // );
-    // autocomplete.current.setFields(['name', 'geometry', 'formatted_address']);
-    // autocomplete.current.addListener('place_changed', onSelect);
+    autocomplete.current = new google.maps.places.Autocomplete(
+      inputRef.current,
+      options,
+    );
+    autocomplete.current.setFields(['name', 'geometry', 'formatted_address']);
+    autocomplete.current.addListener('place_changed', onSelect);
   };
 
   return (
