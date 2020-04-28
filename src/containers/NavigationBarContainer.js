@@ -74,7 +74,7 @@ const AuthenticatedNavBarWrapper = styled.div`
       padding: 13px 0 0;
       height: auto;
     `};
-`
+`;
 
 const NavigationBarHeader = styled.h1`
     font-weight: 900;

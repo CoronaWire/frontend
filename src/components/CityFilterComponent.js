@@ -24,13 +24,13 @@ const CityFilterWrapper = styled.div`
     align-items: center;
     border-bottom-style: solid;
     border-bottom-color: #C6C9D1;
-    border-bottom-width: 3px
+    border-bottom-width: 3px;
 `
 
 const CityButton = styled(TabularButton)`
-    
+    background-color: transparent;
+    padding-top: 20px;
 `
-
 
 class CityFilterComponent extends PureComponent {
     constructor(props){

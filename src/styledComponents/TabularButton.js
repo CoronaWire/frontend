@@ -14,7 +14,7 @@ const TabularButton = styled.h2`
     font-size: 15px;
     font-weight: 500;
     height: 100%;
-    padding-top: 20px;
+    padding-top: 10px;
     background-color: white;
     margin-right: 20px;
     display: inline-block;

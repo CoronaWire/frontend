@@ -11,7 +11,7 @@ import { LeftPositionedWrapper, RightPositionedWrapper } from '../styledComponen
 const StatusFilterWrapper = styled.div`
     background-color: transparent;
     min-height: 64px;
-    height: 100%;
+    height: 70px;
     width: auto;
     display: flex;
     flex-direction: row;

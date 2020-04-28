@@ -27,7 +27,8 @@ const IndividualArticleWrapper = styled.div`
     cursor: pointer;
     padding-top: 10px;
     background-color: ${props => props.checked === true ? '#B2ACFA' : 'white'};
-`
+    flex-shrink: 0;
+`;
 
 const ArticleText = styled.div`
     width: auto;
@@ -35,7 +36,7 @@ const ArticleText = styled.div`
     background-color: transparent;
     display: flex;
     flex-direction: column;
-`
+`;
 
 const ArticleTitle = styled(LargeText)`
     margin-bottom: 5px;

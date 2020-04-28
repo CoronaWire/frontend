@@ -8,12 +8,14 @@ import styled from 'styled-components';
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { MediumText } from '../styledComponents/Text';
 import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
+import { OutlineButton } from '../styledComponents/Buttons';
+
 // Sub-Components
 import ModeratorArticleComponent from './ModeratorArticleComponent'
 
 const GreyMediumText = styled(MediumText)`
     color: #646464;
-`
+`;
 
 const ArticleFeedTitleBar = styled.div`
     height: 40px;
@@ -31,6 +33,18 @@ const ArticleFeedWrapper = styled.div`
     flex-direction: column;
 `;
 
+const EndOfFeedContainer = styled.div`
+    background-color: rt;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+`;
+
+const Button = styled(OutlineButton)`
+    margin-top: 20px;
+    margin-bottom: 20px;
+`
+
 class ModeratorArticleFeedComponent extends PureComponent {
     constructor(props) {
         super(props);
@@ -40,7 +54,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
     }
 
     render(){
-        const arr = Object.keys(this.props.articleFeed);
+        const articleKeysArray = Object.keys(this.props.articleFeed);
         return(
             <>
             <ArticleFeedTitleBar GlobalTheme={GlobalTheme} >
@@ -62,7 +76,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
             </ArticleFeedTitleBar>
             <ArticleFeedWrapper>
                 {
-                    Object.keys(this.props.articleFeed).map((objectKey, index) => {
+                    articleKeysArray.map((objectKey, index) => {
                         const articleObject = this.props.articleFeed[objectKey];
                         const articleKey = objectKey;
                         return <ModeratorArticleComponent 
@@ -77,6 +91,11 @@ class ModeratorArticleFeedComponent extends PureComponent {
                                 />
                     })
                 }
+                <EndOfFeedContainer>
+                    {
+                        articleKeysArray.length > 0 && <Button onClick={this.props.retrieveMoreArticles}> Load more Articles </Button>
+                    }
+                </EndOfFeedContainer>
             </ArticleFeedWrapper>
         </>
         )

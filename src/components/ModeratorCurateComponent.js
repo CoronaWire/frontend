@@ -20,7 +20,6 @@ import IndividualArticleTopActionComponent from './IndividualArticleTopActionCom
 import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles} from '../utilityFunctions';
 
 // #toDo: create index.jsfile in styled components to get all of components out
-const MODERATOR_API_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/';
 
 const FeedWrapper = styled.div`
     height: 100%;
@@ -55,7 +54,7 @@ const FilterWrapper = styled.div`
 // fixed
 const MiddleFeedWrapper = styled.div`
     width: 100%;
-    height: 74%;
+    height: 90%;
     background-color: transparent;
     display: flex;
     flex-direction: column;
@@ -91,6 +90,7 @@ class ModeratorCurateComponent extends PureComponent {
             selectedArticleCounter: 0,
             articleCurrentlyDisplayed: null,
             articleDisplayedIndex: null,
+            numOfArticlesReturned: 0,
 
         }
         // #comment: articles will be either stored in redux state or locally.
@@ -100,7 +100,8 @@ class ModeratorCurateComponent extends PureComponent {
     componentDidMount = async () => {
         const paramObject = {
             status: 'pending', 
-            region: undefined
+            region: 'all',
+            offset: 0,
         }
         this.retrieveArticle(paramObject);
     }
@@ -112,24 +113,30 @@ class ModeratorCurateComponent extends PureComponent {
     }
 
     retrieveArticle = async (paramObject) => {
-        const { status, region } = paramObject;
+        const { status, region, offset} = paramObject;
         let returnedResponse;
-        if (region == undefined) {
-            const allArticlesURL = MODERATOR_API_URL + `${status}`;
-            returnedResponse = await axios.get(allArticlesURL);
-        } else {
-            const articlesWithinRegionURL = MODERATOR_API_URL + `${status}` + '/region/' + `${region}`;
-            returnedResponse = await axios.get(articlesWithinRegionURL);
-        }
+        const MODERATOR_API_URL = `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/${status}/region/${region}/offset/${offset}`;
+        console.log('making call to', MODERATOR_API_URL);
+        returnedResponse = await axios.get(MODERATOR_API_URL);
+        console.log('reutnred repsonse')
+        console.log(returnedResponse);
         const articlesArray = returnedResponse.data;
         // #toDo: this needs to be done either on back-end or within the individual component
-        const articleFeedObject = transformIntoArticleObject(articlesArray)
-        const articleIDObject = createObjectOfArticleIDs(articlesArray);
+        let articleFeedObject = transformIntoArticleObject(articlesArray)
+        let articleIDObject = createObjectOfArticleIDs(articlesArray);
         // console.log('Returned response', returnedResponse);
         // console.log('Article object', articleFeedObject)
+
+        // Merge the objects togethr
+        const previousArticleFeed = this.state.articleFeed;
+        const previousSelectedArticles = this.state.selectedArticles;
+        
+        articleFeedObject = Object.assign({}, previousArticleFeed, articleFeedObject);
+        articleIDObject = Object.assign({}, previousSelectedArticles, articleIDObject);
+
         this.setState({
             articleFeed: articleFeedObject,
-            selectedArticles: articleIDObject
+            selectedArticles: articleIDObject,
         })
     }
 
@@ -143,9 +150,17 @@ class ModeratorCurateComponent extends PureComponent {
         // Object passed in order to retrieve articles by status
         const paramObject = {
             status: status,
-            region: this.state.locationFilter === "all" ? undefined : this.state.locationFilter
+            region: this.state.locationFilter === "all" ? 'all' : this.state.locationFilter,
+            offset: 0,
         }
         // Call the retrieveArticle function to retrieve articles
+        
+        // Ensures that we're able to use the numOfArticles returned as an offset later for pagination
+        const numOfArticles = Object.keys(this.state.articleFeed).length;
+        this.setState({
+            numOfArticlesReturned: numOfArticles
+        })
+
         this.retrieveArticle(paramObject);
     }
 
@@ -159,9 +174,30 @@ class ModeratorCurateComponent extends PureComponent {
         // Object passed in order to retrieve articles by status
         const paramObject = {
             status: this.state.statusFilter,
-            region: location === "all" ? undefined : location
+            region: location === "all" ? 'all' : location, // #toDo: get rid of this useless ternary operator,
+            offset: 0,
         }
+
+        // Ensures that we're able to use the numOfArticles returned as an offset later for pagination
+        const numOfArticles = Object.keys(this.state.articleFeed).length;
+        this.setState({
+            numOfArticlesReturned: numOfArticles
+        })
+
         // Call the retrieveArticle function to retrieve articles
+        this.retrieveArticle(paramObject);
+    }
+
+    retrieveMoreArticles = () => {
+        const articleLength = Object.keys(this.state.articleFeed).length;
+        console.log(`Offset is ${articleLength}`);
+        
+        const paramObject = {
+            status: this.state.statusFilter,
+            region: this.state.locationFilter,
+            offset: articleLength
+        }
+
         this.retrieveArticle(paramObject);
     }
 
@@ -344,9 +380,10 @@ class ModeratorCurateComponent extends PureComponent {
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
         // Current article chosen by the user
         const currentArticle = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
-        // console.log('ARTICLE FEED STATE', this.state.articleFeed)
+        console.log('ARTICLE FEED STATE', this.state.articleFeed)
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         // console.log('Current article', currentArticle);
+
         return(
             <FeedWrapper>
                 <FilterActionsWrapper>
@@ -373,6 +410,7 @@ class ModeratorCurateComponent extends PureComponent {
                         selectedArticles={this.state.selectedArticles}
                         articleFeed={this.state.articleFeed}
                         selectIndividualArticle={this.selectIndividualArticle}
+                        retrieveMoreArticles={this.retrieveMoreArticles}
                         />
                         :
                         <ModeratorIndividualArticleComponent articleObject={currentArticle} />
