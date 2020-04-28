@@ -116,9 +116,9 @@ class ModeratorCurateComponent extends PureComponent {
         const { status, region, offset} = paramObject;
         let returnedResponse;
         const MODERATOR_API_URL = `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/${status}/region/${region}/offset/${offset}`;
-        console.log('making call to', MODERATOR_API_URL);
+        console.log('Making call to', MODERATOR_API_URL);
         returnedResponse = await axios.get(MODERATOR_API_URL);
-        console.log('reutnred repsonse')
+        console.log('Returned response')
         console.log(returnedResponse);
         const articlesArray = returnedResponse.data;
         // #toDo: this needs to be done either on back-end or within the individual component
@@ -126,13 +126,6 @@ class ModeratorCurateComponent extends PureComponent {
         let articleIDObject = createObjectOfArticleIDs(articlesArray);
         // console.log('Returned response', returnedResponse);
         // console.log('Article object', articleFeedObject)
-
-        // Merge the objects togethr
-        const previousArticleFeed = this.state.articleFeed;
-        const previousSelectedArticles = this.state.selectedArticles;
-        
-        articleFeedObject = Object.assign({}, previousArticleFeed, articleFeedObject);
-        articleIDObject = Object.assign({}, previousSelectedArticles, articleIDObject);
 
         this.setState({
             articleFeed: articleFeedObject,
@@ -188,17 +181,35 @@ class ModeratorCurateComponent extends PureComponent {
         this.retrieveArticle(paramObject);
     }
 
-    retrieveMoreArticles = () => {
+    retrieveMoreArticles = async () => {
         const articleLength = Object.keys(this.state.articleFeed).length;
         console.log(`Offset is ${articleLength}`);
+        let status = this.state.statusFilter, region = this.state.locationFilter, offset = articleLength;
         
-        const paramObject = {
-            status: this.state.statusFilter,
-            region: this.state.locationFilter,
-            offset: articleLength
-        }
+        let returnedResponse;
+        const MODERATOR_API_URL = `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/${status}/region/${region}/offset/${offset}`;
+        returnedResponse = await axios.get(MODERATOR_API_URL);
+        console.log('Returned response')
+        console.log(returnedResponse);
+        const articlesArray = returnedResponse.data;
+        // #toDo: this needs to be done either on back-end or within the individual component
+        let articleFeedObject = transformIntoArticleObject(articlesArray)
+        let articleIDObject = createObjectOfArticleIDs(articlesArray);
+        // console.log('Returned response', returnedResponse);
+        // console.log('Article object', articleFeedObject)
 
-        this.retrieveArticle(paramObject);
+        // Merge the objects togethr
+        const previousArticleFeed = this.state.articleFeed;
+        const previousSelectedArticles = this.state.selectedArticles;
+        
+        articleFeedObject = Object.assign({}, previousArticleFeed, articleFeedObject);
+        articleIDObject = Object.assign({}, previousSelectedArticles, articleIDObject);
+
+        this.setState({
+            articleFeed: articleFeedObject,
+            selectedArticles: articleIDObject,
+        })
+
     }
 
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
@@ -244,12 +255,17 @@ class ModeratorCurateComponent extends PureComponent {
         Object.keys(this.state.selectedArticles).forEach((key) => {
             const selectedStatus = this.state.selectedArticles[key]
             if (selectedStatus === true){
-                articleFeed[key].mod_status = 'approved';
-                // Re-set selection state to false
-                selectedArticles[key] = false;
-                // Ensure to decrement the counter
-                countToSubtract += 1
-                // Store article ID in array
+
+                // Initial approach, simply change the status to "approved so that it can be shown on the front-end"
+                // articleFeed[key].mod_status = 'approved';
+                // // Re-set selection state to false
+                // selectedArticles[key] = false;
+                // // Ensure to decrement the counter
+                // countToSubtract += 1
+                // // Store article ID in array
+
+                // Second approach (proposed by Joe in the first QA) is to delete them directly
+                delete articleFeed[key];
             }
         })
         
