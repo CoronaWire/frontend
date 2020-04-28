@@ -37,7 +37,7 @@ export const NoBorderButton = styled(Button)`
 `
 
 export const OutlineButton = styled(Button)`
-    color: #8779F1;
+    color: rgb(24,11,255);
     background-color: white;
     border-color: #B3B3F0;
     border-style: solid;
@@ -45,8 +45,8 @@ export const OutlineButton = styled(Button)`
     border-radius: 5px;
     font-size: 16px;
     &:hover {
-        border-color: #8779F1;
-        color: #8779F1;
+        border-color: rgb(24,11,255);
+        color: rgb(24,11,255);
     }
 `
 

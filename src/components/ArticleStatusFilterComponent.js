@@ -36,6 +36,11 @@ const StatusButton = styled.button`
     border-style: none; 
     padding-left: 20px;
     padding-right: 20px;
+    &:hover {
+        background-color: #6558f5;
+        color: #293845;
+    }
+    transition: background-color 0.6s ease-in;
 `;
 
 class ArticleStatusFilterComponent extends PureComponent {
