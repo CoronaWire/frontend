@@ -139,11 +139,14 @@ const MainDashboardComponent = () => {
   ];
 
   const [mainFeed, setMainFeed] = useState([]);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { scope, location } = useSelector(({ newsFeed }) => newsFeed);
 
   const handleFetch = async (scope, location) => {
+    setLoading(true);
     const data = await fetchArticles(scope, location);
+    setLoading(false);
     if (data) {
       setMainFeed(data);
     }
@@ -175,7 +178,7 @@ const MainDashboardComponent = () => {
         </React.Fragment>
       )}
       <NewsListWrapper>
-        {news.map((newsObject, index) => (
+        {!news.map((newsObject, index) => (
           <SingleNewsComponent key={index} props={newsObject} />
         ))}
       </NewsListWrapper>
