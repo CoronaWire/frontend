@@ -152,7 +152,11 @@ class ModeratorCurateComponent extends PureComponent {
             numOfArticlesReturned: numOfArticles
         })
 
+        // Makes API call to retrieve the data
         this.retrieveArticle(paramObject);
+
+        // Ensures that we move back to the article feed component
+        this.goBackToArticleFeed()
     }
 
     toggleLocationFilter = (event) => {
@@ -177,6 +181,8 @@ class ModeratorCurateComponent extends PureComponent {
 
         // Call the retrieveArticle function to retrieve articles
         this.retrieveArticle(paramObject);
+        // Makes sure we go back to article feed component
+        this.goBackToArticleFeed()
     }
 
     retrieveMoreArticles = async () => {
@@ -365,6 +371,12 @@ class ModeratorCurateComponent extends PureComponent {
         })
     }
 
+    goBackToArticleFeed = () => {
+        this.setState({
+            pageDisplayed: 'articleFeed'
+        })
+    }
+
     nextArticle = () => {
         const { articleDisplayedIndex } = this.state;
         const feedLength = Object.keys(this.state.articleFeed).length;
@@ -424,6 +436,7 @@ class ModeratorCurateComponent extends PureComponent {
                             togglePageDisplayed={this.togglePageDisplayed}
                             nextArticle={this.nextArticle}
                             previousArticle={this.previousArticle} 
+
                             />
                         }
                     </FilterWrapper>
@@ -440,7 +453,9 @@ class ModeratorCurateComponent extends PureComponent {
                         retrieveMoreArticles={this.retrieveMoreArticles}
                         />
                         :
-                        <ModeratorIndividualArticleComponent articleObject={currentArticle} />
+                        <ModeratorIndividualArticleComponent 
+                         articleObject={currentArticle}
+                         />
                     }
                 </MiddleFeedWrapper>
                 {
