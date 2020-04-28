@@ -87,7 +87,10 @@ class ModeratorIndividualArticleComponent extends Component {
         super(props);
         this.state = {
             // Empty for now
-
+            title: props.articleObject.title,
+            content: props.articleObject.content,
+            source: props.articleObject.source_id,
+            region: props.articleObject.region,
         }
     }
 
@@ -106,14 +109,14 @@ class ModeratorIndividualArticleComponent extends Component {
                             <InputTitle>
                             Title
                             </InputTitle>
-                            <MediumTextField id='title' value={this.props.articleObject.title} onChange={this.handleChange} />
+                            <MediumTextField id='title' value={this.state.title} onChange={this.handleChange} />
                             
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             Content
                             </InputTitle>
-                            <MediumTextField id='content' value={this.props.articleObject.content} onChange={this.handleChange} />
+                            <MediumTextField id='content' value={this.state.content} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
@@ -126,15 +129,14 @@ class ModeratorIndividualArticleComponent extends Component {
                             <InputTitle>
                             Source
                             </InputTitle>
-                            <SmallTextField id='source'>
-                            </SmallTextField>
+                            <SmallTextField id='source' value={this.state.source} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             Region
                             </InputTitle>
-                            <SmallTextField id='region'>
-                            </SmallTextField>
+                            <SmallTextField id='region' value={this.state.region} onChange={this.handleChange}/>
+            
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
