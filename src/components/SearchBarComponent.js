@@ -12,9 +12,12 @@ const InputWrapper = styled.div`
 
   svg {
     position: absolute;
-    left: 16px;
     top: 50%;
     transform: translateY(-50%);
+  }
+
+  svg:first-child {
+    left: 16px;
   }
 
   .pac-container {

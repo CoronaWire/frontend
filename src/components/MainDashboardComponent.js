@@ -1,14 +1,18 @@
 // Main Dashboard Component = renders the News Aggregation
 
 // External Packages
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
+import { fetchArticles } from './../helpers/newsApi';
+import { setScopeAction } from './../actionCreators/actions';
 // Internal Modules
 import LoginButton from '../styledComponents/LoginButton';
 import GlobalTheme from '../styledComponents/GlobalTheme';
 // Components
 import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
+import { H3, H2 } from './core';
 
 // #toDo: make paddingLeft and marginLeft below 30px
 
@@ -95,6 +99,19 @@ const ScopeWrapper = styled.div`
     display: flex;
 `
 
+const BackToNews = styled(H3)`
+  cursor: pointer;
+  color: ${({ theme }) => theme.newsColors.pink};
+  margin-bottom: 24px;
+  text-transform: uppercase;
+`;
+
+const NonLocalTitle = styled(H2)`
+  color: ${({ theme }) => theme.newsColors.navy};
+  margin-bottom: 24px;
+  text-transform: uppercase;
+`;
+
 // #toFix: set margin-left and right of both styled components through Global Theming or through
 // # a common stylesheet for a single source of truth
 // #toFix: also centralize border-radius of article cards
@@ -104,61 +121,66 @@ const NewsListWrapper = styled.div``;
 const OuterWrapper = styled.div``;
 
 // #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
-class MainDashboardComponent extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            categories: ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor'], // #toDecide : Finalize number of categories and type of categories
-            news: [
-              {
-                timeStamp: '12 min',
-                title: 'Drive-through novel coronavirus (COVID-19) testing available by appointment at Stanford',
-                summary: `
-                  Drive-through appointments for Stanford Medicine COVID-19 test are available for patients who have been referred.
-                  Drive-through appointments for Stanford Medicine COVID-19 test are available for patients who have been referred.
-                `,
-                source: 'Stanford Health Care',
-                newsType: 'Website',
-              },
-                {timeStamp: '1 hour', title: 'Several SF police officers self-quarantined after coronavirus exposure', summary: 'A janitor who worked at a Sodo office park that houses several Seattle Police Department training and support units recently tested positive for COVID-19', source: 'SF Chronicle', newsType: 'Website'},
-                {timeStamp: '1 d', title: 'Researchers from Taiwan find cure for COVID-19.', summary: "It's all in the title. Enough said.", source: 'NY Times', newsType: 'Website'},
-            ]
-        }
+const MainDashboardComponent = () => {
+  const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
+  const news = [
+      {
+        timeStamp: '12 min',
+        title: 'Drive-through novel coronavirus (COVID-19) testing available by appointment at Stanford',
+        summary: `
+          Drive-through appointments for Stanford Medicine COVID-19 test are available for patients who have been referred.
+          Drive-through appointments for Stanford Medicine COVID-19 test are available for patients who have been referred.
+        `,
+        source: 'Stanford Health Care',
+        newsType: 'Website',
+      },
+        {timeStamp: '1 hour', title: 'Several SF police officers self-quarantined after coronavirus exposure', summary: 'A janitor who worked at a Sodo office park that houses several Seattle Police Department training and support units recently tested positive for COVID-19', source: 'SF Chronicle', newsType: 'Website'},
+        {timeStamp: '1 d', title: 'Researchers from Taiwan find cure for COVID-19.', summary: "It's all in the title. Enough said.", source: 'NY Times', newsType: 'Website'},
+  ];
+
+  const [mainFeed, setMainFeed] = useState([]);
+  const dispatch = useDispatch();
+  const { scope, location } = useSelector(({ newsFeed }) => newsFeed);
+
+  const handleFetch = async (scope, location) => {
+    const data = await fetchArticles(scope, location);
+    if (data) {
+      setMainFeed(data);
     }
+  };
 
-  componentDidMount() {
+  useEffect(() => {
+    handleFetch(scope, location);
+  }, [scope, location]);
 
-  }
-
-    // handleChange = (event, newValue) => {
-    //     setValue(newValue);
-    // };
-    
-    handleScopeClick = (value) => {
-        this.setState({scopeClicked: value})
-    }
-
-    // #toDo: figure out the clicked state of the categories button, same grey color?
-
-    render(){
-        return(
-
-          <OuterWrapper>
-            {false && (
-              <ButtonsContainer>
-                {this.state.categories.map((value, index) => (
-                  <Button key={index}>{value}</Button>
-                ))}
-              </ButtonsContainer>
-            )}
-            <NewsListWrapper>
-              {this.state.news.map((newsObject, index) => (
-                <SingleNewsComponent key={index} props={newsObject} />
-              ))}
-            </NewsListWrapper>
-          </OuterWrapper>
-        )
-    }
+  return (
+    <OuterWrapper>
+      {false && (
+        <ButtonsContainer>
+          {categories.map((value, index) => (
+            <Button key={index}>{value}</Button>
+          ))}
+        </ButtonsContainer>
+      )}
+      {scope !== 'local' && (
+        <React.Fragment>
+          <BackToNews
+            onClick={() => {
+              dispatch(setScopeAction('local'));
+            }}
+          >
+            Back to news
+          </BackToNews>
+          <NonLocalTitle>{`${scope} news`}</NonLocalTitle>
+        </React.Fragment>
+      )}
+      <NewsListWrapper>
+        {news.map((newsObject, index) => (
+          <SingleNewsComponent key={index} props={newsObject} />
+        ))}
+      </NewsListWrapper>
+    </OuterWrapper>
+  );
 }
 
 export default MainDashboardComponent;
