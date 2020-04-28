@@ -47,4 +47,5 @@ export const HalfGrid = styled.div`
     background-color: transparent;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 `

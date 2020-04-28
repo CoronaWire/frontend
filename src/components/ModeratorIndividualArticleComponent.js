@@ -18,11 +18,12 @@ const IndividualArticleWrapper = styled.div`
 
 const ArticleDataWrapper = styled.div`
     width: 90%;
-    height: 90%;
     background-color: transparent;
     display: flex;
     flex-direction: column;
     margin: auto auto;
+    margin-bottom: 50px;
+    padding-bottom: 50px;
 `;
 
 const InputTitle = styled.p`
@@ -36,7 +37,7 @@ const InputTitle = styled.p`
 
 const MediumTextField = styled.textarea`
     background-color: white;
-    border: solid 2px #b8c4cf;
+    border: solid 2px #B8C4CF;
     height: 120px;
     width: 90%;
     max-width: 90%;
@@ -103,31 +104,45 @@ class ModeratorIndividualArticleComponent extends Component {
                     <ArticleDataWrapper>
                         <InputWrapper>
                             <InputTitle>
-                            Preview
+                            Title
                             </InputTitle>
-                            <MediumTextField>
-                            </MediumTextField>
-                        </InputWrapper>
-                        <InputWrapper>
-                            <InputTitle>
-                            Headline
-                            </InputTitle>
-                            <MediumTextField id='headline' value={this.props.articleObject.title} onChange={this.handleChange} />
+                            <MediumTextField id='title' value={this.props.articleObject.title} onChange={this.handleChange} />
                             
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
-                            Description
+                            Content
                             </InputTitle>
-                            <MediumTextField id='description' value={this.props.articleObject.content} onChange={this.handleChange} />
+                            <MediumTextField id='content' value={this.props.articleObject.content} onChange={this.handleChange} />
                         </InputWrapper>
-                        {/* <InputWrapper>
+                        <InputWrapper>
                             <InputTitle>
-                            Location
+                            Scope
                             </InputTitle>
-                            <SmallTextField id='location'>
+                            <SmallTextField id='scope'>
                             </SmallTextField>
-                        </InputWrapper> */}
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            Source
+                            </InputTitle>
+                            <SmallTextField id='source'>
+                            </SmallTextField>
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            Region
+                            </InputTitle>
+                            <SmallTextField id='region'>
+                            </SmallTextField>
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            City
+                            </InputTitle>
+                            <SmallTextField id='city'>
+                            </SmallTextField>
+                        </InputWrapper>
                     </ArticleDataWrapper>
                 </HalfGrid>
                 <HalfGrid>
