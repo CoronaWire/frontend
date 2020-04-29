@@ -5,7 +5,9 @@ import { getLocationFromLocalStorage } from './../helpers/localStorage';
 const defaultLocation = {
   lat: 37.3860517,
   lng: -122.0838511,
-  name: "Mountain View, CA, USA"
+  name: 'Mountain View, CA, USA',
+  state: 'California',
+  countyFipsCode: '06085',
 };
 
 const initialState = {

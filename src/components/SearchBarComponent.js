@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { setLocationAction } from './../actionCreators/actions';
+import { fetchFipsInfo } from './../helpers/fips';
 import { Input, b1Css, SearchIcon } from './core';
 import { retry } from './../helpers/utilities';
 import { saveLocationToLocalStorage } from './../helpers/localStorage';
@@ -36,19 +37,26 @@ export const SearchBarComponent = ({ handleSelect }) => {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
 
-  const onSelect = () => {
+  const onSelect = async () => {
     const address = autocomplete.current.getPlace();
     if (address) {
       const {
         geometry: { location },
-        formatted_address: formatedAddress,
+        formatted_address: name,
       } = address;
+      const lat = location.lat();
+      const lng = location.lng();
+      const fipsData = await fetchFipsInfo(lat, lng);
+
       const userLocation = {
-        lat: location.lat(),
-        lng: location.lng(),
-        name: formatedAddress,
-        formatedAddress,
+        lat,
+        lng,
+        name,
+        ...fipsData,
       };
+
+      console.log(userLocation);
+
       saveLocationToLocalStorage(userLocation);
       dispatch(
         setLocationAction(userLocation),
