@@ -39,11 +39,15 @@ export const SearchBarComponent = ({ handleSelect }) => {
   const onSelect = () => {
     const address = autocomplete.current.getPlace();
     if (address) {
-      const { geometry: { location } , formatted_address } = address;
+      const {
+        geometry: { location },
+        formatted_address: formatedAddress,
+      } = address;
       const userLocation = {
         lat: location.lat(),
         lng: location.lng(),
-        name: formatted_address,
+        name: formatedAddress,
+        formatedAddress,
       };
       saveLocationToLocalStorage(userLocation);
       dispatch(
