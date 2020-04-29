@@ -178,7 +178,7 @@ const MainDashboardComponent = () => {
         </React.Fragment>
       )}
       <NewsListWrapper>
-        {!news.map((newsObject, index) => (
+        {news.map((newsObject, index) => (
           <SingleNewsComponent key={index} props={newsObject} />
         ))}
       </NewsListWrapper>
