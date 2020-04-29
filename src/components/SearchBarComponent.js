@@ -1,10 +1,12 @@
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { setLocationAction } from './../actionCreators/actions';
 import { Input, b1Css, SearchIcon } from './core';
 import { retry } from './../helpers/utilities';
+import { saveLocationToLocalStorage } from './../helpers/localStorage';
+import { useUpdateEffect } from './../helpers/hooks';
 
 const InputWrapper = styled.div`
   position: relative;
@@ -38,14 +40,17 @@ export const SearchBarComponent = ({ handleSelect }) => {
     const address = autocomplete.current.getPlace();
     if (address) {
       const { geometry: { location } , formatted_address } = address;
+      const userLocation = {
+        lat: location.lat(),
+        lng: location.lng(),
+        name: formatted_address,
+      };
+      saveLocationToLocalStorage(userLocation);
       dispatch(
-        setLocationAction({
-          lat: location.lat(),
-          lng: location.lng(),
-          name: formatted_address,
-        }),
+        setLocationAction(userLocation),
       );
     }
+    inputRef.current.blur();
   };
 
   const setupAutocomplete = () => {
@@ -68,11 +73,23 @@ export const SearchBarComponent = ({ handleSelect }) => {
     );
   }, []);
 
+  const setLocation = useSelector(({ newsFeed: { location } }) => location && location.name);
+  const [inputValue, setInputValue] = useState(setLocation || '');
+  useUpdateEffect(() => {
+    setInputValue(setLocation);
+  }, [setLocation]);
+
   // todo change try again logic and move script to index
   return (
     <InputWrapper>
       <SearchIcon />
-      <TextInput type="text" ref={inputRef} placeholder="Enter your city" />
+      <TextInput
+        type="text"
+        ref={inputRef}
+        value={inputValue}
+        onChange={e => setInputValue(e.target.value)}
+        placeholder="Enter your city"
+      />
     </InputWrapper>
   );
 };

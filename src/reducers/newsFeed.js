@@ -1,5 +1,6 @@
 // Reducer for general news feed
 import { SET_LOCATION, SET_SCOPE } from '../actionCreators/constants';
+import { getLocationFromLocalStorage } from './../helpers/localStorage';
 
 const defaultLocation = {
   lat: 37.3860517,
@@ -9,7 +10,7 @@ const defaultLocation = {
 
 const initialState = {
   scope: 'local',
-  location: defaultLocation,
+  location: getLocationFromLocalStorage() || defaultLocation,
 }
 
 export const newsFeed = (state = initialState, action) => {
