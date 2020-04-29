@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { setLocationAction } from './../actionCreators/actions';
 import { Input, b1Css, SearchIcon } from './core';
-import Script from 'react-load-script';
+import { retry } from './../helpers/utilities';
 
 const InputWrapper = styled.div`
   position: relative;
@@ -48,7 +48,6 @@ export const SearchBarComponent = ({ handleSelect }) => {
     }
   };
 
-  // todo change try again logic and move script to index
   const setupAutocomplete = () => {
     const options = {
       types: ['(regions)'],
@@ -62,13 +61,16 @@ export const SearchBarComponent = ({ handleSelect }) => {
     autocomplete.current.addListener('place_changed', onSelect);
   };
 
+  useEffect(() => {
+    retry(
+      () => window && window.google,
+      setupAutocomplete,
+    );
+  }, []);
+
+  // todo change try again logic and move script to index
   return (
     <InputWrapper>
-      <Script
-        url={`https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`}
-        onLoad={setupAutocomplete}
-        onError={() => console.log('error')}
-      />
       <SearchIcon />
       <TextInput type="text" ref={inputRef} placeholder="Enter your city" />
     </InputWrapper>
