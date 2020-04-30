@@ -68,7 +68,7 @@ export const SearchBarComponent = ({ handleSelect }) => {
       types: ['(regions)'],
       componentRestrictions: { country: 'us' }
     };
-    autocomplete.current = new google.maps.places.Autocomplete(
+    autocomplete.current = new window.google.maps.places.Autocomplete(
       inputRef.current,
       options,
     );
