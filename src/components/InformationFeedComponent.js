@@ -74,7 +74,7 @@ const InformationFeedComponent = () => {
       <FeedSelector activeFeed={activeFeed} setActiveFeed={setActiveFeed} />
       {!loading && feed.map((article) => (
         <FeedArticle key={article.id}>
-          <Link href={article.article_url}>
+          <Link href={article.article_url} target="_blank">
             <ArticleTitle> {article.title} </ArticleTitle>
           </Link>
           <ArticleMetaData>{timeSince(article.published_at)} - {article.source_id}</ArticleMetaData>

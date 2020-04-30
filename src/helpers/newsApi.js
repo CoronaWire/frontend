@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-const queryToParams = query =>
-  Object.keys(query).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`).join('&');
+const queryToParams = query => Object.keys(query)
+  .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
+  .join('&');
 
 export const fetchArticles = async ({
   scope,

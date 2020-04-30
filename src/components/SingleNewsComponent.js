@@ -82,7 +82,7 @@ const SingleNewsComponent = ({
     <SourceContainer>
       <DataSource>{source}</DataSource>
     </SourceContainer>
-    <Link href={articleUrl}>
+    <Link target="_blank" href={articleUrl}>
       <NewsTitle>{title}</NewsTitle>
     </Link>
     <NewsTextContainer>

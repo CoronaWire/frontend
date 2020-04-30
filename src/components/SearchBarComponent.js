@@ -55,8 +55,6 @@ export const SearchBarComponent = ({ handleSelect }) => {
         ...fipsData,
       };
 
-      console.log(userLocation);
-
       saveLocationToLocalStorage(userLocation);
       dispatch(
         setLocationAction(userLocation),
