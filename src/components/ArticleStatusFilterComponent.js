@@ -40,7 +40,7 @@ const StatusButton = styled.button`
         background-color: #6558f5;
         color: #293845;
     }
-    transition: background-color 0.6s ease-in;
+    transition: background-color 0.2s ease-in;
 `;
 
 class ArticleStatusFilterComponent extends PureComponent {

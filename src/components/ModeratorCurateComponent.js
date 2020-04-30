@@ -93,6 +93,7 @@ class ModeratorCurateComponent extends PureComponent {
             articleCurrentlyDisplayed: null,
             articleDisplayedIndex: null,
             numOfArticlesReturned: 0,
+            currentlySelectedArticle: {},
 
         }
         // #comment: articles will be either stored in redux state or locally.
@@ -280,7 +281,7 @@ class ModeratorCurateComponent extends PureComponent {
                 // // Store article ID in array
 
                 // Second approach (proposed by Joe in the first QA) is to delete them directly
-                delete articleFeed[key];
+                this.deleteArticleFromFeed(key);
             }
         })
         
@@ -301,10 +302,10 @@ class ModeratorCurateComponent extends PureComponent {
         const articleIDArray = getSelectedArticles(this.state.selectedArticles);
         const URL = REJECT_ARTICLE_URL;
         // Send request with array of article_ids to server to reject individual or several articles
-        let approveArticlesResponse = await axios.put(URL, {
+        let rejectArticlesResponse = await axios.put(URL, {
             articleIDArray: articleIDArray, 
         })
-        // console.log('Reject Article Response', approveArticlesResponse)
+        console.log('Reject Article Response', rejectArticlesResponse)
 
         // Sames as approveSeveralArticles logic but opposite
         Object.keys(this.state.selectedArticles).forEach((key) => {
@@ -321,7 +322,7 @@ class ModeratorCurateComponent extends PureComponent {
                 // Store article ID in array
 
                 // Deletes article from article object
-                delete articleFeed[key];
+                this.deleteArticleFromFeed(key);
             }
         })
         
@@ -330,6 +331,14 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({articleFeed, selectedArticles});
     }
 
+
+    deleteArticleFromFeed = (key) => {
+        const articleFeed = {...this.state.articleFeed};
+        delete articleFeed[key];
+        this.setState({
+            articleFeed: articleFeed
+        })
+    }
 
     // Both of these functions are only useful if the article status is changed on the 'pending' page
     approveIndividualArticle = async (articleID) => {
@@ -347,10 +356,18 @@ class ModeratorCurateComponent extends PureComponent {
         }
     }
 
-    rejetIndividualArticle = (articleID) => {
+    rejetIndividualArticle = async (articleID) => {
         // const articleFeed = {...this.state.articleFeed};
         // articleFeed[articleID].mod_status = 'Rejected';
         // this.setState({articleFeed})
+        const URL = REJECT_ARTICLE_URL;
+        let articleIDArray = [articleID];
+        try {
+            let rejectArticleResponse = await axios.put(URL, { articleIDArray: articleIDArray });
+            console.log('Reject article', rejectArticleResponse);
+        } catch (error) {
+            console.error(`Error caught in rejetIndividualArticle function ${error}`)
+        }
     }
     
     undoArticleApprovalRejection = async (articleID) => {
@@ -366,9 +383,11 @@ class ModeratorCurateComponent extends PureComponent {
         }
 
         // Reflect change in the internal state
-        let articleFeed = {...this.state.articleFeed};
-        articleFeed[articleID].mod_status = 'pending';
-        this.setState({articleFeed});
+        const key = articleID;
+        this.deleteArticleFromFeed(key);
+        // let articleFeed = {...this.state.articleFeed};
+        // articleFeed[articleID].mod_status = 'pending';
+        // this.setState({articleFeed});
     }
 
     togglePageDisplayed = () => {
@@ -377,12 +396,13 @@ class ModeratorCurateComponent extends PureComponent {
         })
     }
 
-    selectIndividualArticle = (articleID, articleIndex) => {
+    selectIndividualArticle = (articleID, articleIndex, articleObject) => {
         console.log('Individual article selected', articleID);
         this.setState({
             articleCurrentlyDisplayed: articleID,
             pageDisplayed: this.state.pageDisplayed === 'articleFeed' ? 'individualArticle' : 'articleFeed',
             articleDisplayedIndex: articleIndex,
+            currentlySelectedArticle: articleObject
         })
     }
 
@@ -393,31 +413,39 @@ class ModeratorCurateComponent extends PureComponent {
     }
 
     nextArticle = () => {
-        const { articleDisplayedIndex } = this.state;
+        let { articleDisplayedIndex } = this.state;
         const feedLength = Object.keys(this.state.articleFeed).length;
+        const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
+        articleDisplayedIndex = articleDisplayedIndex === feedLength-1 ? 0 : articleDisplayedIndex + 1;
+        const currentlyDisplayedArticleObject = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
         this.setState({
-            articleDisplayedIndex: articleDisplayedIndex === feedLength-1 ? 0 : articleDisplayedIndex + 1
+            articleDisplayedIndex: articleDisplayedIndex,
+            currentlySelectedArticle: currentlyDisplayedArticleObject
         })
-        console.log('Current article index', articleDisplayedIndex);
     }
 
     previousArticle = () => {
-        const { articleDisplayedIndex } = this.state;
+        let { articleDisplayedIndex } = this.state;
         const feedLength = Object.keys(this.state.articleFeed).length;
+        const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
+        articleDisplayedIndex = articleDisplayedIndex === 0 ? feedLength - 1 : articleDisplayedIndex-1
+        const currentlyDisplayedArticleObject = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
         this.setState({
-            articleDisplayedIndex:  articleDisplayedIndex === 0 ? feedLength - 1 : articleDisplayedIndex-1
+            articleDisplayedIndex: articleDisplayedIndex,
+            currentlySelectedArticle: currentlyDisplayedArticleObject        
         })
     }
 
     approveAndNextArticle = () => {
         const { articleDisplayedIndex, articleFeed } = this.state;
+        console.log('current article before next called', articleDisplayedIndex);
         const articleKey = Object.keys(articleFeed)[Number(articleDisplayedIndex)];
         const articleObject = articleFeed[articleKey]
         const articleID = articleObject.article_id;
         this.nextArticle();
         console.log('current article ID', articleID);
-        console.log('current article Object', articleObject);
         this.approveIndividualArticle(articleID);
+        this.deleteArticleFromFeed(articleKey);
     }
 
     // #toDo: ensure that calculations for length are only done once.
@@ -428,6 +456,19 @@ class ModeratorCurateComponent extends PureComponent {
         const articleID = articleObject.article_id;
         this.nextArticle();
         this.rejetIndividualArticle(articleID);
+        this.deleteArticleFromFeed(articleKey);
+
+    }
+
+    editArticleInformation = (propertyToEdit, editedText) => {
+        // console.log('Currently selected article', this.state.currentlySelectedArticle);
+        const articleObject = {...this.state.currentlySelectedArticle};
+        console.log('ARTICLE OBJECT BEFORE', articleObject);
+        articleObject[propertyToEdit] = editedText;
+        console.log('ARTICLE OBJECT AFTER', articleObject);
+        this.setState({
+            currentlySelectedArticle: articleObject
+        })
     }
 
     // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
@@ -436,7 +477,8 @@ class ModeratorCurateComponent extends PureComponent {
         // list of articles when attempting to edit
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
         // Current article chosen by the user
-        const currentArticle = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
+        console.log('rendered displayed index', this.state.articleDisplayedIndex)
+        console.log('Current article object', this.state.currentlySelectedArticle);
         console.log('ARTICLE FEED STATE', this.state.articleFeed)
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         // console.log('Article currently displayed ', this.state.articleCurrentlyDisplayed);
@@ -473,7 +515,8 @@ class ModeratorCurateComponent extends PureComponent {
                         />
                         :
                         <ModeratorIndividualArticleComponent 
-                         articleObject={currentArticle}
+                         articleObject={this.state.currentlySelectedArticle}
+                         editArticleInformation={this.editArticleInformation}
                          />
                     }
                 </MiddleFeedWrapper>

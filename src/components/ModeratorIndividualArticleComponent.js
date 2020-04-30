@@ -137,7 +137,7 @@ class ModeratorIndividualArticleComponent extends Component {
             summary: props.articleObject.summary,
             city:  props.articleObject.city,
             country: props.articleObject.country,
-            contentTypeDisplayed: 'IFrame',
+            contentTypeDisplayed: 'Outline',
             articleURL: props.articleObject.article_url,
             outline: 'https://outline.com/' + props.articleObject.article_url
         }
@@ -147,6 +147,9 @@ class ModeratorIndividualArticleComponent extends Component {
         this.setState({
         [event.target.id]: event.target.value,
         });
+        const propertyToEdit = event.target.id;
+        const newData = event.target.value;
+        this.props.editArticleInformation(propertyToEdit, newData);
     };
 
     changeContentDisplay = (contentType) => {
@@ -156,6 +159,10 @@ class ModeratorIndividualArticleComponent extends Component {
     }
 
     render(){
+        const { title, author, summary, specificity, city, state, country, content } = this.props.articleObject;
+        const articleURL = this.props.articleObject.article_url;
+        const outlineURL = 'https://outline.com/' + articleURL;
+
         return (
             <IndividualArticleWrapper>
                 <HalfGrid>
@@ -164,51 +171,51 @@ class ModeratorIndividualArticleComponent extends Component {
                             <InputTitle>
                             Title
                             </InputTitle>
-                            <MediumTextField id='title' value={this.state.title} onChange={this.handleChange} />
+                            <MediumTextField id='title' value={title} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             Author
                             </InputTitle>
-                            <MediumTextField id='author' value={this.state.author} onChange={this.handleChange} />
+                            <MediumTextField id='author' value={author} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             URL
                             </InputTitle>
-                            <MediumTextField id='url' value={this.state.articleURL} onChange={this.handleChange} />
+                            <MediumTextField id='article_url' value={articleURL} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             Summary
                             </InputTitle>
-                            <MediumTextField id='summary' value={this.state.summary} onChange={this.handleChange} />
+                            <MediumTextField id='summary' value={summary} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             Specificity
                             </InputTitle>
-                            <SmallTextField id='specificity' value={this.state.specificity} onChange={this.handleChange} >
+                            <SmallTextField id='specificity' value={specificity} onChange={this.handleChange} >
                             </SmallTextField>
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             City
                             </InputTitle>
-                            <SmallTextField id='city' value={this.state.city} onChange={this.handleChange} />
+                            <SmallTextField id='city' value={city} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             State
                             </InputTitle>
-                            <SmallTextField id='state' value={this.state.state} onChange={this.handleChange}/>
+                            <SmallTextField id='state' value={state} onChange={this.handleChange}/>
             
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             Country
                             </InputTitle>
-                            <SmallTextField id='country' value={this.state.country} onChange={this.handleChange}>
+                            <SmallTextField id='country' value={country} onChange={this.handleChange}>
                             </SmallTextField>
                         </InputWrapper>
                     </ArticleDataWrapper>
@@ -220,13 +227,13 @@ class ModeratorIndividualArticleComponent extends Component {
                         <ContentDisplayTypeButton onClick={() => this.changeContentDisplay('Text')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Text'}> Text </ContentDisplayTypeButton>                       
                     </ContentDisplayChoiceWrapper>
                     {
-                        this.state.contentTypeDisplayed === 'Outline' &&  <IFrame src={`${this.state.outline}`} />
+                        this.state.contentTypeDisplayed === 'Outline' &&  <IFrame src={`${outlineURL}`} />
                     }
                     {
-                        this.state.contentTypeDisplayed === 'IFrame' &&  <IFrame src={`${this.props.articleObject.article_url}`} />
+                        this.state.contentTypeDisplayed === 'IFrame' &&  <IFrame src={`${articleURL}`} />
                     }
                     {
-                        this.state.contentTypeDisplayed === 'Text' &&  <TextContent> {this.state.content} </TextContent>
+                        this.state.contentTypeDisplayed === 'Text' &&  <TextContent> {content} </TextContent>
                     }
                 </HalfGrid>
             </IndividualArticleWrapper>

@@ -102,7 +102,8 @@ class ModeratorArticleComponent extends Component {
     render() {
         const { articleID, articleIndex } = this.props;
         const status = this.props.articleObject.mod_status
-        const publishedTime = this.props.articleObject.published_at;
+        const { articleObject } = this.props
+        const publishedTime = articleObject.published_at;
         const publishedAt = removeHoursFromDate(this.props.articleObject.published_at);
         const relativeTime = moment(`${publishedAt}`, "YYYY-MM-DD").fromNow();
         // Capitalizes mod_status
@@ -123,7 +124,7 @@ class ModeratorArticleComponent extends Component {
 
                         }
                     </TinyGrid>
-                    <LargeGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex)} id={articleID}>
+                    <LargeGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex, articleObject)} id={articleID}>
                         <ArticleText>
                             <ArticleTitle>
                                 {this.props.articleObject.title}
