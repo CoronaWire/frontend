@@ -145,7 +145,7 @@ const MainDashboardComponent = () => {
 
   const handleFetch = async (scope, location) => {
     setLoading(true);
-    const data = await fetchArticles(scope, location);
+    const data = await fetchArticles({ scope, location });
     setLoading(false);
     if (data) {
       setMainFeed(data);
