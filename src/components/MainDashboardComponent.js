@@ -2,6 +2,7 @@
 
 // External Packages
 import React, { useState, useEffect } from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { fetchArticles } from './../helpers/newsApi';
@@ -140,17 +141,28 @@ const MainDashboardComponent = () => {
 
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const dispatch = useDispatch();
   const { scope, location } = useSelector(({ newsFeed }) => newsFeed);
 
   const handleFetch = async (scope, location) => {
     setLoading(true);
     const data = await fetchArticles({ scope, location });
-    setLoading(false);
-    if (data) {
-      setMainFeed(data);
+    if (data && data.data) {
+      setMainFeed(data.data);
     }
+    setLoading(false);
   };
+
+  const handleFetchMore = async () => {
+    const max = mainFeed && mainFeed[mainFeed.length - 1] && mainFeed[mainFeed.length - 1].id - 1;
+    const data = await fetchArticles({ scope, location, query: { max } });
+    if (data && data.data && data.data.length) {
+      setMainFeed([...mainFeed, ...data.data]);
+    } else {
+      setHasMore(false);
+    }
+  }
 
   useEffect(() => {
     handleFetch(scope, location);
@@ -177,11 +189,25 @@ const MainDashboardComponent = () => {
           <NonLocalTitle>{`${scope} news`}</NonLocalTitle>
         </React.Fragment>
       )}
-      <NewsListWrapper>
-        {news.map((newsObject, index) => (
-          <SingleNewsComponent key={index} props={newsObject} />
-        ))}
-      </NewsListWrapper>
+      <InfiniteScroll
+        hasMore={!loading && hasMore}
+        pageStart={0}
+        loader={() => null}
+        loadMore={handleFetchMore}
+      >
+        <NewsListWrapper>
+          {!loading && mainFeed.map(article => (
+            <SingleNewsComponent
+              key={article.id}
+              title={article.title}
+              publishedAt={article.published_at}
+              summary={article.summary}
+              articleUrl={article.article_url}
+              source={article.source_id}
+            />
+          ))}
+        </NewsListWrapper>
+      </InfiniteScroll>
     </OuterWrapper>
   );
 }

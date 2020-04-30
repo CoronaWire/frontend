@@ -5,7 +5,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 // Internal Modules
-import { Container, UpArrowIcon, DownArrowIcon, Text, B1, H1, Metadata, H4 } from './core';
+import { Link, Container, Text, B1, H1, Metadata, H4 } from './core';
+import { timeSince } from './../helpers/datetime';
 import { media } from './../helpers/media';
 
 // #toAsk #UIUX: how is width / height going to change with mobile responsiveness?
@@ -44,6 +45,9 @@ const NewsTextContainer = styled.div`
 const NewsTitle = styled(H1)`
   ${({ theme }) => `color: ${theme.newsColors.navy}`};
   margin-bottom: 16px;
+  &:hover {
+    opacity: 0.7;
+  }
 `
 
 const DataSource = styled(H4)`
@@ -68,19 +72,23 @@ const SourceContainer = styled(Container)`
 `;
 
 const SingleNewsComponent = ({
-  props: { timeStamp, title, summary, source, newsType } = {},
+  publishedAt,
+  title,
+  summary,
+  source,
+  articleUrl
 }) => (
   <SingleNewsWrapper>
     <SourceContainer>
-      <DataSource>
-        {`${source} - ${newsType}`}
-      </DataSource>
+      <DataSource>{source}</DataSource>
     </SourceContainer>
-    <NewsTitle>{title}</NewsTitle>
+    <Link href={articleUrl}>
+      <NewsTitle>{title}</NewsTitle>
+    </Link>
     <NewsTextContainer>
       <NewsText>{summary}</NewsText>
     </NewsTextContainer>
-    <NewsTimeStamp>{timeStamp}</NewsTimeStamp>
+    <NewsTimeStamp>{timeSince(publishedAt)}</NewsTimeStamp>
   </SingleNewsWrapper>
 );
 
