@@ -91,7 +91,7 @@ const ContentDisplayChoiceWrapper = styled.div`
 
 const ContentDisplayTypeButton = styled.button`
     height: 100%;
-    width: 50%;
+    width: 33%;
     background-color: ${props => props.contentTypeDisplayed === props.currentButtonType ? 'green' : 'transparent'};
     text-align: center;
     outline: none;
@@ -137,7 +137,9 @@ class ModeratorIndividualArticleComponent extends Component {
             summary: props.articleObject.summary,
             city:  props.articleObject.city,
             country: props.articleObject.country,
-            contentTypeDisplayed: 'IFrame'
+            contentTypeDisplayed: 'IFrame',
+            articleURL: props.articleObject.article_url,
+            outline: 'https://outline.com/' + props.articleObject.article_url
         }
     }
 
@@ -147,9 +149,9 @@ class ModeratorIndividualArticleComponent extends Component {
         });
     };
 
-    changeContentDisplay = () => {
+    changeContentDisplay = (contentType) => {
         this.setState({
-            contentTypeDisplayed: this.state.contentTypeDisplayed === 'IFrame' ? 'Text' : 'IFrame'
+            contentTypeDisplayed: contentType
         })
     }
 
@@ -169,6 +171,12 @@ class ModeratorIndividualArticleComponent extends Component {
                             Author
                             </InputTitle>
                             <MediumTextField id='author' value={this.state.author} onChange={this.handleChange} />
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            URL
+                            </InputTitle>
+                            <MediumTextField id='url' value={this.state.articleURL} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
@@ -207,9 +215,13 @@ class ModeratorIndividualArticleComponent extends Component {
                 </HalfGrid>
                 <HalfGrid>
                     <ContentDisplayChoiceWrapper>
-                        <ContentDisplayTypeButton onClick={this.changeContentDisplay} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'IFrame'} > IFrame </ContentDisplayTypeButton>
-                        <ContentDisplayTypeButton onClick={this.changeContentDisplay} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Text'}> Text </ContentDisplayTypeButton>                       
+                        <ContentDisplayTypeButton onClick={() => this.changeContentDisplay('Outline')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Outline'} > Outline </ContentDisplayTypeButton>
+                        <ContentDisplayTypeButton onClick={() => this.changeContentDisplay('IFrame')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'IFrame'} > IFrame </ContentDisplayTypeButton>
+                        <ContentDisplayTypeButton onClick={() => this.changeContentDisplay('Text')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Text'}> Text </ContentDisplayTypeButton>                       
                     </ContentDisplayChoiceWrapper>
+                    {
+                        this.state.contentTypeDisplayed === 'Outline' &&  <IFrame src={`${this.state.outline}`} />
+                    }
                     {
                         this.state.contentTypeDisplayed === 'IFrame' &&  <IFrame src={`${this.props.articleObject.article_url}`} />
                     }

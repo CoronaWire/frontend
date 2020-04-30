@@ -123,13 +123,13 @@ class ModeratorCurateComponent extends PureComponent {
         const articlesArray = returnedResponse.data;
         // #toDo: this needs to be done either on back-end or within the individual component
         let articleFeedObject = transformIntoArticleObject(articlesArray)
-        let articleIDObject = createObjectOfArticleIDs(articlesArray);
+        let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
         // console.log('Returned response', returnedResponse);
         // console.log('Article object', articleFeedObject)
 
         this.setState({
             articleFeed: articleFeedObject,
-            selectedArticles: articleIDObject,
+            selectedArticles: selectedArticlesObject,
         })
     }
 
@@ -199,14 +199,14 @@ class ModeratorCurateComponent extends PureComponent {
         const articlesArray = returnedResponse.data;
         // #toDo: this needs to be done either on back-end or within the individual component
         let articleFeedObject = transformIntoArticleObject(articlesArray)
-        let articleIDObject = createObjectOfArticleIDs(articlesArray);
+        let con = createObjectOfArticleIDs(articlesArray);
  
         // Merge the objects together
         const previousArticleFeed = this.state.articleFeed;
         const previousSelectedArticles = this.state.selectedArticles;
         
         articleFeedObject = Object.assign({}, previousArticleFeed, articleFeedObject);
-        articleIDObject = Object.assign({}, previousSelectedArticles, articleIDObject);
+        con = Object.assign({}, previousSelectedArticles, con);
 
         // const newArticleFeedLength = Object.keys(articleFeedObject).length;
 
@@ -219,7 +219,7 @@ class ModeratorCurateComponent extends PureComponent {
 
         this.setState({
             articleFeed: articleFeedObject,
-            selectedArticles: articleIDObject,
+            selectedArticles: con,
         })
 
     }
@@ -253,14 +253,16 @@ class ModeratorCurateComponent extends PureComponent {
         let selectedArticles = {...this.state.selectedArticles};
         let countToSubtract = 0;
 
+        console.log('Selected articles,', this.state.selectedArticles);
         // Get an array of all the article_ids of the articles selected
         const articleIDArray = getSelectedArticles(this.state.selectedArticles);
         const URL = APPROVE_ARTICLE_URL;
+        console.log('Article ID Array about to be approved', articleIDArray);
         // Send request with array of article_ids to server to approve individual or several articles
         let approveArticlesResponse = await axios.put(URL, {
             articleIDArray: articleIDArray, 
         })
-        // console.log('Approve Article Response', approveArticlesResponse)
+        console.log(`Approve Article Response`, approveArticlesResponse)
 
         // Traverse list of selected articles. If article status is true, it is selected by user, therefore
         // we change the status of that article to 'approved', revert it's selected status to false,
@@ -329,16 +331,26 @@ class ModeratorCurateComponent extends PureComponent {
     }
 
 
-    approveIndividualArticle = (articleID) => {
-        const articleFeed = {...this.state.articleFeed};
-        articleFeed[articleID].mod_status = 'Approved';
-        this.setState({articleFeed})
+    // Both of these functions are only useful if the article status is changed on the 'pending' page
+    approveIndividualArticle = async (articleID) => {
+        // const articleFeed = {...this.state.articleFeed};
+        // articleFeed[articleID].mod_status = 'Approved';
+        // this.setState({articleFeed})
+        const URL = APPROVE_ARTICLE_URL;
+        let articleIDArray = [articleID];
+        console.log('article ID Array', articleIDArray)
+        try {
+            let approveArticleResponse = await axios.put(URL, { articleIDArray: articleIDArray });
+            console.log('Approve article', approveArticleResponse);
+        } catch (error) {
+            console.error(`Error caught in approveIndividualArticle function ${error}`)
+        }
     }
 
     rejetIndividualArticle = (articleID) => {
-        const articleFeed = {...this.state.articleFeed};
-        articleFeed[articleID].mod_status = 'Rejected';
-        this.setState({articleFeed})
+        // const articleFeed = {...this.state.articleFeed};
+        // articleFeed[articleID].mod_status = 'Rejected';
+        // this.setState({articleFeed})
     }
     
     undoArticleApprovalRejection = async (articleID) => {
@@ -366,6 +378,7 @@ class ModeratorCurateComponent extends PureComponent {
     }
 
     selectIndividualArticle = (articleID, articleIndex) => {
+        console.log('Individual article selected', articleID);
         this.setState({
             articleCurrentlyDisplayed: articleID,
             pageDisplayed: this.state.pageDisplayed === 'articleFeed' ? 'individualArticle' : 'articleFeed',
@@ -385,6 +398,7 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({
             articleDisplayedIndex: articleDisplayedIndex === feedLength-1 ? 0 : articleDisplayedIndex + 1
         })
+        console.log('Current article index', articleDisplayedIndex);
     }
 
     previousArticle = () => {
@@ -399,8 +413,10 @@ class ModeratorCurateComponent extends PureComponent {
         const { articleDisplayedIndex, articleFeed } = this.state;
         const articleKey = Object.keys(articleFeed)[Number(articleDisplayedIndex)];
         const articleObject = articleFeed[articleKey]
-        const articleID = articleObject.id;
+        const articleID = articleObject.article_id;
         this.nextArticle();
+        console.log('current article ID', articleID);
+        console.log('current article Object', articleObject);
         this.approveIndividualArticle(articleID);
     }
 
@@ -409,7 +425,7 @@ class ModeratorCurateComponent extends PureComponent {
         const { articleDisplayedIndex, articleFeed } = this.state;
         const articleKey = Object.keys(articleFeed)[Number(articleDisplayedIndex)];
         const articleObject = articleFeed[articleKey]
-        const articleID = articleObject.id;
+        const articleID = articleObject.article_id;
         this.nextArticle();
         this.rejetIndividualArticle(articleID);
     }
@@ -423,6 +439,7 @@ class ModeratorCurateComponent extends PureComponent {
         const currentArticle = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
         console.log('ARTICLE FEED STATE', this.state.articleFeed)
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
+        // console.log('Article currently displayed ', this.state.articleCurrentlyDisplayed);
         // console.log('Current article', currentArticle);
 
         return(
