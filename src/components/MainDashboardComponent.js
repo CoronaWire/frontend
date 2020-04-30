@@ -124,20 +124,6 @@ const OuterWrapper = styled.div``;
 // #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
 const MainDashboardComponent = () => {
   const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
-  const news = [
-      {
-        timeStamp: '12 min',
-        title: 'Drive-through novel coronavirus (COVID-19) testing available by appointment at Stanford',
-        summary: `
-          Drive-through appointments for Stanford Medicine COVID-19 test are available for patients who have been referred.
-          Drive-through appointments for Stanford Medicine COVID-19 test are available for patients who have been referred.
-        `,
-        source: 'Stanford Health Care',
-        newsType: 'Website',
-      },
-        {timeStamp: '1 hour', title: 'Several SF police officers self-quarantined after coronavirus exposure', summary: 'A janitor who worked at a Sodo office park that houses several Seattle Police Department training and support units recently tested positive for COVID-19', source: 'SF Chronicle', newsType: 'Website'},
-        {timeStamp: '1 d', title: 'Researchers from Taiwan find cure for COVID-19.', summary: "It's all in the title. Enough said.", source: 'NY Times', newsType: 'Website'},
-  ];
 
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
