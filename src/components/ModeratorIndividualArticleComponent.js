@@ -81,6 +81,48 @@ const IFrame = styled.iframe`
     border-style: none;
 `
 
+const ContentDisplayChoiceWrapper = styled.div`
+    height: 40px;
+    width: 100%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+`
+
+const ContentDisplayTypeButton = styled.button`
+    height: 100%;
+    width: 50%;
+    background-color: ${props => props.contentTypeDisplayed === props.currentButtonType ? 'green' : 'transparent'};
+    text-align: center;
+    outline: none;
+    cursor: pointer;
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+    border-top-style: solid;
+    border-top-width: 4px;
+    border-top-color: transparent;
+    &:hover {
+        border-top-style: solid;
+        border-top-width: 4px;
+        border-top-color: green;
+    }
+`
+
+const TextContent = styled.div`
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    padding-left: 120px;
+    padding-right: 120px;
+    font-size: 15px;
+    font-weight: 500;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    line-height: 20px;
+    text-justify: auto;
+
+`
 
 class ModeratorIndividualArticleComponent extends Component {
     constructor(props) {
@@ -90,7 +132,12 @@ class ModeratorIndividualArticleComponent extends Component {
             title: props.articleObject.title,
             content: props.articleObject.content,
             source: props.articleObject.source_id,
-            region: props.articleObject.region,
+            state: props.articleObject.state,
+            author: props.articleObject.author,
+            summary: props.articleObject.summary,
+            city:  props.articleObject.city,
+            country: props.articleObject.country,
+            contentTypeDisplayed: 'IFrame'
         }
     }
 
@@ -99,6 +146,12 @@ class ModeratorIndividualArticleComponent extends Component {
         [event.target.id]: event.target.value,
         });
     };
+
+    changeContentDisplay = () => {
+        this.setState({
+            contentTypeDisplayed: this.state.contentTypeDisplayed === 'IFrame' ? 'Text' : 'IFrame'
+        })
+    }
 
     render(){
         return (
@@ -110,45 +163,59 @@ class ModeratorIndividualArticleComponent extends Component {
                             Title
                             </InputTitle>
                             <MediumTextField id='title' value={this.state.title} onChange={this.handleChange} />
-                            
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
-                            Content
+                            Author
                             </InputTitle>
-                            <MediumTextField id='content' value={this.state.content} onChange={this.handleChange} />
+                            <MediumTextField id='author' value={this.state.author} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
-                            Scope
+                            Summary
                             </InputTitle>
-                            <SmallTextField id='scope'>
+                            <MediumTextField id='summary' value={this.state.summary} onChange={this.handleChange} />
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            Specificity
+                            </InputTitle>
+                            <SmallTextField id='specificity' value={this.state.specificity} onChange={this.handleChange} >
                             </SmallTextField>
-                        </InputWrapper>
-                        <InputWrapper>
-                            <InputTitle>
-                            Source
-                            </InputTitle>
-                            <SmallTextField id='source' value={this.state.source} onChange={this.handleChange} />
-                        </InputWrapper>
-                        <InputWrapper>
-                            <InputTitle>
-                            Region
-                            </InputTitle>
-                            <SmallTextField id='region' value={this.state.region} onChange={this.handleChange}/>
-            
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             City
                             </InputTitle>
-                            <SmallTextField id='city'>
+                            <SmallTextField id='city' value={this.state.city} onChange={this.handleChange} />
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            State
+                            </InputTitle>
+                            <SmallTextField id='state' value={this.state.state} onChange={this.handleChange}/>
+            
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            Country
+                            </InputTitle>
+                            <SmallTextField id='country' value={this.state.country} onChange={this.handleChange}>
                             </SmallTextField>
                         </InputWrapper>
                     </ArticleDataWrapper>
                 </HalfGrid>
                 <HalfGrid>
-                    <IFrame src={`${this.props.articleObject.article_url}`} />
+                    <ContentDisplayChoiceWrapper>
+                        <ContentDisplayTypeButton onClick={this.changeContentDisplay} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'IFrame'} > IFrame </ContentDisplayTypeButton>
+                        <ContentDisplayTypeButton onClick={this.changeContentDisplay} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Text'}> Text </ContentDisplayTypeButton>                       
+                    </ContentDisplayChoiceWrapper>
+                    {
+                        this.state.contentTypeDisplayed === 'IFrame' &&  <IFrame src={`${this.props.articleObject.article_url}`} />
+                    }
+                    {
+                        this.state.contentTypeDisplayed === 'Text' &&  <TextContent> {this.state.content} </TextContent>
+                    }
                 </HalfGrid>
             </IndividualArticleWrapper>
         )

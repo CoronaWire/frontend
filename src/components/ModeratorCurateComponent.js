@@ -19,8 +19,10 @@ import IndividualArticleTopActionComponent from './IndividualArticleTopActionCom
 // Utility Function
 import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles} from '../utilityFunctions';
 
-// #toDo: create index.jsfile in styled components to get all of components out
+// URLs
+import { APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticlesURL } from '../URL';
 
+// #toDo: create index.jsfile in styled components to get all of components out
 const FeedWrapper = styled.div`
     height: 100%;
     width: 100%;
@@ -28,7 +30,7 @@ const FeedWrapper = styled.div`
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-`
+`;
 
 // #toDo: change names
 const FilterActionsWrapper = styled.div`
@@ -115,7 +117,7 @@ class ModeratorCurateComponent extends PureComponent {
     retrieveArticle = async (paramObject) => {
         const { status, region, offset} = paramObject;
         let returnedResponse;
-        const MODERATOR_API_URL = `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/${status}/region/${region}/offset/${offset}`;
+        const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset); // #Need to change the offset initially
         returnedResponse = await axios.get(MODERATOR_API_URL);
         console.log(returnedResponse);
         const articlesArray = returnedResponse.data;
@@ -191,7 +193,7 @@ class ModeratorCurateComponent extends PureComponent {
         let status = this.state.statusFilter, region = this.state.locationFilter, offset = articleLength;
         
         let returnedResponse;
-        const MODERATOR_API_URL = `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/${status}/region/${region}/offset/${offset}`;
+        const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset);
         returnedResponse = await axios.get(MODERATOR_API_URL);
         console.log(`Returned response ${returnedResponse}`)
         const articlesArray = returnedResponse.data;
@@ -253,9 +255,9 @@ class ModeratorCurateComponent extends PureComponent {
 
         // Get an array of all the article_ids of the articles selected
         const articleIDArray = getSelectedArticles(this.state.selectedArticles);
-        const url = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/approve';
+        const URL = APPROVE_ARTICLE_URL;
         // Send request with array of article_ids to server to approve individual or several articles
-        let approveArticlesResponse = await axios.put(url, {
+        let approveArticlesResponse = await axios.put(URL, {
             articleIDArray: articleIDArray, 
         })
         // console.log('Approve Article Response', approveArticlesResponse)
@@ -295,9 +297,9 @@ class ModeratorCurateComponent extends PureComponent {
 
         // Get an array of all the article_ids of the articles selected
         const articleIDArray = getSelectedArticles(this.state.selectedArticles);
-        const url = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/reject';
+        const URL = REJECT_ARTICLE_URL;
         // Send request with array of article_ids to server to reject individual or several articles
-        let approveArticlesResponse = await axios.put(url, {
+        let approveArticlesResponse = await axios.put(URL, {
             articleIDArray: articleIDArray, 
         })
         // console.log('Reject Article Response', approveArticlesResponse)
@@ -340,11 +342,11 @@ class ModeratorCurateComponent extends PureComponent {
     }
     
     undoArticleApprovalRejection = async (articleID) => {
-        const url = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/review'
+        const URL = MAKE_ARTICLE_PENDING_URL;
 
         // Send call to back-end to ensure article mod_status is changed to pending
         try {
-            let makeArticlePendingResponse = await axios.put(url, {
+            let makeArticlePendingResponse = await axios.put(URL, {
                 articleID: articleID, 
             })
         } catch (error) {

@@ -50,13 +50,13 @@ class CityFilterComponent extends PureComponent {
                         >
                             All  
                         </CityButton>
-                        <CityButton id='california' 
+                        <CityButton id='California' 
                         selectedID={this.props.locationFilter} 
                         onClick={this.props.toggleLocationFilter}
                         > 
                         California 
                         </CityButton>
-                        <CityButton id='washington'
+                        <CityButton id='Washington'
                         selectedID={this.props.locationFilter} 
                         onClick={this.props.toggleLocationFilter}
                         > 
