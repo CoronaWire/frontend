@@ -44,7 +44,7 @@ class CityFilterComponent extends PureComponent {
         return(
                 <CityFilterWrapper>
                     <LeftPositionedWrapper>
-                        <CityButton id='all' 
+                        <CityButton id='all' // #toDo: Make 'all' capitalized in both moderation-app-engine service and ModeratorCurateFunction
                         selectedID={this.props.locationFilter} 
                         onClick={this.props.toggleLocationFilter}
                         >
@@ -62,7 +62,20 @@ class CityFilterComponent extends PureComponent {
                         > 
                         Washington
                         </CityButton>
+                        <CityButton id='Global'
+                        selectedID={this.props.locationFilter} 
+                        onClick={this.props.toggleLocationFilter}
+                        > 
+                        Global
+                        </CityButton>
+                        <CityButton id='National'
+                        selectedID={this.props.locationFilter} 
+                        onClick={this.props.toggleLocationFilter}
+                        > 
+                        National
+                        </CityButton>
                     </LeftPositionedWrapper>
+                    
                     {/* <RightPositionedWrapper>
                         <NoBorderButton>
                             Add Area

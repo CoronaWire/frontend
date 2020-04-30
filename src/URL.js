@@ -16,4 +16,10 @@ export const retrieveLocalArticlesURL = (region, status, maxID) => {
     }
 };
 
+export const retrieveGlobalArticleURL = (status, offset) => {
+    return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/global?status=${status}&offset=${offset}`
+}
 
+export const retrieveNationalArticleURL = (status, offset) => {
+    return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/national?status=${status}&offset=${offset}`
+}

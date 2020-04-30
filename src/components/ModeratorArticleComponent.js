@@ -25,7 +25,6 @@ const IndividualArticleWrapper = styled.div`
         background-color: ${props => props.checked === true ? '#B2ACFA' : props.GlobalTheme.moderationPlatform.sharedLightGrey};
     };
     cursor: pointer;
-    padding-top: 10px;
     background-color: ${props => props.checked === true ? '#B2ACFA' : 'white'};
     flex-shrink: 0;
 `;
@@ -51,6 +50,7 @@ const ArticleSummary = styled(SmallText)`
 
 const ArticleMetaDataText = styled(MediumText)`
     background-color: transparent;
+    font-size: 13px;
 `
 
 // #toDo #globalTheme: move colors up to global theme
@@ -90,6 +90,12 @@ const ColumnWrapper = styled.div`
     visibility: ${props => (props.status === 'approved' || props.status === 'rejected')? 'visible' : 'hidden'};
 `
 
+const TinyArticleGrid = styled(TinyGrid)`
+    &:hover {
+        background-color: #B2ACFA;
+    }
+`
+
 class ModeratorArticleComponent extends Component {
     constructor(props){
         super(props);
@@ -115,7 +121,7 @@ class ModeratorArticleComponent extends Component {
                         // onClick={() => this.props.toggleArticleSelected(articleID)}
                         checked={this.props.checked}
                     >
-                    <TinyGrid>
+                    <TinyArticleGrid onClick={() => this.props.toggleArticleSelected(articleID)}>
                         {
                             (this.props.articleObject.mod_status === 'approved' || this.props.articleObject.mod_status === 'rejected') ?
                             <StatusCircle status={this.props.articleObject.mod_status} />
@@ -123,14 +129,14 @@ class ModeratorArticleComponent extends Component {
                             <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(articleID)} />
 
                         }
-                    </TinyGrid>
+                    </TinyArticleGrid>
                     <LargeGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex, articleObject)} id={articleID}>
                         <ArticleText>
                             <ArticleTitle>
                                 {this.props.articleObject.title}
                             </ArticleTitle>
                             <ArticleSummary>
-                                {this.props.articleObject.content}
+                                {this.props.articleObject.summary}
                             </ArticleSummary>
                         </ArticleText>
                     </LargeGrid>

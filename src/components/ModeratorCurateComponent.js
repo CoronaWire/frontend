@@ -20,7 +20,7 @@ import IndividualArticleTopActionComponent from './IndividualArticleTopActionCom
 import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles} from '../utilityFunctions';
 
 // URLs
-import { APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticlesURL } from '../URL';
+import { APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticlesURL, retrieveGlobalArticleURL, retrieveNationalArticleURL } from '../URL';
 
 // #toDo: create index.jsfile in styled components to get all of components out
 const FeedWrapper = styled.div`
@@ -118,20 +118,54 @@ class ModeratorCurateComponent extends PureComponent {
     retrieveArticle = async (paramObject) => {
         const { status, region, offset} = paramObject;
         let returnedResponse;
-        const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset); // #Need to change the offset initially
-        returnedResponse = await axios.get(MODERATOR_API_URL);
-        console.log(returnedResponse);
-        const articlesArray = returnedResponse.data;
-        // #toDo: this needs to be done either on back-end or within the individual component
-        let articleFeedObject = transformIntoArticleObject(articlesArray)
-        let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
-        // console.log('Returned response', returnedResponse);
-        // console.log('Article object', articleFeedObject)
 
-        this.setState({
-            articleFeed: articleFeedObject,
-            selectedArticles: selectedArticlesObject,
-        })
+        if (region === 'National') {
+            const NATIONAL_API_URL = retrieveNationalArticleURL(status, offset);
+            returnedResponse = await axios.get(NATIONAL_API_URL);
+            console.log(returnedResponse);
+            const articlesArray = returnedResponse.data;
+            // #toDo: this needs to be done either on back-end or within the individual component
+            let articleFeedObject = transformIntoArticleObject(articlesArray)
+            let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
+            // console.log('Returned response', returnedResponse);
+            // console.log('Article object', articleFeedObject)
+    
+            this.setState({
+                articleFeed: articleFeedObject,
+                selectedArticles: selectedArticlesObject,
+            })         
+        } else if (region === 'Global') {
+            const GLOBAL_API_URL = retrieveGlobalArticleURL(status, offset);
+            returnedResponse = await axios.get(GLOBAL_API_URL);
+            console.log(returnedResponse);
+            const articlesArray = returnedResponse.data;
+            // #toDo: this needs to be done either on back-end or within the individual component
+            let articleFeedObject = transformIntoArticleObject(articlesArray)
+            let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
+            // console.log('Returned response', returnedResponse);
+            // console.log('Article object', articleFeedObject)
+    
+            this.setState({
+                articleFeed: articleFeedObject,
+                selectedArticles: selectedArticlesObject,
+            })         
+        } else {
+            let returnedResponse;
+            const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset); // #Need to change the offset initially
+            returnedResponse = await axios.get(MODERATOR_API_URL);
+            console.log(returnedResponse);
+            const articlesArray = returnedResponse.data;
+            // #toDo: this needs to be done either on back-end or within the individual component
+            let articleFeedObject = transformIntoArticleObject(articlesArray)
+            let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
+            // console.log('Returned response', returnedResponse);
+            // console.log('Article object', articleFeedObject)
+    
+            this.setState({
+                articleFeed: articleFeedObject,
+                selectedArticles: selectedArticlesObject,
+            })         
+        }
     }
 
     // #toDo: use the same verbs. change or toggle. toggle is more for buttons, change is better here.
