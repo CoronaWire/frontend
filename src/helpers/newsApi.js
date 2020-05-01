@@ -10,7 +10,7 @@ export const fetchArticles = async ({
   query = {},
 }) => {
   const apiUrl = process.env.REACT_APP_NEWS_API_URL;
-  const params = queryToParams({ ...query, status: 'pending' });
+  const params = queryToParams(query);
   const paramsFragment = params ? `?${params}` : '';
   try {
     switch (scope) {
