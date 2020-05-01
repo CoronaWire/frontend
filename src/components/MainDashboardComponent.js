@@ -13,6 +13,7 @@ import GlobalTheme from '../styledComponents/GlobalTheme';
 // Components
 import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
+import { LocalZeroState } from './ZeroState';
 import { H3, H2 } from './core';
 
 // #toDo: make paddingLeft and marginLeft below 30px
@@ -175,25 +176,29 @@ const MainDashboardComponent = () => {
           <NonLocalTitle>{`${scope} news`}</NonLocalTitle>
         </React.Fragment>
       )}
-      <InfiniteScroll
-        hasMore={!loading && hasMore}
-        pageStart={0}
-        loader={() => null}
-        loadMore={handleFetchMore}
-      >
-        <NewsListWrapper>
-          {!loading && mainFeed.map(article => (
-            <SingleNewsComponent
-              key={article.id}
-              title={article.title}
-              publishedAt={article.published_at}
-              summary={article.summary}
-              articleUrl={article.article_url}
-              source={article.source_id}
-            />
-          ))}
-        </NewsListWrapper>
-      </InfiniteScroll>
+      {!loading && scope === 'local' && !mainFeed.length ? (
+        <LocalZeroState />
+      ) : (
+        <InfiniteScroll
+          hasMore={!loading && hasMore}
+          pageStart={0}
+          loader={() => null}
+          loadMore={handleFetchMore}
+        >
+          <NewsListWrapper>
+            {!loading && mainFeed.map(article => (
+              <SingleNewsComponent
+                key={article.id}
+                title={article.title}
+                publishedAt={article.published_at}
+                summary={article.summary}
+                articleUrl={article.article_url}
+                source={article.source_id}
+              />
+            ))}
+          </NewsListWrapper>
+        </InfiniteScroll>
+      )}
     </OuterWrapper>
   );
 }

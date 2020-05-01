@@ -25,6 +25,6 @@ export const fetchArticles = async ({
     }
   } catch (err) {
     console.log(err);
-    return [];
+    return null;
   }
 };
