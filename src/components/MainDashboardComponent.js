@@ -14,7 +14,7 @@ import GlobalTheme from '../styledComponents/GlobalTheme';
 import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
 import { LocalZeroState } from './ZeroState';
-import { H3, H2 } from './core';
+import { Container, H3, H2, Button as BaseButton } from './core';
 
 // #toDo: make paddingLeft and marginLeft below 30px
 
@@ -108,10 +108,28 @@ const BackToNews = styled(H3)`
   text-transform: uppercase;
 `;
 
-const NonLocalTitle = styled(H2)`
+const Title = styled(H2)`
   color: ${({ theme }) => theme.newsColors.navy};
   margin-bottom: 24px;
   text-transform: uppercase;
+`;
+
+const ToggleButton = styled(BaseButton)`
+  ${({ theme, active }) => css`
+    background: ${theme.newsColors.pink};
+    color: ${theme.newsColors.white};
+    &:disabled {
+      background: ${theme.newsColors.midGrey};
+    }
+  `};
+  margin-left: 16px;
+  &:first-child {
+    margin-left: 0;
+  }
+`;
+
+const ToggleContainer = styled(Container)`
+  margin-bottom: 24px;
 `;
 
 // #toFix: set margin-left and right of both styled components through Global Theming or through
@@ -129,12 +147,13 @@ const MainDashboardComponent = () => {
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [localType, setLocalType] = useState('fips');
   const dispatch = useDispatch();
   const { scope, location } = useSelector(({ newsFeed }) => newsFeed);
 
-  const handleFetch = async (scope, location) => {
+  const handleFetch = async (scope, location, options) => {
     setLoading(true);
-    const data = await fetchArticles({ scope, location });
+    const data = await fetchArticles({ scope, location, options });
     if (data && data.data) {
       setMainFeed(data.data);
     }
@@ -143,7 +162,12 @@ const MainDashboardComponent = () => {
 
   const handleFetchMore = async () => {
     const max = mainFeed && mainFeed[mainFeed.length - 1] && mainFeed[mainFeed.length - 1].id - 1;
-    const data = await fetchArticles({ scope, location, query: { max } });
+    const data = await fetchArticles({
+      scope,
+      location,
+      query: { max },
+      options: { localType },
+    });
     if (data && data.data && data.data.length) {
       setMainFeed([...mainFeed, ...data.data]);
     } else {
@@ -152,8 +176,8 @@ const MainDashboardComponent = () => {
   }
 
   useEffect(() => {
-    handleFetch(scope, location);
-  }, [scope, location]);
+    handleFetch(scope, location, { localType });
+  }, [scope, location, localType]);
 
   return (
     <OuterWrapper>
@@ -164,7 +188,7 @@ const MainDashboardComponent = () => {
           ))}
         </ButtonsContainer>
       )}
-      {scope !== 'local' && (
+      {scope !== 'local' ? (
         <React.Fragment>
           <BackToNews
             onClick={() => {
@@ -173,8 +197,26 @@ const MainDashboardComponent = () => {
           >
             Back to news
           </BackToNews>
-          <NonLocalTitle>{`${scope} news`}</NonLocalTitle>
+          <Title>{`${scope} news`}</Title>
         </React.Fragment>
+      ) : (
+        <ToggleContainer flexColumn width="100%">
+          <Title>{`Showing results for "${localType}"`}</Title>
+          <Container>
+            <ToggleButton
+              onClick={() => setLocalType('fips')}
+              disabled={localType === 'fips'}
+            >
+              FIPS
+            </ToggleButton>
+            <ToggleButton
+              onClick={() => setLocalType('coord')}
+              disabled={localType === 'coord'}
+            >
+              Lat / Long
+            </ToggleButton>
+          </Container>
+        </ToggleContainer>
       )}
       {!loading && scope === 'local' && !mainFeed.length ? (
         <LocalZeroState />
