@@ -27,6 +27,7 @@ const IndividualArticleWrapper = styled.div`
     cursor: pointer;
     padding-top: 10px;
     background-color: ${props => props.checked === true ? '#B2ACFA' : 'white'};
+    flex-shrink: 0;
 `
 
 const ArticleText = styled.div`
