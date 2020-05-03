@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import moment from 'moment';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
-import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
+import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid } from '../styledComponents/GridLayout';
 import { LargeText, SmallText, UnderlinedMediumText, MediumText } from '../styledComponents/Text';
 import { removeHoursFromDate } from '../utilityFunctions';
 
@@ -30,11 +30,15 @@ const IndividualArticleWrapper = styled.div`
 `;
 
 const ArticleText = styled.div`
-    width: auto;
     height: 100%;
     background-color: transparent;
     display: flex;
     flex-direction: column;
+`;
+
+const ArticleImage = styled.img`
+    height: 100%;
+    width: 200px;
 `;
 
 const ArticleTitle = styled(LargeText)`
@@ -90,6 +94,11 @@ const ColumnWrapper = styled.div`
     visibility: ${props => (props.status === 'approved' || props.status === 'rejected')? 'visible' : 'hidden'};
 `
 
+const LargeArticleGrid = styled(LargeGrid)`
+    display: flex;
+    flex-direction: row;
+`;
+
 const TinyArticleGrid = styled(TinyGrid)`
     &:hover {
         background-color: #B2ACFA;
@@ -130,7 +139,8 @@ class ModeratorArticleComponent extends Component {
 
                         }
                     </TinyArticleGrid>
-                    <LargeGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex, articleObject)} id={articleID}>
+                    <LargeArticleGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex, articleObject)} id={articleID}>
+                        {/* <ArticleImage src={this.props.articleObject.image_url} /> */}
                         <ArticleText>
                             <ArticleTitle>
                                 {this.props.articleObject.title}
@@ -139,7 +149,7 @@ class ModeratorArticleComponent extends Component {
                                 {this.props.articleObject.summary}
                             </ArticleSummary>
                         </ArticleText>
-                    </LargeGrid>
+                    </LargeArticleGrid>
                     <SmallGrid>
                         <ArticleMetaDataText> {this.props.articleObject.source_id} </ArticleMetaDataText>
                     </SmallGrid>

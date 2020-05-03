@@ -41,6 +41,14 @@ export const SmallGrid = styled.div`
     align-items: center;
 `
 
+export const SmallerGrid = styled.div`
+    height: 100%;
+    width: 10%;
+    background-color: transparent;
+    padding-left: 20px;
+    justify-content: center;
+    align-items: center;
+`
 export const HalfGrid = styled.div`
     height: 100%;
     width: 50%;

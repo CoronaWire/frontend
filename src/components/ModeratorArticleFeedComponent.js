@@ -7,7 +7,7 @@ import styled from 'styled-components';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { MediumText } from '../styledComponents/Text';
-import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
+import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid } from '../styledComponents/GridLayout';
 import { OutlineButton } from '../styledComponents/Buttons';
 
 // Sub-Components
@@ -39,6 +39,7 @@ const EndOfFeedContainer = styled.div`
     justify-content: center;
     width: 100%;
 `;
+
 
 const Button = styled(OutlineButton)`
     margin-top: 20px;
