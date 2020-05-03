@@ -9,3 +9,7 @@ export const RETRIEVE_HOSPITAL_DATA = 'RETRIEVE_HOSPITAL_DATA';
 // Article / News Related Moderator Related Actions
 
 // Hospital Data Related Actions
+
+// News feed actions
+export const SET_SCOPE = 'SET_SCOPE';
+export const SET_LOCATION = 'SET_LOCATION';

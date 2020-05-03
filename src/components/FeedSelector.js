@@ -39,23 +39,20 @@ const options = [
   { id: 'global', name: 'GLOBAL NEWS' },
 ];
 
-export const FeedSelector = () => {
-  const [activeFeed, setActiveFeed] = useState('national');
-  return (
-    <Container align="flex-end" width="100%">
-      {options.map(({ id, name }, index) => (
-        <React.Fragment>
-          {!!index && <Divider />}
-          <Option
-            onClick={() => {
-              setActiveFeed(id);
-            }}
-            active={id === activeFeed}
-            name={name}
-          />
-        </React.Fragment>
-      ))}
-      <EndDivider />
-    </Container>
-  );
-};
+export const FeedSelector = ({ activeFeed, setActiveFeed }) => (
+  <Container align="flex-end" width="100%">
+    {options.map(({ id, name }, index) => (
+      <React.Fragment>
+        {!!index && <Divider />}
+        <Option
+          onClick={() => {
+            setActiveFeed(id);
+          }}
+          active={id === activeFeed}
+          name={name}
+        />
+      </React.Fragment>
+    ))}
+    <EndDivider />
+  </Container>
+);

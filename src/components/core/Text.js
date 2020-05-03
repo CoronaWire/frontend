@@ -34,8 +34,7 @@ export const H2 = styled.h2`
   letter-spacing: 0.5px;
 `;
 
-export const H3 = styled.h3`
-  ${normalizeCss};
+export const h3Css = css`
   ${sansSerifFont};
   ${({ theme }) => css`
     font-weight: ${theme.fontWeight.bold};
@@ -43,6 +42,11 @@ export const H3 = styled.h3`
   font-size: 14px;
   line-height: 14px;
   letter-spacing: 0.5px;
+`;
+
+export const H3 = styled.h3`
+  ${normalizeCss};
+  ${h3Css};
 `;
 
 export const H4 = styled.h4`
