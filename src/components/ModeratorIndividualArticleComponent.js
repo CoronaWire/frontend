@@ -18,11 +18,12 @@ const IndividualArticleWrapper = styled.div`
 
 const ArticleDataWrapper = styled.div`
     width: 90%;
-    height: 90%;
     background-color: transparent;
     display: flex;
     flex-direction: column;
     margin: auto auto;
+    margin-bottom: 50px;
+    padding-bottom: 50px;
 `;
 
 const InputTitle = styled.p`
@@ -36,7 +37,7 @@ const InputTitle = styled.p`
 
 const MediumTextField = styled.textarea`
     background-color: white;
-    border: solid 2px #b8c4cf;
+    border: solid 2px #B8C4CF;
     height: 120px;
     width: 90%;
     max-width: 90%;
@@ -80,13 +81,65 @@ const IFrame = styled.iframe`
     border-style: none;
 `
 
+const ContentDisplayChoiceWrapper = styled.div`
+    height: 40px;
+    width: 100%;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+`
+
+const ContentDisplayTypeButton = styled.button`
+    height: 100%;
+    width: 33%;
+    background-color: ${props => props.contentTypeDisplayed === props.currentButtonType ? 'green' : 'transparent'};
+    text-align: center;
+    outline: none;
+    cursor: pointer;
+    color: black;
+    font-size: 16px;
+    font-weight: 600;
+    border-top-style: solid;
+    border-top-width: 4px;
+    border-top-color: transparent;
+    &:hover {
+        border-top-style: solid;
+        border-top-width: 4px;
+        border-top-color: green;
+    }
+`
+
+const TextContent = styled.div`
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    padding-left: 120px;
+    padding-right: 120px;
+    font-size: 15px;
+    font-weight: 500;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    line-height: 20px;
+    text-justify: auto;
+
+`
 
 class ModeratorIndividualArticleComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
             // Empty for now
-
+            title: props.articleObject.title,
+            content: props.articleObject.content,
+            source: props.articleObject.source_id,
+            state: props.articleObject.state,
+            author: props.articleObject.author,
+            summary: props.articleObject.summary,
+            city:  props.articleObject.city,
+            country: props.articleObject.country,
+            contentTypeDisplayed: 'Outline',
+            articleURL: props.articleObject.article_url,
+            outline: 'https://outline.com/' + props.articleObject.article_url
         }
     }
 
@@ -94,44 +147,94 @@ class ModeratorIndividualArticleComponent extends Component {
         this.setState({
         [event.target.id]: event.target.value,
         });
+        const propertyToEdit = event.target.id;
+        const newData = event.target.value;
+        this.props.editArticleInformation(propertyToEdit, newData);
     };
 
+    changeContentDisplay = (contentType) => {
+        this.setState({
+            contentTypeDisplayed: contentType
+        })
+    }
+
     render(){
+        const { title, author, summary, specificity, city, state, country, content } = this.props.articleObject;
+        const articleURL = this.props.articleObject.article_url;
+        const outlineURL = 'https://outline.com/' + articleURL;
+
         return (
             <IndividualArticleWrapper>
                 <HalfGrid>
                     <ArticleDataWrapper>
                         <InputWrapper>
                             <InputTitle>
-                            Preview
+                            Title
                             </InputTitle>
-                            <MediumTextField>
-                            </MediumTextField>
+                            <MediumTextField id='title' value={title} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
-                            Headline
+                            Author
                             </InputTitle>
-                            <MediumTextField id='headline' value={this.props.articleObject.title} onChange={this.handleChange} />
-                            
+                            <MediumTextField id='author' value={author} onChange={this.handleChange} />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
-                            Description
+                            URL
                             </InputTitle>
-                            <MediumTextField id='description' value={this.props.articleObject.content} onChange={this.handleChange} />
+                            <MediumTextField id='article_url' value={articleURL} onChange={this.handleChange} />
                         </InputWrapper>
-                        {/* <InputWrapper>
+                        <InputWrapper>
                             <InputTitle>
-                            Location
+                            Summary
                             </InputTitle>
-                            <SmallTextField id='location'>
+                            <MediumTextField id='summary' value={summary} onChange={this.handleChange} />
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            Specificity
+                            </InputTitle>
+                            <SmallTextField id='specificity' value={specificity} onChange={this.handleChange} >
                             </SmallTextField>
-                        </InputWrapper> */}
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            City
+                            </InputTitle>
+                            <SmallTextField id='city' value={city} onChange={this.handleChange} />
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            State
+                            </InputTitle>
+                            <SmallTextField id='state' value={state} onChange={this.handleChange}/>
+            
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            Country
+                            </InputTitle>
+                            <SmallTextField id='country' value={country} onChange={this.handleChange}>
+                            </SmallTextField>
+                        </InputWrapper>
                     </ArticleDataWrapper>
                 </HalfGrid>
                 <HalfGrid>
-                    <IFrame src={`${this.props.articleObject.article_url}`} />
+                    <ContentDisplayChoiceWrapper>
+                        <ContentDisplayTypeButton onClick={() => this.changeContentDisplay('Outline')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Outline'} > Outline </ContentDisplayTypeButton>
+                        <ContentDisplayTypeButton onClick={() => this.changeContentDisplay('IFrame')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'IFrame'} > IFrame </ContentDisplayTypeButton>
+                        <ContentDisplayTypeButton onClick={() => this.changeContentDisplay('Text')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Text'}> Text </ContentDisplayTypeButton>                       
+                    </ContentDisplayChoiceWrapper>
+                    {
+                        this.state.contentTypeDisplayed === 'Outline' &&  <IFrame src={`${outlineURL}`} />
+                    }
+                    {
+                        this.state.contentTypeDisplayed === 'IFrame' &&  <IFrame src={`${articleURL}`} />
+                    }
+                    {
+                        this.state.contentTypeDisplayed === 'Text' &&  <TextContent> {content} </TextContent>
+                    }
                 </HalfGrid>
             </IndividualArticleWrapper>
         )

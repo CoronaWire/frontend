@@ -24,13 +24,13 @@ const CityFilterWrapper = styled.div`
     align-items: center;
     border-bottom-style: solid;
     border-bottom-color: #C6C9D1;
-    border-bottom-width: 3px
+    border-bottom-width: 3px;
 `
 
 const CityButton = styled(TabularButton)`
-    
+    background-color: transparent;
+    padding-top: 20px;
 `
-
 
 class CityFilterComponent extends PureComponent {
     constructor(props){
@@ -44,25 +44,38 @@ class CityFilterComponent extends PureComponent {
         return(
                 <CityFilterWrapper>
                     <LeftPositionedWrapper>
-                        <CityButton id='all' 
+                        <CityButton id='all' // #toDo: Make 'all' capitalized in both moderation-app-engine service and ModeratorCurateFunction
                         selectedID={this.props.locationFilter} 
                         onClick={this.props.toggleLocationFilter}
                         >
                             All  
                         </CityButton>
-                        <CityButton id='california' 
+                        <CityButton id='California' 
                         selectedID={this.props.locationFilter} 
                         onClick={this.props.toggleLocationFilter}
                         > 
                         California 
                         </CityButton>
-                        <CityButton id='washington'
+                        <CityButton id='Washington'
                         selectedID={this.props.locationFilter} 
                         onClick={this.props.toggleLocationFilter}
                         > 
                         Washington
                         </CityButton>
+                        <CityButton id='Global'
+                        selectedID={this.props.locationFilter} 
+                        onClick={this.props.toggleLocationFilter}
+                        > 
+                        Global
+                        </CityButton>
+                        <CityButton id='National'
+                        selectedID={this.props.locationFilter} 
+                        onClick={this.props.toggleLocationFilter}
+                        > 
+                        National
+                        </CityButton>
                     </LeftPositionedWrapper>
+                    
                     {/* <RightPositionedWrapper>
                         <NoBorderButton>
                             Add Area

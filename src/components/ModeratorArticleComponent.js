@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import moment from 'moment';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
-import { TinyGrid, LargeGrid, SmallGrid } from '../styledComponents/GridLayout';
+import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid } from '../styledComponents/GridLayout';
 import { LargeText, SmallText, UnderlinedMediumText, MediumText } from '../styledComponents/Text';
 import { removeHoursFromDate } from '../utilityFunctions';
 
@@ -25,18 +25,23 @@ const IndividualArticleWrapper = styled.div`
         background-color: ${props => props.checked === true ? '#B2ACFA' : props.GlobalTheme.moderationPlatform.sharedLightGrey};
     };
     cursor: pointer;
-    padding-top: 10px;
     background-color: ${props => props.checked === true ? '#B2ACFA' : 'white'};
     flex-shrink: 0;
-`
+`;
+
+
 
 const ArticleText = styled.div`
-    width: auto;
     height: 100%;
     background-color: transparent;
     display: flex;
     flex-direction: column;
-`
+`;
+
+const ArticleImage = styled.img`
+    height: 100%;
+    width: 200px;
+`;
 
 const ArticleTitle = styled(LargeText)`
     margin-bottom: 5px;
@@ -51,6 +56,7 @@ const ArticleSummary = styled(SmallText)`
 
 const ArticleMetaDataText = styled(MediumText)`
     background-color: transparent;
+    font-size: 13px;
 `
 
 // #toDo #globalTheme: move colors up to global theme
@@ -90,6 +96,17 @@ const ColumnWrapper = styled.div`
     visibility: ${props => (props.status === 'approved' || props.status === 'rejected')? 'visible' : 'hidden'};
 `
 
+const LargeArticleGrid = styled(LargeGrid)`
+    display: flex;
+    flex-direction: row;
+`;
+
+const TinyArticleGrid = styled(TinyGrid)`
+    &:hover {
+        background-color: #B2ACFA;
+    }
+`
+
 class ModeratorArticleComponent extends Component {
     constructor(props){
         super(props);
@@ -102,7 +119,8 @@ class ModeratorArticleComponent extends Component {
     render() {
         const { articleID, articleIndex } = this.props;
         const status = this.props.articleObject.mod_status
-        const publishedTime = this.props.articleObject.published_at;
+        const { articleObject } = this.props
+        const publishedTime = articleObject.published_at;
         const publishedAt = removeHoursFromDate(this.props.articleObject.published_at);
         const relativeTime = moment(`${publishedAt}`, "YYYY-MM-DD").fromNow();
         // Capitalizes mod_status
@@ -114,7 +132,7 @@ class ModeratorArticleComponent extends Component {
                         // onClick={() => this.props.toggleArticleSelected(articleID)}
                         checked={this.props.checked}
                     >
-                    <TinyGrid>
+                    <TinyArticleGrid onClick={() => this.props.toggleArticleSelected(articleID)}>
                         {
                             (this.props.articleObject.mod_status === 'approved' || this.props.articleObject.mod_status === 'rejected') ?
                             <StatusCircle status={this.props.articleObject.mod_status} />
@@ -122,17 +140,18 @@ class ModeratorArticleComponent extends Component {
                             <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(articleID)} />
 
                         }
-                    </TinyGrid>
-                    <LargeGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex)} id={articleID}>
+                    </TinyArticleGrid>
+                    <LargeArticleGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex, articleObject)} id={articleID}>
+                        {/* <ArticleImage src={this.props.articleObject.image_url} /> */}
                         <ArticleText>
                             <ArticleTitle>
                                 {this.props.articleObject.title}
                             </ArticleTitle>
                             <ArticleSummary>
-                                {this.props.articleObject.content}
+                                {this.props.articleObject.summary}
                             </ArticleSummary>
                         </ArticleText>
-                    </LargeGrid>
+                    </LargeArticleGrid>
                     <SmallGrid>
                         <ArticleMetaDataText> {this.props.articleObject.source_id} </ArticleMetaDataText>
                     </SmallGrid>

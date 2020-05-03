@@ -96,3 +96,12 @@ export const removeHoursFromDate = (dateString) => {
     const actualDate = dateArray[0];
     return actualDate;
 }
+
+/*
+*
+* As the name suggests.
+*
+*/
+export const countNumOfArticles = (articlesArray) => {
+    return articlesArray.length;
+}

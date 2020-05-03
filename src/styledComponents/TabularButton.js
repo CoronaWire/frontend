@@ -14,13 +14,13 @@ const TabularButton = styled.h2`
     font-size: 15px;
     font-weight: 500;
     height: 100%;
-    padding-top: 20px;
+    padding-top: 10px;
     background-color: white;
     margin-right: 20px;
     display: inline-block;
     border-bottom-style: solid;
-    color: ${props => props.selectedID === props.id ? '#6558f5' : 'black'};
-    border-bottom-color: ${props => props.selectedID === props.id ? '#6558f5' : 'transparent'};
+    color: ${props => props.selectedID === props.id ? '#6558F5' : 'black'};
+    border-bottom-color: ${props => props.selectedID === props.id ? '#6558F5' : 'transparent'};
     border-bottom-width: 3px;
     min-width: 50px;
     text-align: center;
