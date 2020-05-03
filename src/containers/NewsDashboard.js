@@ -3,6 +3,7 @@
 
 // External Packages
 import React, { Component } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 // Internal Modules
 import LeftClientMenuComponent from '../components/LeftClientMenuComponent';
@@ -53,30 +54,24 @@ const RightSideContainer = styled.div`
   `};
 `
 
-class NewsDashboard extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-        // Empty for now
-    }
-  }
-
-  render(){
-    return (
-      <DashboardWrapper>
-        <LeftSideContainer>
-          <LeftClientMenuComponent />
-        </LeftSideContainer>
-        <MiddleContainer>
-          <NewsDashboardComponent />
-        </MiddleContainer>
+const NewsDashboard = () => {
+  const isLocalScope = useSelector(({ newsFeed: { scope } = {} }) => scope === 'local');
+  return (
+    <DashboardWrapper>
+      <LeftSideContainer>
+        <LeftClientMenuComponent />
+      </LeftSideContainer>
+      <MiddleContainer>
+        <NewsDashboardComponent />
+      </MiddleContainer>
+      {isLocalScope && (
         <RightSideContainer>
           <InformationFeedComponent />
         </RightSideContainer>
-      </DashboardWrapper>
-    );
-  }
-}
+      )}
+    </DashboardWrapper>
+  );
+};
 
 // #toUpgrade: Information Feed Component currently only holds one component (Global News) but needs
 // to be extended to also hold a National News component 

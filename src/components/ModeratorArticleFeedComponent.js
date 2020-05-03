@@ -22,6 +22,7 @@ const ArticleFeedTitleBar = styled.div`
     background-color: ${props => props.GlobalTheme.moderationPlatform.sharedLightGrey};
     display: flex;
     flex-direction: row;
+    flex-shrink: 0;
 `;
 
 const ArticleFeedWrapper = styled.div`

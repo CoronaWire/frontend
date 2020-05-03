@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setScopeAction } from './../actionCreators/actions';
 import styled, { css } from 'styled-components';
 import { H3, Container } from './core';
 
@@ -33,16 +35,17 @@ const options = [
 ];
 
 export const MobileFeedSelector = () => {
-  const [activeFeed, setActiveFeed] = useState('local');
+  const activeScope = useSelector(({ newsFeed: { scope } }) => scope);
+  const dispatch = useDispatch();
   return (
     <Container width="100%">
       {options.map(({ id, name }, index) => (
         <Option
           onClick={() => {
-            setActiveFeed(id);
+            dispatch(setScopeAction(id));
           }}
           total={options.length}
-          active={id === activeFeed}
+          active={id === activeScope}
           name={name}
         />
       ))}

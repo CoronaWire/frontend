@@ -29,6 +29,8 @@ const IndividualArticleWrapper = styled.div`
     flex-shrink: 0;
 `;
 
+
+
 const ArticleText = styled.div`
     height: 100%;
     background-color: transparent;

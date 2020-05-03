@@ -1,8 +1,13 @@
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { setLocationAction } from './../actionCreators/actions';
+import { fetchFipsInfo } from './../helpers/fips';
 import { Input, b1Css, SearchIcon } from './core';
-import Script from 'react-load-script';
+import { retry } from './../helpers/utilities';
+import { saveLocationToLocalStorage } from './../helpers/localStorage';
+import { useUpdateEffect } from './../helpers/hooks';
 
 const InputWrapper = styled.div`
   position: relative;
@@ -10,9 +15,12 @@ const InputWrapper = styled.div`
 
   svg {
     position: absolute;
-    left: 16px;
     top: 50%;
     transform: translateY(-50%);
+  }
+
+  svg:first-child {
+    left: 16px;
   }
 
   .pac-container {
@@ -27,14 +35,32 @@ const TextInput = styled(Input)`
 export const SearchBarComponent = ({ handleSelect }) => {
   const autocomplete = useRef(null);
   const inputRef = useRef(null);
+  const dispatch = useDispatch();
 
-  const onSelect = () => {
+  const onSelect = async () => {
     const address = autocomplete.current.getPlace();
-    console.log(address);
-    if (handleSelect) {
-      // do something with address
-      handleSelect(address);
+    if (address) {
+      const {
+        geometry: { location },
+        formatted_address: name,
+      } = address;
+      const lat = location.lat();
+      const lng = location.lng();
+      const fipsData = await fetchFipsInfo(lat, lng);
+
+      const userLocation = {
+        lat,
+        lng,
+        name,
+        ...fipsData,
+      };
+
+      saveLocationToLocalStorage(userLocation);
+      dispatch(
+        setLocationAction(userLocation),
+      );
     }
+    inputRef.current.blur();
   };
 
   const setupAutocomplete = () => {
@@ -42,23 +68,38 @@ export const SearchBarComponent = ({ handleSelect }) => {
       types: ['(regions)'],
       componentRestrictions: { country: 'us' }
     };
-    // autocomplete.current = new google.maps.places.Autocomplete(
-    //   inputRef.current,
-    //   options,
-    // );
-    // autocomplete.current.setFields(['name', 'geometry', 'formatted_address']);
-    // autocomplete.current.addListener('place_changed', onSelect);
+    autocomplete.current = new window.google.maps.places.Autocomplete(
+      inputRef.current,
+      options,
+    );
+    autocomplete.current.setFields(['name', 'geometry', 'formatted_address']);
+    autocomplete.current.addListener('place_changed', onSelect);
   };
 
+  useEffect(() => {
+    retry(
+      () => window && window.google,
+      setupAutocomplete,
+    );
+  }, []);
+
+  const setLocation = useSelector(({ newsFeed: { location } }) => location && location.name);
+  const [inputValue, setInputValue] = useState(setLocation || '');
+  useUpdateEffect(() => {
+    setInputValue(setLocation);
+  }, [setLocation]);
+
+  // todo change try again logic and move script to index
   return (
     <InputWrapper>
-      <Script
-        url={`https://maps.googleapis.com/maps/api/js?key=AIzaSyC8K2pvt-4CSCWa_qgPi5DOj0caFrDdw2k&libraries=places`}
-        onLoad={setupAutocomplete}
-        onError={() => console.log('error')}
-      />
       <SearchIcon />
-      <TextInput type="text" ref={inputRef} placeholder="Enter your city" />
+      <TextInput
+        type="text"
+        ref={inputRef}
+        value={inputValue}
+        onChange={e => setInputValue(e.target.value)}
+        placeholder="Enter your city"
+      />
     </InputWrapper>
   );
 };
