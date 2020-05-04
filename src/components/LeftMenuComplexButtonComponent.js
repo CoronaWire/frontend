@@ -22,6 +22,7 @@ const MenuButtonSubTitle = styled(H4)`
 
 const Wrapper = styled.div`
   padding: 5px 0 3px 24px;
+  border-left: 4px solid transparent;
 `;
 
 const StyledLink = styled(NavLink)`
