@@ -19,6 +19,7 @@ import { timeSince } from './../helpers/datetime';
 
 const FeedWrapper = styled.div`
   padding: 0 24px;
+  width: 100%;
 `;
 
 const FeedArticle = styled.div`
