@@ -93,7 +93,7 @@ const ColumnWrapper = styled.div`
     background-color: transparent;
     display: flex;
     flex-direction: column;
-    visibility: ${props => (props.status === 'approved' || props.status === 'rejected')? 'visible' : 'hidden'};
+    visibility: ${props => (props.status === 'approved' || props.status === 'rejected') ? 'visible' : 'hidden'};
 `
 
 const LargeArticleGrid = styled(LargeGrid)`
@@ -103,7 +103,7 @@ const LargeArticleGrid = styled(LargeGrid)`
 
 const TinyArticleGrid = styled(TinyGrid)`
     &:hover {
-        background-color: #B2ACFA;
+        background-color: ${props => props.modStatus != 'pending' ? 'transparent' : '#B2ACFA'};
     }
 `
 
@@ -131,8 +131,9 @@ class ModeratorArticleComponent extends Component {
                         GlobalTheme={GlobalTheme} 
                         // onClick={() => this.props.toggleArticleSelected(articleID)}
                         checked={this.props.checked}
+                        
                     >
-                    <TinyArticleGrid onClick={() => this.props.toggleArticleSelected(articleID)}>
+                    <TinyArticleGrid onClick={() => this.props.toggleArticleSelected(articleID)} modStatus={this.props.articleObject.mod_status}>
                         {
                             (this.props.articleObject.mod_status === 'approved' || this.props.articleObject.mod_status === 'rejected') ?
                             <StatusCircle status={this.props.articleObject.mod_status} />

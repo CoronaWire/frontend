@@ -1,6 +1,5 @@
 // Moderator Individual Article Component
-// Component displaying selected article's current data, also allowing moderators to edit said data, and 
-// approve / reject article
+// Component displaying selected article's current data, also allowing moderators to edit said data, and approve / reject article
 
 // External Packages
 import React, { Component } from 'react';
@@ -92,7 +91,7 @@ const ContentDisplayChoiceWrapper = styled.div`
 const ContentDisplayTypeButton = styled.button`
     height: 100%;
     width: 33%;
-    background-color: ${props => props.contentTypeDisplayed === props.currentButtonType ? 'green' : 'transparent'};
+    background-color: ${props => props.contentTypeDisplayed === props.currentButtonType ? '#1AAE9F' : 'transparent'};
     text-align: center;
     outline: none;
     cursor: pointer;
@@ -105,12 +104,11 @@ const ContentDisplayTypeButton = styled.button`
     &:hover {
         border-top-style: solid;
         border-top-width: 4px;
-        border-top-color: green;
+        border-top-color: #1AAE9F;
     }
 `
 
 const TextContent = styled.div`
-    height: 100%;
     width: 100%;
     text-align: center;
     padding-left: 120px;
@@ -118,10 +116,29 @@ const TextContent = styled.div`
     font-size: 15px;
     font-weight: 500;
     padding-top: 40px;
-    padding-bottom: 40px;
+    padding-bottom: 100px;
     line-height: 20px;
     text-justify: auto;
+    background-color: white;
+`;
 
+const DropDownListWrapper = styled.select`
+    width: 60%;
+    font-size: 14px;
+    background-color: white;
+    color: black;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 4px;
+`
+
+const DropDownListOption = styled.option`
+    height: 60px;
+    backgroun-color: green;
+    color: black;
 `
 
 class ModeratorIndividualArticleComponent extends Component {
@@ -158,10 +175,17 @@ class ModeratorIndividualArticleComponent extends Component {
         })
     }
 
+    dropdownChange = (event) => {
+        console.log(`Specificity modified in drop down ${event.target.value}`);
+        this.props.editArticleInformation('specificity', event.target.value);
+    }
+
     render(){
         const { title, author, summary, specificity, city, state, country, content } = this.props.articleObject;
         const articleURL = this.props.articleObject.article_url;
         const outlineURL = 'https://outline.com/' + articleURL;
+        const dropdownOptions = ['Local', 'Regional', 'National', 'Global'];
+        const defaultOption = dropdownOptions[0];
 
         return (
             <IndividualArticleWrapper>
@@ -195,8 +219,13 @@ class ModeratorIndividualArticleComponent extends Component {
                             <InputTitle>
                             Specificity
                             </InputTitle>
-                            <SmallTextField id='specificity' value={specificity} onChange={this.handleChange} >
-                            </SmallTextField>
+                            <DropDownListWrapper onChange={this.dropdownChange} >
+                                <DropDownListOption id='' value=''>  </DropDownListOption>
+                                <DropDownListOption id='Local' value='Local'> Local </DropDownListOption>
+                                <DropDownListOption id='Regional' value='Regional'> Regional </DropDownListOption>
+                                <DropDownListOption id='National' value='National'> National </DropDownListOption>
+                                <DropDownListOption id='Global' value='Global'> Global </DropDownListOption>
+                            </DropDownListWrapper>
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>

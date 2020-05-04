@@ -20,7 +20,7 @@ import IndividualArticleTopActionComponent from './IndividualArticleTopActionCom
 import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles} from '../utilityFunctions';
 
 // URLs
-import { APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticlesURL, retrieveGlobalArticleURL, retrieveNationalArticleURL } from '../URL';
+import { ARTICLE_URL, APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticlesURL, retrieveGlobalArticleURL, retrieveNationalArticleURL } from '../URL';
 
 // #toDo: create index.jsfile in styled components to get all of components out
 const FeedWrapper = styled.div`
@@ -79,8 +79,6 @@ class ModeratorCurateComponent extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            filterLocation: '',
-            filterArticleStatus: '',
             sortBy: '',
             articleSelected: false, // Removed functionality for now
             statusFilter: 'pending',
@@ -117,55 +115,36 @@ class ModeratorCurateComponent extends PureComponent {
 
     retrieveArticle = async (paramObject) => {
         const { status, region, offset} = paramObject;
-        let returnedResponse;
+        let returnedResponse, articlesArray;
 
         if (region === 'National') {
             const NATIONAL_API_URL = retrieveNationalArticleURL(status, offset);
             returnedResponse = await axios.get(NATIONAL_API_URL);
-            console.log(returnedResponse);
-            const articlesArray = returnedResponse.data;
+            articlesArray = returnedResponse.data;
             // #toDo: this needs to be done either on back-end or within the individual component
-            let articleFeedObject = transformIntoArticleObject(articlesArray)
-            let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
-            // console.log('Returned response', returnedResponse);
-            // console.log('Article object', articleFeedObject)
-    
-            this.setState({
-                articleFeed: articleFeedObject,
-                selectedArticles: selectedArticlesObject,
-            })         
+                     
         } else if (region === 'Global') {
             const GLOBAL_API_URL = retrieveGlobalArticleURL(status, offset);
             returnedResponse = await axios.get(GLOBAL_API_URL);
-            console.log(returnedResponse);
-            const articlesArray = returnedResponse.data;
-            // #toDo: this needs to be done either on back-end or within the individual component
-            let articleFeedObject = transformIntoArticleObject(articlesArray)
-            let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
-            // console.log('Returned response', returnedResponse);
-            // console.log('Article object', articleFeedObject)
-    
-            this.setState({
-                articleFeed: articleFeedObject,
-                selectedArticles: selectedArticlesObject,
-            })         
+            articlesArray = returnedResponse.data;
+                   
         } else {
-            let returnedResponse;
             const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset); // #Need to change the offset initially
             returnedResponse = await axios.get(MODERATOR_API_URL);
-            console.log(returnedResponse);
-            const articlesArray = returnedResponse.data;
-            // #toDo: this needs to be done either on back-end or within the individual component
-            let articleFeedObject = transformIntoArticleObject(articlesArray)
-            let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
-            // console.log('Returned response', returnedResponse);
-            // console.log('Article object', articleFeedObject)
-    
-            this.setState({
-                articleFeed: articleFeedObject,
-                selectedArticles: selectedArticlesObject,
-            })         
+            articlesArray = returnedResponse.data.articlesArray;
+            let articleCount = returnedResponse.data.articleCount[0].count;
+            this.setState({articleCount})
         }
+        console.log('Returned response from back-end', returnedResponse);
+        let articleFeedObject = transformIntoArticleObject(articlesArray)
+        let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
+        // console.log('Returned response', returnedResponse);
+        // console.log('Article object', articleFeedObject)
+
+        this.setState({
+            articleFeed: articleFeedObject,
+            selectedArticles: selectedArticlesObject,
+        })
     }
 
     // #toDo: use the same verbs. change or toggle. toggle is more for buttons, change is better here.
@@ -192,7 +171,7 @@ class ModeratorCurateComponent extends PureComponent {
         // Makes API call to retrieve the data
         this.retrieveArticle(paramObject);
 
-        // Ensures that we move back to the article feed component
+        // Ensures that we move back to the article feed component 
         this.goBackToArticleFeed()
     }
 
@@ -226,35 +205,39 @@ class ModeratorCurateComponent extends PureComponent {
         const articleLength = Object.keys(this.state.articleFeed).length;
         console.log(`Offset is ${articleLength}`);
         let status = this.state.statusFilter, region = this.state.locationFilter, offset = articleLength;
-        
-        let returnedResponse;
-        const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset);
-        returnedResponse = await axios.get(MODERATOR_API_URL);
-        console.log(`Returned response ${returnedResponse}`)
-        const articlesArray = returnedResponse.data;
+        let returnedResponse, URL, articlesArray, articleCount;
+
+        if (region === 'National') {
+            URL = retrieveNationalArticleURL(status, offset);
+            returnedResponse = await axios.get(URL);
+            articlesArray = returnedResponse.data ? returnedResponse.data : [];
+        } else if (region === 'Global') {
+            URL = retrieveGlobalArticleURL(status, offset);
+            returnedResponse = await axios.get(URL);
+            articlesArray = returnedResponse.data ? returnedResponse.data : [];
+        } else {
+            URL = retrieveArticlesURL(status, region, offset);
+            returnedResponse = await axios.get(URL);
+            articlesArray = returnedResponse.data.articlesArray;
+            articleCount = returnedResponse.data.articleCount[0].count;
+        }
+        console.log(`Returned response`);
+        console.log(returnedResponse);
         // #toDo: this needs to be done either on back-end or within the individual component
         let articleFeedObject = transformIntoArticleObject(articlesArray)
-        let con = createObjectOfArticleIDs(articlesArray);
+        let hashOfArticleIDs = createObjectOfArticleIDs(articlesArray);
  
         // Merge the objects together
         const previousArticleFeed = this.state.articleFeed;
         const previousSelectedArticles = this.state.selectedArticles;
         
         articleFeedObject = Object.assign({}, previousArticleFeed, articleFeedObject);
-        con = Object.assign({}, previousSelectedArticles, con);
-
-        // const newArticleFeedLength = Object.keys(articleFeedObject).length;
-
-        // if (newArticleFeedLength !== articleLength) {
-
-        // }
-
-        // console.log('old article length', articleLength);
-        // console.log('new article feed length', newArticleFeedLength);
+        hashOfArticleIDs = Object.assign({}, previousSelectedArticles, hashOfArticleIDs);
 
         this.setState({
             articleFeed: articleFeedObject,
-            selectedArticles: con,
+            selectedArticles: hashOfArticleIDs,
+            articleCount: articleCount
         })
 
     }
@@ -268,7 +251,6 @@ class ModeratorCurateComponent extends PureComponent {
         // Ensures that only articles which haven't been approved or rejected yet increment the counter and are added
         // to the list of selected articles. Also ensures that the background doesn't change when clicked.
         if (this.state.articleFeed[articleID].mod_status !== 'approved' && this.state.articleFeed[articleID].mod_status !== 'rejected' ) {
-            console.log('toggle runnnnnnnnn')
             if (articleSelectedState === true) {
                 this.setState({
                     selectedArticleCounter: this.state.selectedArticleCounter - 1
@@ -309,7 +291,7 @@ class ModeratorCurateComponent extends PureComponent {
                 // Initial approach, simply change the status to "approved so that it can be shown on the front-end"
                 // articleFeed[key].mod_status = 'approved';
                 // // Re-set selection state to false
-                // selectedArticles[key] = false;
+                selectedArticles[key] = false;
                 // // Ensure to decrement the counter
                 // countToSubtract += 1
                 // // Store article ID in array
@@ -324,7 +306,7 @@ class ModeratorCurateComponent extends PureComponent {
         // #toResearch: why did one asynchronous call to setState on same property work instead of
         // a few one after the other
         this.setState({selectedArticleCounter: 0});
-        this.setState({articleFeed, selectedArticles});
+        this.setState({selectedArticles});
     }
 
     rejectSeveralArticles = async () => {
@@ -350,7 +332,7 @@ class ModeratorCurateComponent extends PureComponent {
                 // were displayed with a specific UI based on the 'mod_status' being rejected
                 // articleFeed[key].mod_status = 'rejected';
                 // Re-set selection to false
-                // selectedArticles[key] = false;
+                selectedArticles[key] = false;
                 // Ensure to decrement the counter
                 // countToSubtract += 1
                 // Store article ID in array
@@ -362,7 +344,7 @@ class ModeratorCurateComponent extends PureComponent {
         
         this.setState({selectedArticleCounter: 0});
         // Make asynchronous back-end call here with articleID list
-        this.setState({articleFeed, selectedArticles});
+        this.setState({selectedArticles});
     }
 
 
@@ -428,6 +410,15 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({
             pageDisplayed: this.state.pageDisplayed === 'articleFeed' ? 'individualArticle' : 'articleFeed'
         })
+
+        // Ensures that articles are re-fetched again, in case article data was updated.
+        const paramObject = {
+            region: this.state.locationFilter,
+            status: this.state.statusFilter,
+            offset: 0
+        }
+
+        this.retrieveArticle(paramObject);
     }
 
     selectIndividualArticle = (articleID, articleIndex, articleObject) => {
@@ -448,10 +439,14 @@ class ModeratorCurateComponent extends PureComponent {
 
     nextArticle = () => {
         let { articleDisplayedIndex } = this.state;
+        console.log('Index of article currently displayed', articleDisplayedIndex)
         const feedLength = Object.keys(this.state.articleFeed).length;
+        console.log('Article feed length', feedLength);
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
         articleDisplayedIndex = articleDisplayedIndex === feedLength-1 ? 0 : articleDisplayedIndex + 1;
+        console.log('New article displayed index', articleDisplayedIndex);
         const currentlyDisplayedArticleObject = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
+        console.log('Next article to display', currentlyDisplayedArticleObject);
         this.setState({
             articleDisplayedIndex: articleDisplayedIndex,
             currentlySelectedArticle: currentlyDisplayedArticleObject
@@ -494,15 +489,40 @@ class ModeratorCurateComponent extends PureComponent {
 
     }
 
+    // Edits the currently selected articles information (ie. title, summary, etc.) in order to send it to the back-end 
+    // later and save it
     editArticleInformation = (propertyToEdit, editedText) => {
         // console.log('Currently selected article', this.state.currentlySelectedArticle);
         const articleObject = {...this.state.currentlySelectedArticle};
-        console.log('ARTICLE OBJECT BEFORE', articleObject);
         articleObject[propertyToEdit] = editedText;
-        console.log('ARTICLE OBJECT AFTER', articleObject);
         this.setState({
             currentlySelectedArticle: articleObject
         })
+    }
+
+    // As the name suggests, makes a PUT request with data recently edited stored in this.state.currentlySelectedArticle
+    // to store the newly edited article in the DB
+    // #later: Should we add more editable fields in the moderation platform?
+    saveArticleToDatabase = async () => {
+        const currentArticleObject  = {...this.state.currentlySelectedArticle};
+        const { summary, title, author, city, state, country, article_id, specificity } = currentArticleObject;
+
+        try {
+            let updateArticleResponse = await axios.put(ARTICLE_URL, {
+                summary: summary,
+                title: title,
+                author: author,
+                city: city,
+                state: state,
+                country: country,
+                article_id: article_id,
+                specificity: specificity
+            })
+            console.log('Save article to database response');
+            console.log(updateArticleResponse)
+        } catch (error) {
+            console.error(`Error caught in saveArticle function ${error}`);
+        }
     }
 
     // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
@@ -510,10 +530,11 @@ class ModeratorCurateComponent extends PureComponent {
         // Array of all the different article_ids for the articles displayed. Allows us to loop through
         // list of articles when attempting to edit
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
+        const {articleCount} = this.state;
         // Current article chosen by the user
-        console.log('rendered displayed index', this.state.articleDisplayedIndex)
-        console.log('Current article object', this.state.currentlySelectedArticle);
-        console.log('ARTICLE FEED STATE', this.state.articleFeed)
+        // console.log('Index of article displayed', this.state.articleDisplayedIndex)
+        // console.log('Current article object', this.state.currentlySelectedArticle);
+        // console.log('Article feed', this.state.articleFeed)
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         // console.log('Article currently displayed ', this.state.articleCurrentlyDisplayed);
         // console.log('Current article', currentArticle);
@@ -522,16 +543,22 @@ class ModeratorCurateComponent extends PureComponent {
             <FeedWrapper>
                 <FilterActionsWrapper>
                     <FilterWrapper>
-                        <CityFilterComponent locationFilter={this.state.locationFilter} toggleLocationFilter={this.toggleLocationFilter} />
+                        <CityFilterComponent 
+                            locationFilter={this.state.locationFilter} 
+                            toggleLocationFilter={this.toggleLocationFilter}
+                            articleCount={articleCount} />
                         {
                             this.state.pageDisplayed === 'articleFeed' ?
-                            <ArticleStatusFilterComponent statusFilter={this.state.statusFilter} changeStatusFilter={this.changeStatusFilter} />   
+                            <ArticleStatusFilterComponent 
+                            statusFilter={this.state.statusFilter} 
+                            changeStatusFilter={this.changeStatusFilter} 
+                            articleCount={articleCount}
+                            />   
                             :
                             <IndividualArticleTopActionComponent 
                             togglePageDisplayed={this.togglePageDisplayed}
                             nextArticle={this.nextArticle}
                             previousArticle={this.previousArticle} 
-
                             />
                         }
                     </FilterWrapper>
@@ -566,6 +593,8 @@ class ModeratorCurateComponent extends PureComponent {
                     <ModeratorIndividualArticleBottomBar 
                         approveAndNextArticle={this.approveAndNextArticle}
                         rejectAndNextArticle={this.rejectAndNextArticle}
+                        saveArticleToDatabase={this.saveArticleToDatabase}
+                        statusFilter={this.state.statusFilter}
                     />
                 }
             </FeedWrapper>

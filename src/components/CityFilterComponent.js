@@ -13,6 +13,7 @@ import styled from 'styled-components';
 // Internal Modules
 import TabularButton from '../styledComponents/TabularButton';
 import { LeftPositionedWrapper, RightPositionedWrapper } from '../styledComponents/PositionedWrappers';
+import { MediumText } from '../styledComponents/Text';
 
 const CityFilterWrapper = styled.div`
     width: auto;
@@ -76,11 +77,13 @@ class CityFilterComponent extends PureComponent {
                         </CityButton>
                     </LeftPositionedWrapper>
                     
-                    {/* <RightPositionedWrapper>
-                        <NoBorderButton>
+                    <RightPositionedWrapper>
+                        {/* <NoBorderButton>
                             Add Area
-                        </NoBorderButton>
-                    </RightPositionedWrapper> */}
+                        </NoBorderButton> */}
+                        <MediumText> {this.props.articleCount} Total Articles </MediumText>
+
+                    </RightPositionedWrapper>
                 </CityFilterWrapper>
         )
     }

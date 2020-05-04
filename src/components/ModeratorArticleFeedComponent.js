@@ -45,6 +45,11 @@ const EndOfFeedContainer = styled.div`
 const Button = styled(OutlineButton)`
     margin-top: 20px;
     margin-bottom: 20px;
+    &:hover {
+        color: white;
+        background-color: rgb(24,11,255);
+    }
+    transition: background-color 0.2s ease-in, color 0.2s ease-in;
 `
 
 class ModeratorArticleFeedComponent extends PureComponent {
