@@ -20,8 +20,8 @@ const DashboardWrapper = styled.div`
   display: flex;
   flex-direction: row;
   ${media.mobile`
-    padding-top: 8px;
-    margin-top: 138px;
+    padding-top: 16px;
+    margin-top: 147px;
   `};
 `
 
@@ -40,6 +40,7 @@ const MiddleContainer = styled.div`
   padding: 0 330px;
   ${media.mobile`
     width: 100%;
+    padding: 0 16px;
   `};
 `
 

@@ -42,10 +42,10 @@ const NavigationBarWrapper = styled.div`
     align-items: center;
     z-index: 5;
     flex-direction: row;
-    -webkit-box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
-    -moz-box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
     box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
-    min-width: 640px;
+    ${media.aboveMobile`
+      min-width: 640px;
+    `};
     ${media.mobile`
       flex-direction: column;
       padding: 13px 0 0;
