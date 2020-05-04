@@ -2,6 +2,8 @@ export const APPROVE_ARTICLE_URL = 'https://moderatorapi-dot-coronawire-2020.uc.
 
 export const REJECT_ARTICLE_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/reject';
 
+export const ARTICLE_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles';
+
 export const MAKE_ARTICLE_PENDING_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/review';
 
 export const retrieveArticlesURL = (status, region, offset) => {

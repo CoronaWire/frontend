@@ -20,7 +20,7 @@ import IndividualArticleTopActionComponent from './IndividualArticleTopActionCom
 import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles} from '../utilityFunctions';
 
 // URLs
-import { APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticlesURL, retrieveGlobalArticleURL, retrieveNationalArticleURL } from '../URL';
+import { ARTICLE_URL, APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticlesURL, retrieveGlobalArticleURL, retrieveNationalArticleURL } from '../URL';
 
 // #toDo: create index.jsfile in styled components to get all of components out
 const FeedWrapper = styled.div`
@@ -268,7 +268,6 @@ class ModeratorCurateComponent extends PureComponent {
         // Ensures that only articles which haven't been approved or rejected yet increment the counter and are added
         // to the list of selected articles. Also ensures that the background doesn't change when clicked.
         if (this.state.articleFeed[articleID].mod_status !== 'approved' && this.state.articleFeed[articleID].mod_status !== 'rejected' ) {
-            console.log('toggle runnnnnnnnn')
             if (articleSelectedState === true) {
                 this.setState({
                     selectedArticleCounter: this.state.selectedArticleCounter - 1
@@ -505,15 +504,37 @@ class ModeratorCurateComponent extends PureComponent {
         })
     }
 
+    saveArticleToDatabase = async () => {
+        const currentArticleObject  = {...this.state.currentlySelectedArticle};
+        const { summary, title, author, city, state, country, article_id, specificity } = currentArticleObject;
+
+        try {
+            let updateArticleResponse = await axios.put(ARTICLE_URL, {
+                summary: summary,
+                title: title,
+                author: author,
+                city: city,
+                state: state,
+                country: country,
+                article_id: article_id,
+                specificity: specificity
+            })
+            console.log('Save article to database response');
+            console.log(updateArticleResponse)
+        } catch (error) {
+            console.error(`Error caught in saveArticle function ${error}`);
+        }
+    }
+
     // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
     render(){
         // Array of all the different article_ids for the articles displayed. Allows us to loop through
         // list of articles when attempting to edit
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
         // Current article chosen by the user
-        console.log('rendered displayed index', this.state.articleDisplayedIndex)
+        // console.log('Index of article displayed', this.state.articleDisplayedIndex)
         console.log('Current article object', this.state.currentlySelectedArticle);
-        console.log('ARTICLE FEED STATE', this.state.articleFeed)
+        // console.log('Article feed', this.state.articleFeed)
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         // console.log('Article currently displayed ', this.state.articleCurrentlyDisplayed);
         // console.log('Current article', currentArticle);
@@ -566,6 +587,7 @@ class ModeratorCurateComponent extends PureComponent {
                     <ModeratorIndividualArticleBottomBar 
                         approveAndNextArticle={this.approveAndNextArticle}
                         rejectAndNextArticle={this.rejectAndNextArticle}
+                        saveArticleToDatabase={this.saveArticleToDatabase}
                     />
                 }
             </FeedWrapper>

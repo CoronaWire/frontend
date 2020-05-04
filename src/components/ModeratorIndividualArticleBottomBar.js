@@ -52,10 +52,15 @@ class ModeratorIndividualArticleBottomBar extends PureComponent {
         // Make sure to disable it for a few seconds once an article is saved
         if (this.state.disabled === false) {
             this.toggleDisabled();
+            // Call to higher-order function in order to save article into the DB 
+            this.props.saveArticleToDatabase();
             setTimeout(this.toggleDisabled, 5000);
         }
     }
 
+    componentWillUnmount = () => {
+        
+    }
     render(){
         return(
                 <BottomBarWrapper>
