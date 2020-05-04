@@ -20,38 +20,31 @@ const Separator = styled(DividingLine)`
 // #toDo: move margin-top to GlobalTheming to ensure that it'll be shared across the Dashboard middle title
 // and the main menu buttons
 
+const menuOptions = [
+ {
+   title: 'News',
+   subTitle: "Learn what's reported locally",
+   path: '/',
+ },
+ {
+   title: 'About Covid-Wire',
+   subTitle: 'Donate & learn about the site',
+   path: '/about',
+ },
+];
 
-class LeftClientMenuComponent extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-          menuOptions: [
-             {
-               menuTitle: 'News',
-               menuSubtitle: "Learn what's reported locally"
-             },
-             {
-               menuTitle: 'About Covid-Wire',
-               menuSubtitle: 'Donate & learn about the site'
-             },
-             {
-               menuTitle: 'COVID-19 Facts',
-               menuSubtitle: 'Knowledge on the Virus'
-             }
-          ],
-      }
-    }
-
-    render(){
-        return(
-            <LeftMenuWrapper>
-              {this.state.menuOptions.map((menuObject, index) => (
-                <LeftMenuButtonComponent active={!index} props={menuObject} key={index} />
-              ))}
-              <Separator />
-            </LeftMenuWrapper>
-        )
-    }
-}
+const LeftClientMenuComponent = () => (
+  <LeftMenuWrapper>
+    {menuOptions.map(({ title, subTitle, path }) => (
+      <LeftMenuButtonComponent
+        path={path}
+        title={title}
+        subTitle={subTitle}
+        key={title}
+      />
+    ))}
+    <Separator />
+  </LeftMenuWrapper>
+);
 
 export default LeftClientMenuComponent;

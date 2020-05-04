@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { setLocationAction } from './../actionCreators/actions';
 import { fetchFipsInfo } from './../helpers/fips';
@@ -36,14 +37,26 @@ export const SearchBarComponent = ({ handleSelect }) => {
   const autocomplete = useRef(null);
   const inputRef = useRef(null);
   const dispatch = useDispatch();
+  const routerLocation = useLocation();
+  const history = useHistory();
+
+  const redirectToNewsDashboard = () => {
+    if (routerLocation.pathname !== '/') {
+      history.push('/');
+    }
+  }
 
   const onSelect = async () => {
     const address = autocomplete.current.getPlace();
     if (address) {
       const {
-        geometry: { location },
+        geometry: { location } = {},
         formatted_address: name,
       } = address;
+      if (!location) {
+        redirectToNewsDashboard();
+        return;
+      }
       const lat = location.lat();
       const lng = location.lng();
       const fipsData = await fetchFipsInfo(lat, lng);
@@ -61,6 +74,7 @@ export const SearchBarComponent = ({ handleSelect }) => {
       );
     }
     inputRef.current.blur();
+    redirectToNewsDashboard();
   };
 
   const setupAutocomplete = () => {

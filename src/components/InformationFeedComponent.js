@@ -18,7 +18,7 @@ import { timeSince } from './../helpers/datetime';
 // #toDo: button that refreshes feed? how to make it automatic? Firebase could still be v useful here.
 
 const FeedWrapper = styled.div`
-  padding: 0 24px;
+  width: 100%;
 `;
 
 const FeedArticle = styled.div`

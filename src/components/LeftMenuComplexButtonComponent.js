@@ -6,12 +6,10 @@
 // ExternalPackages
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
+import { NavLink } from 'react-router-dom';
 // Internal Modules
 import MenuButton from '../styledComponents/MenuButton';
 import { H2, H4 } from './core';
-
-const MenuButtonWitHover = styled(MenuButton)`
-`
 
 const MenuButtonTitle = styled(H2)`
   ${({ theme }) => `color: ${theme.newsColors.darkGrey}`};
@@ -24,31 +22,42 @@ const MenuButtonSubTitle = styled(H4)`
 
 const Wrapper = styled.div`
   padding: 5px 0 3px 24px;
+`;
+
+const StyledLink = styled(NavLink)`
+  text-decoration: none;
+  display: block;
   margin-top: 26px;
   &:first-child {
     margin-top: 0;
   }
-  ${({ active, theme }) => active && css`
-    ${MenuButtonTitle}, ${MenuButtonSubTitle} {
-      color: ${theme.newsColors.pink};
-    }
-    border-left: 4px solid ${theme.newsColors.pink};
-  `};
+  &.active {
+    ${({ theme }) => css`
+      ${Wrapper} {
+        border-left: 4px solid ${theme.newsColors.pink};
+      }
+      ${MenuButtonTitle}, ${MenuButtonSubTitle} {
+        color: ${theme.newsColors.pink};
+      }
+    `};
+  }
 `;
 
 // For now, MenuButtonTitle here is the initial design made with Jeff's wireframe.
 // The MenuButtonTitle in the Styled Components folder is the one designed by Linda
 // #toDo: choose between one design and the other.
 
-const LeftMenuComplexButtonComponent = ({ active, props: { menuTitle, menuSubtitle } }) => (
-  <Wrapper active={active}>
-    <MenuButtonTitle>
-      {menuTitle}
-    </MenuButtonTitle>
-    <MenuButtonSubTitle>
-      {menuSubtitle}
-    </MenuButtonSubTitle>
-  </Wrapper>
+const LeftMenuComplexButtonComponent = ({ path, title, subTitle }) => (
+  <StyledLink exact to={path}>
+    <Wrapper>
+      <MenuButtonTitle>
+        {title}
+      </MenuButtonTitle>
+      <MenuButtonSubTitle>
+        {subTitle}
+      </MenuButtonSubTitle>
+    </Wrapper>
+  </StyledLink>
 );
 
 export default LeftMenuComplexButtonComponent;
