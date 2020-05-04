@@ -59,7 +59,7 @@ class ModeratorIndividualArticleBottomBar extends PureComponent {
     }
 
     componentWillUnmount = () => {
-        
+
     }
     render(){
         return(
@@ -69,14 +69,19 @@ class ModeratorIndividualArticleBottomBar extends PureComponent {
                             Save
                         </DelayOutlineButton>
                     </LeftPositionedWrapper>
-                    <RightPositionedWrapper>
-                        <AcceptRejectButton status={'reject'} onClick={this.props.rejectAndNextArticle} >
-                            Reject and Next
-                        </AcceptRejectButton>
-                        <AcceptRejectButton status={'approve'} onClick={this.props.approveAndNextArticle} >
-                            Approve and Next
-                        </AcceptRejectButton>
-                    </RightPositionedWrapper>
+                    {
+                        this.props.statusFilter === 'pending' 
+                        &&
+                        <RightPositionedWrapper>
+                            <AcceptRejectButton status={'reject'} onClick={this.props.rejectAndNextArticle} >
+                                Reject and Next
+                            </AcceptRejectButton>
+                            <AcceptRejectButton status={'approve'} onClick={this.props.approveAndNextArticle} >
+                                Approve and Next
+                            </AcceptRejectButton>
+                        </RightPositionedWrapper>
+                    }
+
                 </BottomBarWrapper>
         )
     }

@@ -454,10 +454,14 @@ class ModeratorCurateComponent extends PureComponent {
 
     nextArticle = () => {
         let { articleDisplayedIndex } = this.state;
+        console.log('Index of article currently displayed', articleDisplayedIndex)
         const feedLength = Object.keys(this.state.articleFeed).length;
+        console.log('Article feed length', feedLength);
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
         articleDisplayedIndex = articleDisplayedIndex === feedLength-1 ? 0 : articleDisplayedIndex + 1;
+        console.log('New article displayed index', articleDisplayedIndex);
         const currentlyDisplayedArticleObject = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
+        console.log('Next article to display', currentlyDisplayedArticleObject);
         this.setState({
             articleDisplayedIndex: articleDisplayedIndex,
             currentlySelectedArticle: currentlyDisplayedArticleObject
@@ -594,6 +598,7 @@ class ModeratorCurateComponent extends PureComponent {
                         approveAndNextArticle={this.approveAndNextArticle}
                         rejectAndNextArticle={this.rejectAndNextArticle}
                         saveArticleToDatabase={this.saveArticleToDatabase}
+                        statusFilter={this.state.statusFilter}
                     />
                 }
             </FeedWrapper>
