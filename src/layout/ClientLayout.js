@@ -14,7 +14,7 @@ const ClientHomeWrapper = styled.div`
 
 const DashboardWrapper = styled.div`
   width: 100%;
-  margin-top: 70px;
+  margin-top: 80px;
   padding-top: 40px;
   background-color: transparent;
   display: flex;
@@ -29,11 +29,12 @@ const LeftSideContainer = styled.div`
   width: 330px;
   position: fixed;
   left: 0;
-  top: 112px;
+  top: 120px;
   ${media.mobile`
     display: none;
   `};
 `
+
 const MiddleContainer = styled.div`
   flex: 1;
   background-color: transparent;
@@ -46,11 +47,12 @@ const MiddleContainer = styled.div`
 
 const RightSideContainer = styled.div`
   width: 330px;
-  top: 112px;
+  top: 120px;
   position: fixed;
   right: 0;
   display: flex;
   justify-content: center;
+  padding: 0 24px;
   ${media.mobile`
     display: none;
   `};
