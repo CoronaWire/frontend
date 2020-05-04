@@ -237,6 +237,7 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({
             articleFeed: articleFeedObject,
             selectedArticles: hashOfArticleIDs,
+            articleCount: articleCount
         })
 
     }
