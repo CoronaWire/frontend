@@ -47,9 +47,9 @@ const StyledLink = styled(NavLink)`
 // The MenuButtonTitle in the Styled Components folder is the one designed by Linda
 // #toDo: choose between one design and the other.
 
-const LeftMenuComplexButtonComponent = ({ path, active, title, subTitle }) => (
+const LeftMenuComplexButtonComponent = ({ path, title, subTitle }) => (
   <StyledLink to={path}>
-    <Wrapper active={active}>
+    <Wrapper>
       <MenuButtonTitle>
         {title}
       </MenuButtonTitle>
