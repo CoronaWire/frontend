@@ -120,25 +120,23 @@ class ModeratorCurateComponent extends PureComponent {
         if (region === 'National') {
             const NATIONAL_API_URL = retrieveNationalArticleURL(status, offset);
             returnedResponse = await axios.get(NATIONAL_API_URL);
-            console.log(returnedResponse);
             articlesArray = returnedResponse.data;
             // #toDo: this needs to be done either on back-end or within the individual component
                      
         } else if (region === 'Global') {
             const GLOBAL_API_URL = retrieveGlobalArticleURL(status, offset);
             returnedResponse = await axios.get(GLOBAL_API_URL);
-            console.log(returnedResponse);
             articlesArray = returnedResponse.data;
                    
         } else {
             let returnedResponse;
             const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset); // #Need to change the offset initially
             returnedResponse = await axios.get(MODERATOR_API_URL);
-            console.log('Returned response from back-end', returnedResponse);
             articlesArray = returnedResponse.data.articlesArray;
-            // #toDo: this needs to be done either on back-end or within the individual component
-                
+            let articleCount = returnedResponse.data.articleCount[0].count;
+            this.setState({articleCount})
         }
+        console.log('Returned response from back-end', returnedResponse);
         let articleFeedObject = transformIntoArticleObject(articlesArray)
         let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
         // console.log('Returned response', returnedResponse);
@@ -224,15 +222,6 @@ class ModeratorCurateComponent extends PureComponent {
         
         articleFeedObject = Object.assign({}, previousArticleFeed, articleFeedObject);
         con = Object.assign({}, previousSelectedArticles, con);
-
-        // const newArticleFeedLength = Object.keys(articleFeedObject).length;
-
-        // if (newArticleFeedLength !== articleLength) {
-
-        // }
-
-        // console.log('old article length', articleLength);
-        // console.log('new article feed length', newArticleFeedLength);
 
         this.setState({
             articleFeed: articleFeedObject,
@@ -488,17 +477,20 @@ class ModeratorCurateComponent extends PureComponent {
 
     }
 
+    // Edits the currently selected articles information (ie. title, summary, etc.) in order to send it to the back-end 
+    // later and save it
     editArticleInformation = (propertyToEdit, editedText) => {
         // console.log('Currently selected article', this.state.currentlySelectedArticle);
         const articleObject = {...this.state.currentlySelectedArticle};
-        console.log('ARTICLE OBJECT BEFORE', articleObject);
         articleObject[propertyToEdit] = editedText;
-        console.log('ARTICLE OBJECT AFTER', articleObject);
         this.setState({
             currentlySelectedArticle: articleObject
         })
     }
 
+    // As the name suggests, makes a PUT request with data recently edited stored in this.state.currentlySelectedArticle
+    // to store the newly edited article in the DB
+    // #later: Should we add more editable fields in the moderation platform?
     saveArticleToDatabase = async () => {
         const currentArticleObject  = {...this.state.currentlySelectedArticle};
         const { summary, title, author, city, state, country, article_id, specificity } = currentArticleObject;
@@ -526,6 +518,7 @@ class ModeratorCurateComponent extends PureComponent {
         // Array of all the different article_ids for the articles displayed. Allows us to loop through
         // list of articles when attempting to edit
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
+        const {articleCount} = this.state;
         // Current article chosen by the user
         // console.log('Index of article displayed', this.state.articleDisplayedIndex)
         console.log('Current article object', this.state.currentlySelectedArticle);
@@ -538,10 +531,17 @@ class ModeratorCurateComponent extends PureComponent {
             <FeedWrapper>
                 <FilterActionsWrapper>
                     <FilterWrapper>
-                        <CityFilterComponent locationFilter={this.state.locationFilter} toggleLocationFilter={this.toggleLocationFilter} />
+                        <CityFilterComponent 
+                            locationFilter={this.state.locationFilter} 
+                            toggleLocationFilter={this.toggleLocationFilter}
+                            articleCount={articleCount} />
                         {
                             this.state.pageDisplayed === 'articleFeed' ?
-                            <ArticleStatusFilterComponent statusFilter={this.state.statusFilter} changeStatusFilter={this.changeStatusFilter} />   
+                            <ArticleStatusFilterComponent 
+                            statusFilter={this.state.statusFilter} 
+                            changeStatusFilter={this.changeStatusFilter} 
+                            articleCount={articleCount}
+                            />   
                             :
                             <IndividualArticleTopActionComponent 
                             togglePageDisplayed={this.togglePageDisplayed}
