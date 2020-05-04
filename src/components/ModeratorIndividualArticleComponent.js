@@ -4,7 +4,6 @@
 // External Packages
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Dropdown from 'react-dropdown';
 // Internal Modules
 import { HalfGrid } from '../styledComponents/GridLayout';
 

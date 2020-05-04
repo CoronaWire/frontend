@@ -79,8 +79,6 @@ class ModeratorCurateComponent extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
-            filterLocation: '',
-            filterArticleStatus: '',
             sortBy: '',
             articleSelected: false, // Removed functionality for now
             statusFilter: 'pending',
@@ -192,7 +190,7 @@ class ModeratorCurateComponent extends PureComponent {
         // Makes API call to retrieve the data
         this.retrieveArticle(paramObject);
 
-        // Ensures that we move back to the article feed component
+        // Ensures that we move back to the article feed component 
         this.goBackToArticleFeed()
     }
 
@@ -427,6 +425,15 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({
             pageDisplayed: this.state.pageDisplayed === 'articleFeed' ? 'individualArticle' : 'articleFeed'
         })
+
+        // Ensures that articles are re-fetched again, in case article data was updated.
+        const paramObject = {
+            region: this.state.locationFilter,
+            status: this.state.statusFilter,
+            offset: 0
+        }
+
+        this.retrieveArticle(paramObject);
     }
 
     selectIndividualArticle = (articleID, articleIndex, articleObject) => {
@@ -552,7 +559,6 @@ class ModeratorCurateComponent extends PureComponent {
                             togglePageDisplayed={this.togglePageDisplayed}
                             nextArticle={this.nextArticle}
                             previousArticle={this.previousArticle} 
-
                             />
                         }
                     </FilterWrapper>
