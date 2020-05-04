@@ -129,7 +129,6 @@ class ModeratorCurateComponent extends PureComponent {
             articlesArray = returnedResponse.data;
                    
         } else {
-            let returnedResponse;
             const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset); // #Need to change the offset initially
             returnedResponse = await axios.get(MODERATOR_API_URL);
             articlesArray = returnedResponse.data.articlesArray;
@@ -206,26 +205,38 @@ class ModeratorCurateComponent extends PureComponent {
         const articleLength = Object.keys(this.state.articleFeed).length;
         console.log(`Offset is ${articleLength}`);
         let status = this.state.statusFilter, region = this.state.locationFilter, offset = articleLength;
-        
-        let returnedResponse;
-        const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset);
-        returnedResponse = await axios.get(MODERATOR_API_URL);
-        console.log(`Returned response ${returnedResponse}`)
-        const {articlesArray, articleCount} = returnedResponse.data;
+        let returnedResponse, URL, articlesArray, articleCount;
+
+        if (region === 'National') {
+            URL = retrieveNationalArticleURL(status, offset);
+            returnedResponse = await axios.get(URL);
+            articlesArray = returnedResponse.data ? returnedResponse.data : [];
+        } else if (region === 'Global') {
+            URL = retrieveGlobalArticleURL(status, offset);
+            returnedResponse = await axios.get(URL);
+            articlesArray = returnedResponse.data ? returnedResponse.data : [];
+        } else {
+            URL = retrieveArticlesURL(status, region, offset);
+            returnedResponse = await axios.get(URL);
+            articlesArray = returnedResponse.data.articlesArray;
+            articleCount = returnedResponse.data.articleCount[0].count;
+        }
+        console.log(`Returned response`);
+        console.log(returnedResponse);
         // #toDo: this needs to be done either on back-end or within the individual component
         let articleFeedObject = transformIntoArticleObject(articlesArray)
-        let con = createObjectOfArticleIDs(articlesArray);
+        let hashOfArticleIDs = createObjectOfArticleIDs(articlesArray);
  
         // Merge the objects together
         const previousArticleFeed = this.state.articleFeed;
         const previousSelectedArticles = this.state.selectedArticles;
         
         articleFeedObject = Object.assign({}, previousArticleFeed, articleFeedObject);
-        con = Object.assign({}, previousSelectedArticles, con);
+        hashOfArticleIDs = Object.assign({}, previousSelectedArticles, hashOfArticleIDs);
 
         this.setState({
             articleFeed: articleFeedObject,
-            selectedArticles: con,
+            selectedArticles: hashOfArticleIDs,
         })
 
     }
@@ -521,7 +532,7 @@ class ModeratorCurateComponent extends PureComponent {
         const {articleCount} = this.state;
         // Current article chosen by the user
         // console.log('Index of article displayed', this.state.articleDisplayedIndex)
-        console.log('Current article object', this.state.currentlySelectedArticle);
+        // console.log('Current article object', this.state.currentlySelectedArticle);
         // console.log('Article feed', this.state.articleFeed)
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         // console.log('Article currently displayed ', this.state.articleCurrentlyDisplayed);
