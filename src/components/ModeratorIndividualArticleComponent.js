@@ -203,12 +203,12 @@ class ModeratorIndividualArticleComponent extends Component {
                             </InputTitle>
                             <MediumTextField id='author' value={author} onChange={this.handleChange} />
                         </InputWrapper>
-                        {/* <InputWrapper>
+                        <InputWrapper>
                             <InputTitle>
                             URL
                             </InputTitle>
                             <MediumTextField id='article_url' value={articleURL} onChange={this.handleChange} />
-                        </InputWrapper> */}
+                        </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             Summary

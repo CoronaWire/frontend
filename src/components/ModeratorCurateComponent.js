@@ -306,7 +306,7 @@ class ModeratorCurateComponent extends PureComponent {
                 // Initial approach, simply change the status to "approved so that it can be shown on the front-end"
                 // articleFeed[key].mod_status = 'approved';
                 // // Re-set selection state to false
-                // selectedArticles[key] = false;
+                selectedArticles[key] = false;
                 // // Ensure to decrement the counter
                 // countToSubtract += 1
                 // // Store article ID in array
@@ -321,7 +321,7 @@ class ModeratorCurateComponent extends PureComponent {
         // #toResearch: why did one asynchronous call to setState on same property work instead of
         // a few one after the other
         this.setState({selectedArticleCounter: 0});
-        this.setState({articleFeed, selectedArticles});
+        this.setState({selectedArticles});
     }
 
     rejectSeveralArticles = async () => {
@@ -347,7 +347,7 @@ class ModeratorCurateComponent extends PureComponent {
                 // were displayed with a specific UI based on the 'mod_status' being rejected
                 // articleFeed[key].mod_status = 'rejected';
                 // Re-set selection to false
-                // selectedArticles[key] = false;
+                selectedArticles[key] = false;
                 // Ensure to decrement the counter
                 // countToSubtract += 1
                 // Store article ID in array
@@ -359,7 +359,7 @@ class ModeratorCurateComponent extends PureComponent {
         
         this.setState({selectedArticleCounter: 0});
         // Make asynchronous back-end call here with articleID list
-        this.setState({articleFeed, selectedArticles});
+        this.setState({selectedArticles});
     }
 
 
