@@ -80,6 +80,10 @@ const CheckboxLabel = styled.label`
 const LoginButtonWithGradient = styled(LoginButton)`
     background: rgb(24,11,255);
     background: linear-gradient(90deg, rgba(121,9,119,1) 0%, rgba(24,11,255,1) 100%);
+    &:hover {
+        background: linear-gradient(90deg, rgba(24,11,255,1) 0%, rgba(121,9,119,1) 100%);
+    }
+    transition: background 1s ease-in;
 `
 
 const LoginErrorText = styled(ErrorText)`

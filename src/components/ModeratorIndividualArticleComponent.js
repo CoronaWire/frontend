@@ -221,10 +221,10 @@ class ModeratorIndividualArticleComponent extends Component {
                             </InputTitle>
                             <DropDownListWrapper onChange={this.dropdownChange} >
                                 <DropDownListOption id='' value=''>  </DropDownListOption>
-                                <DropDownListOption id='Local' value='Local'> Local </DropDownListOption>
-                                <DropDownListOption id='Regional' value='Regional'> Regional </DropDownListOption>
-                                <DropDownListOption id='National' value='National'> National </DropDownListOption>
-                                <DropDownListOption id='Global' value='Global'> Global </DropDownListOption>
+                                <DropDownListOption id='local' value='local'> Local </DropDownListOption>
+                                <DropDownListOption id='regional' value='regional'> Regional </DropDownListOption>
+                                <DropDownListOption id='national' value='national'> National </DropDownListOption>
+                                <DropDownListOption id='global' value='global'> Global </DropDownListOption>
                             </DropDownListWrapper>
                         </InputWrapper>
                         <InputWrapper>
