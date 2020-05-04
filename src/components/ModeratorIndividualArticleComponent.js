@@ -109,7 +109,6 @@ const ContentDisplayTypeButton = styled.button`
 `
 
 const TextContent = styled.div`
-    height: 100%;
     width: 100%;
     text-align: center;
     padding-left: 120px;
@@ -117,9 +116,10 @@ const TextContent = styled.div`
     font-size: 15px;
     font-weight: 500;
     padding-top: 40px;
-    padding-bottom: 40px;
+    padding-bottom: 100px;
     line-height: 20px;
     text-justify: auto;
+    background-color: white;
 `;
 
 const DropDownListWrapper = styled.select`
