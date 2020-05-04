@@ -6,11 +6,12 @@ import styled from 'styled-components';
 import { media } from './../helpers/media';
 import { ClientLayout } from './../layout/ClientLayout';
 import { GetInTouch } from './../components/GetInTouch';
+import { AboutContent } from './../components/AboutContent';
 
 export const AboutPage = () => (
   <ClientLayout
     renderRight={() => <GetInTouch />}
   >
-    hello
+    <AboutContent />
   </ClientLayout>
 );

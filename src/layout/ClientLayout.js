@@ -39,9 +39,11 @@ const MiddleContainer = styled.div`
   flex: 1;
   background-color: transparent;
   padding: 0 330px;
+  margin-bottom: 80px;
   ${media.mobile`
     width: 100%;
     padding: 0 16px;
+    margin-bottom: 24px;
   `};
 `
 
