@@ -48,7 +48,7 @@ const StyledLink = styled(NavLink)`
 // #toDo: choose between one design and the other.
 
 const LeftMenuComplexButtonComponent = ({ path, title, subTitle }) => (
-  <StyledLink to={path}>
+  <StyledLink exact to={path}>
     <Wrapper>
       <MenuButtonTitle>
         {title}

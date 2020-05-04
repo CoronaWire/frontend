@@ -6,7 +6,6 @@ import React, { Component } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 // Internal Modules
-import LeftClientMenuComponent from '../components/LeftClientMenuComponent';
 import NewsDashboardComponent from '../components/MainDashboardComponent';
 import InformationFeedComponent from '../components/InformationFeedComponent';
 import { media } from './../helpers/media';
