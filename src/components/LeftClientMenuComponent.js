@@ -64,7 +64,7 @@ const LeftClientMenuComponent = () => (
     <MenuContent flexColumn>
       <Separator />
       <FeedbackText>Made for local.</FeedbackText>
-      <FeedbackButton as="a" href="/TBD">
+      <FeedbackButton as="a" target="_blank" href="https://forms.gle/XKZM3viPsEfE2bAB9">
         Give Feedback
       </FeedbackButton>
     </MenuContent>
