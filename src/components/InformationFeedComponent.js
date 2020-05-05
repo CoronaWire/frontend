@@ -36,6 +36,7 @@ const ArticleTitle = styled(H4)`
 `;
 
 const ArticleMetaData = styled(Metadata)`
+  text-transform: uppercase;
   color: ${({ theme }) => theme.newsColors.midGrey};
 `;
 

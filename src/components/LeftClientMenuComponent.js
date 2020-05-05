@@ -27,7 +27,7 @@ const menuOptions = [
    path: '/',
  },
  {
-   title: 'About Covid-Wire',
+   title: 'About CovidWire',
    subTitle: 'Donate & learn about the site',
    path: '/about',
  },
@@ -43,7 +43,6 @@ const LeftClientMenuComponent = () => (
         key={title}
       />
     ))}
-    <Separator />
   </LeftMenuWrapper>
 );
 

@@ -162,6 +162,9 @@ const MainDashboardComponent = () => {
 
   const handleFetchMore = async () => {
     const max = mainFeed && mainFeed[mainFeed.length - 1] && mainFeed[mainFeed.length - 1].id - 1;
+    if (!max) {
+      return;
+    }
     const data = await fetchArticles({
       scope,
       location,
@@ -177,6 +180,7 @@ const MainDashboardComponent = () => {
 
   useEffect(() => {
     handleFetch(scope, location, { localType });
+    setHasMore(true);
   }, [scope, location, localType]);
 
   return (

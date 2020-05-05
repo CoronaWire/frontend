@@ -26,6 +26,7 @@ const SingleNewsWrapper = styled.div`
 
 
 const NewsTimeStamp = styled(Metadata)`
+  text-transform: uppercase;
   ${({ theme }) => `color: ${theme.newsColors.midGrey}`};
 `
 
