@@ -137,7 +137,7 @@ const DropDownListWrapper = styled.select`
 
 const DropDownListOption = styled.option`
     height: 60px;
-    backgroun-color: green;
+    background-color: transparent;
     color: black;
 `
 

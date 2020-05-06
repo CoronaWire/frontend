@@ -16,6 +16,7 @@ import ModeratorArticleFeedBottomBar from './ModeratorArticleFeedBottomBar'
 import ModeratorIndividualArticleBottomBar from './ModeratorIndividualArticleBottomBar';
 import ArticleStatusFilterComponent from './ArticleStatusFilterComponent';
 import IndividualArticleTopActionComponent from './IndividualArticleTopActionComponent';
+import NewsSourceFilterComponent from './NewsSourceFilterComponent';
 // Utility Function
 import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles} from '../utilityFunctions';
 
@@ -92,7 +93,8 @@ class ModeratorCurateComponent extends PureComponent {
             articleDisplayedIndex: null,
             numOfArticlesReturned: 0,
             currentlySelectedArticle: {},
-
+            newsSourceArray: [],
+            newsSourceFilterArray: [],
         }
         // #comment: articles will be either stored in redux state or locally.
     }
@@ -105,6 +107,7 @@ class ModeratorCurateComponent extends PureComponent {
             offset: 0,
         }
         this.retrieveArticle(paramObject);
+        this.retrieveNewsSources();
     }
 
     selectAllArticles = () => {
@@ -242,6 +245,27 @@ class ModeratorCurateComponent extends PureComponent {
 
     }
 
+    retrieveNewsSources = async () => {
+        const SOURCE_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/sources';
+        try {
+            let newsSourceArray = await axios.get(SOURCE_URL);
+            newsSourceArray = newsSourceArray.data;
+            this.setState({
+                newsSourceArray: newsSourceArray
+            })
+
+        } catch (error) {
+            console.error('Error caught in retrieveNewsSources function');
+        }
+    }
+
+    addNewsSourceToFilter = (newNewsSourceURL) => {
+        console.log('News source added to filter', newNewsSourceURL);
+        let newsSourceFilterArray = [...this.state.newsSourceFilterArray];
+        console.log('News source array', newsSourceFilterArray);
+        newsSourceFilterArray.push(newNewsSourceURL);
+        this.setState({newsSourceFilterArray: newsSourceFilterArray});
+    }
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
     // to be the simplest solution in order to ensure that we can update our components accordingly
     toggleArticleSelected = (articleID) => {
@@ -538,7 +562,7 @@ class ModeratorCurateComponent extends PureComponent {
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         // console.log('Article currently displayed ', this.state.articleCurrentlyDisplayed);
         // console.log('Current article', currentArticle);
-
+        console.log('News sources', this.state.newsSourcesArray);
         return(
             <FeedWrapper>
                 <FilterActionsWrapper>
@@ -546,14 +570,21 @@ class ModeratorCurateComponent extends PureComponent {
                         <CityFilterComponent 
                             locationFilter={this.state.locationFilter} 
                             toggleLocationFilter={this.toggleLocationFilter}
-                            articleCount={articleCount} />
-                        {
-                            this.state.pageDisplayed === 'articleFeed' ?
-                            <ArticleStatusFilterComponent 
+                            articleCount={articleCount} 
                             statusFilter={this.state.statusFilter} 
                             changeStatusFilter={this.changeStatusFilter} 
-                            articleCount={articleCount}
-                            />   
+                            />
+                        {
+                            this.state.pageDisplayed === 'articleFeed' ?
+                            // <ArticleStatusFilterComponent 
+                            // statusFilter={this.state.statusFilter} 
+                            // changeStatusFilter={this.changeStatusFilter} 
+                            // />   
+                            <NewsSourceFilterComponent 
+                            newsSourceArray={this.state.newsSourceArray} 
+                            addNewsSourceToFilter={this.addNewsSourceToFilter}
+                            newsSourceFilterArray={this.state.newsSourceFilterArray}
+                            />
                             :
                             <IndividualArticleTopActionComponent 
                             togglePageDisplayed={this.togglePageDisplayed}

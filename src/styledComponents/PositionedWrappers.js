@@ -13,6 +13,21 @@ export const LeftPositionedWrapper = styled.div`
     justify-content: center;
 `;
 
+export const MiddleWrapper = styled.div`
+    height: 100%;
+    background-color: transparent;
+    margin-left: 10px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-left: 2px solid #DFE6ED;
+    border-right: 2px solid #DFE6ED;
+    padding-left: 20px;
+    padding-right: 10px;
+    justify-content: center;
+`
+
 
 export const RightPositionedWrapper = styled.div`
     height: 100%;
