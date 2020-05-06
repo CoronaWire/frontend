@@ -5,9 +5,12 @@ export const Button = styled.button`
   height: 40px;
   border-radius: 4px;
   border: none;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
   outline: none;
   ${h3Css};
+  line-height: 40px;
   ${({ block }) => {
     if (block) {
       return css`

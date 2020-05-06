@@ -2,6 +2,7 @@
 
 // External Packages
 import React, { Component, PureComponent } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -234,9 +235,11 @@ class UnauthenticatedNavigationBar extends Component {
     render(){
         return (
             <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} >
-            <LogoContainer>
-              <LogoIcon width="100%" />
-            </LogoContainer>
+              <Link to="/">
+                <LogoContainer>
+                  <LogoIcon width="100%" />
+                </LogoContainer>
+              </Link>
 
               <SearchBarContainer>
                 <SearchBarComponent />

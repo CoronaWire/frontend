@@ -1,10 +1,10 @@
 // Left Menu Component = News, Numbers, CoronaVirus Facts
-
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 // Internal Modules
 import LeftMenuButtonComponent from './LeftMenuComplexButtonComponent';
 import DividingLine from '../styledComponents/DividingLine';
+import { B1, Container, Button } from './core';
 
 // #toDo: Needs to be connected to parent component, Dashboard and send up the actual news
 
@@ -15,7 +15,7 @@ const LeftMenuWrapper = styled.div`
 
 const Separator = styled(DividingLine)`
   ${({ theme }) => `background-color: ${theme.newsColors.midGrey}`};
-  margin: 32px 24px 16px;
+  margin: 32px 0;
 `;
 // #toDo: move margin-top to GlobalTheming to ensure that it'll be shared across the Dashboard middle title
 // and the main menu buttons
@@ -27,11 +27,29 @@ const menuOptions = [
    path: '/',
  },
  {
-   title: 'About Covid-Wire',
+   title: 'About CovidWire',
    subTitle: 'Donate & learn about the site',
    path: '/about',
  },
 ];
+
+const MenuContent = styled(Container)`
+  padding: 0 24px;
+  width: 100%;
+`;
+
+const FeedbackText = styled(B1)`
+  ${({ theme }) => `color: ${theme.newsColors.navy}`};
+  margin-bottom: 16px;
+`;
+
+const FeedbackButton = styled(Button)`
+  ${({ theme }) => css`
+    background: ${theme.newsColors.pink};
+    color: ${theme.newsColors.white};
+  `};
+  text-transform: uppercase;
+`;
 
 const LeftClientMenuComponent = () => (
   <LeftMenuWrapper>
@@ -43,7 +61,13 @@ const LeftClientMenuComponent = () => (
         key={title}
       />
     ))}
-    <Separator />
+    <MenuContent flexColumn>
+      <Separator />
+      <FeedbackText>Made for local.</FeedbackText>
+      <FeedbackButton as="a" target="_blank" href="https://forms.gle/XKZM3viPsEfE2bAB9">
+        Give Feedback
+      </FeedbackButton>
+    </MenuContent>
   </LeftMenuWrapper>
 );
 
