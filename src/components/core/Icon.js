@@ -1,17 +1,5 @@
 import * as React from 'react';
 
-export const DownArrowIcon = ({ width = 16 }) => (
-  <svg width={width} viewBox="0 0 28 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M26.654 1.40082L13.8119 10.9445L0.969818 1.40082" stroke="#828282" strokeWidth="2"/>
-  </svg>
-);
-
-export const UpArrowIcon = ({ width = 16 }) => (
-  <svg width={width} viewBox="0 0 28 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0.970018 11.5433L13.8124 2.00011L26.6542 11.5442" stroke="#828282" strokeWidth="2"/>
-  </svg>
-);
-
 export const CheckMarkIcon = ({width= 10}) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={width} height="24" viewBox="0 0 24 24">
     <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
@@ -32,8 +20,8 @@ export const LogoIcon = ({ width = 183 }) => (
   </svg>
 );
 
-export const SearchIcon = ({ width = 24 }) => (
-  <svg width={width} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+export const SearchIcon = ({ width = 24, ...rest }) => (
+  <svg width={width} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...rest}>
     <g opacity="0.9">
       <path
         fillRule="evenodd"
@@ -41,5 +29,25 @@ export const SearchIcon = ({ width = 24 }) => (
         fill="#FF335F"
       />
     </g>
+  </svg>
+);
+
+export const HamburgerIcon = ({ width = 24, ...rest }) => (
+  <svg width={width} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...rest}>
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M4 8C3.45 8 3 7.55 3 7C3 6.45 3.45 6 4 6H20C20.55 6 21 6.45 21 7C21 7.55 20.55 8 20 8H4ZM4 13H20C20.55 13 21 12.55 21 12C21 11.45 20.55 11 20 11H4C3.45 11 3 11.45 3 12C3 12.55 3.45 13 4 13ZM4 18H20C20.55 18 21 17.55 21 17C21 16.45 20.55 16 20 16H4C3.45 16 3 16.45 3 17C3 17.55 3.45 18 4 18Z"
+      fill="#9194A4"
+    />
+  </svg>
+);
+
+export const CloseIcon = ({ width = 24, ...rest }) => (
+  <svg width={width} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...rest}>
+    <path
+      d="M18.3 5.70971C18.1132 5.52246 17.8595 5.41723 17.595 5.41723C17.3305 5.41723 17.0768 5.52246 16.89 5.70971L12 10.5897L7.11 5.69971C6.92317 5.51246 6.66952 5.40723 6.405 5.40723C6.14048 5.40723 5.88683 5.51246 5.7 5.69971C5.31 6.08971 5.31 6.71971 5.7 7.10971L10.59 11.9997L5.7 16.8897C5.31 17.2797 5.31 17.9097 5.7 18.2997C6.09 18.6897 6.72 18.6897 7.11 18.2997L12 13.4097L16.89 18.2997C17.28 18.6897 17.91 18.6897 18.3 18.2997C18.69 17.9097 18.69 17.2797 18.3 16.8897L13.41 11.9997L18.3 7.10971C18.68 6.72971 18.68 6.08971 18.3 5.70971Z"
+      fill="#9194A4"
+    />
   </svg>
 );

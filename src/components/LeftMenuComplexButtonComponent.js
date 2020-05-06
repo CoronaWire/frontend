@@ -8,16 +8,23 @@ import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 // Internal Modules
+import { media } from './../helpers/media';
 import MenuButton from '../styledComponents/MenuButton';
 import { H2, H4 } from './core';
 
 const MenuButtonTitle = styled(H2)`
   ${({ theme }) => `color: ${theme.newsColors.darkGrey}`};
   margin-bottom: 8px;
+  ${media.mobile`
+    ${({ theme }) => `color: ${theme.newsColors.lightGrey}`};
+  `};
 `;
 
 const MenuButtonSubTitle = styled(H4)`
   ${({ theme }) => `color: ${theme.newsColors.darkGrey}`};
+  ${media.mobile`
+    ${({ theme }) => `color: ${theme.newsColors.lightGrey}`};
+  `};
 `;
 
 const Wrapper = styled.div`
