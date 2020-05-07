@@ -15,16 +15,9 @@ import TabularButton from '../styledComponents/TabularButton';
 import { LeftPositionedWrapper, RightPositionedWrapper, MiddleWrapper } from '../styledComponents/PositionedWrappers';
 import { MediumText } from '../styledComponents/Text';
 
-const StatusWrapper = styled.div`
-    width: auto;
-    height: 100%;
-    background-color: orange;
-    margin-left: 15px;
-`
 
-
-const CityFilterWrapper = styled.div`
-    width: auto;
+const FiltersWrapper = styled.div`
+    width: 100%;
     height: 60px;
     background-color: transparent;
     display: flex;
@@ -39,6 +32,9 @@ const CityFilterWrapper = styled.div`
 const CityButton = styled(TabularButton)`
     background-color: transparent;
     padding-top: 20px;
+    &:hover {
+        border-bottom-color: #6558F5;
+    }
 `
 
 // Added to make space for the News Source Filter component which will replace the ArticleStatusFilterComponent's place
@@ -70,7 +66,7 @@ const StatusButton = styled.button`
 `;
 
 
-class CityFilterComponent extends PureComponent {
+class RegionStatusFilterComponent extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
@@ -80,7 +76,7 @@ class CityFilterComponent extends PureComponent {
 
     render(){
         return(
-                <CityFilterWrapper>
+                <FiltersWrapper>
                     <LeftPositionedWrapper>
                         <CityButton id='all' // #toDo: Make 'all' capitalized in both moderation-app-engine service and ModeratorCurateFunction
                         selectedID={this.props.locationFilter} 
@@ -143,9 +139,9 @@ class CityFilterComponent extends PureComponent {
                         <MediumText> {this.props.articleCount} Total Articles </MediumText>
 
                     </RightPositionedWrapper>
-                </CityFilterWrapper>
+                </FiltersWrapper>
         )
     }
 }
 
-export default CityFilterComponent;
+export default RegionStatusFilterComponent;

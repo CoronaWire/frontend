@@ -13,7 +13,8 @@ import moment from 'moment';
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid } from '../styledComponents/GridLayout';
 import { LargeText, SmallText, UnderlinedMediumText, MediumText } from '../styledComponents/Text';
-import { removeHoursFromDate } from '../utilityFunctions';
+import { removeHoursFromDate, removeStandardTimeFromDate } from '../utilityFunctions';
+import { timeSince } from './../helpers/datetime';
 
 const IndividualArticleWrapper = styled.div`
     background-color: transparent;
@@ -117,12 +118,20 @@ class ModeratorArticleComponent extends Component {
     }
 
     render() {
-        const { articleID, articleIndex } = this.props;
-        const status = this.props.articleObject.mod_status
-        const { articleObject } = this.props
+        const { articleID, articleIndex, articleObject } = this.props;
+        const status = articleObject.mod_status
         const publishedTime = articleObject.published_at;
-        const publishedAt = removeHoursFromDate(this.props.articleObject.published_at);
-        const relativeTime = moment(`${publishedAt}`, "YYYY-MM-DD").fromNow();
+        // console.log('Published Time on article', publishedTime);
+        // const publishedAt = removeHoursFromDate(this.props.articleObject.published_at);
+        // console.log('Published at after hours removed', publishedAt);
+        // const relativeTime = moment(`${publishedTime}`, "YYYY-MM-DDTHH:MM:SSZ").fromNow();
+        // console.log('Relative time given by the moment js library', relativeTime);
+        let readable = new Date(publishedTime);
+        readable = readable.toString()
+        console.log('Readable 1', readable);
+        readable = removeStandardTimeFromDate(readable);
+        console.log('Readable 2', readable)
+
         // Capitalizes mod_status
         const mod_status =  status.charAt(0).toUpperCase() + status.slice(1)
         return (
@@ -157,7 +166,7 @@ class ModeratorArticleComponent extends Component {
                         <ArticleMetaDataText> {this.props.articleObject.source_id} </ArticleMetaDataText>
                     </SmallGrid>
                     <SmallGrid>
-                        <ArticleMetaDataText> {relativeTime} </ArticleMetaDataText>
+                        <ArticleMetaDataText> {readable} </ArticleMetaDataText>
                     </SmallGrid>
                     <SmallGrid>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >

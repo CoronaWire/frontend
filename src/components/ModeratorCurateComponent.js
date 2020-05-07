@@ -9,7 +9,7 @@ import axios from 'axios';
 // Styled Components
 // import { NoBorderButton } from '../styledComponents/Buttons';
 // Sub-Components
-import CityFilterComponent from './CityFilterComponent'
+import RegionStatusFilterComponent from './RegionStatusFilterComponent'
 import ModeratorArticleFeedComponent from './ModeratorArticleFeedComponent';
 import ModeratorIndividualArticleComponent from './ModeratorIndividualArticleComponent';
 import ModeratorArticleFeedBottomBar from './ModeratorArticleFeedBottomBar'
@@ -18,7 +18,7 @@ import ArticleStatusFilterComponent from './ArticleStatusFilterComponent';
 import IndividualArticleTopActionComponent from './IndividualArticleTopActionComponent';
 import NewsSourceFilterComponent from './NewsSourceFilterComponent';
 // Utility Function
-import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles} from '../utilityFunctions';
+import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles, removeElementFromArray } from '../utilityFunctions';
 
 // URLs
 import { ARTICLE_URL, APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticlesURL, retrieveGlobalArticleURL, retrieveNationalArticleURL } from '../URL';
@@ -36,11 +36,9 @@ const FeedWrapper = styled.div`
 // #toDo: change names
 const FilterActionsWrapper = styled.div`
     width: 100%;
-    height: 16%;
     background-color: transparent;
     display: flex;
-    flex-direction: row;
-    min-height: 140px;
+    flex-direction: column;
 `
 
 const FilterWrapper = styled.div`
@@ -49,8 +47,19 @@ const FilterWrapper = styled.div`
     box-sizing: content-box;
     background-color: transparent;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 `;
+
+// Created in order to make sure no width is set, so that the more 'NewsSource' filter the user adds, the more they
+// get added to the right of the container without overflowing. We'll implement overflow-x scroll in order to ensure that.
+const FilterWrapperTwo = styled(FilterWrapper)`
+    height: 64px;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+`
 
 // #toFix: middlefeedwrapper and bottomfeedwrapper do not render properly
 // will cause issues with different screen sizes, since height is partly % and partly
@@ -265,6 +274,14 @@ class ModeratorCurateComponent extends PureComponent {
         console.log('News source array', newsSourceFilterArray);
         newsSourceFilterArray.push(newNewsSourceURL);
         this.setState({newsSourceFilterArray: newsSourceFilterArray});
+    }
+
+    deleteNewsSourceFromFilter = (newsSourceURL) => {
+        console.log('Removing news source ', newsSourceURL, ' from array');
+        let newsSourceFilterArray = [...this.state.newsSourceFilterArray];
+        newsSourceFilterArray = removeElementFromArray(newsSourceURL, newsSourceFilterArray);
+        this.setState({newsSourceFilterArray})
+
     }
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
     // to be the simplest solution in order to ensure that we can update our components accordingly
@@ -562,18 +579,20 @@ class ModeratorCurateComponent extends PureComponent {
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         // console.log('Article currently displayed ', this.state.articleCurrentlyDisplayed);
         // console.log('Current article', currentArticle);
-        console.log('News sources', this.state.newsSourcesArray);
+        console.log('News sources filtered', this.state.newsSourceFilterArray);
         return(
             <FeedWrapper>
                 <FilterActionsWrapper>
                     <FilterWrapper>
-                        <CityFilterComponent 
+                        <RegionStatusFilterComponent 
                             locationFilter={this.state.locationFilter} 
                             toggleLocationFilter={this.toggleLocationFilter}
                             articleCount={articleCount} 
                             statusFilter={this.state.statusFilter} 
                             changeStatusFilter={this.changeStatusFilter} 
                             />
+                    </FilterWrapper>
+                    <FilterWrapperTwo>
                         {
                             this.state.pageDisplayed === 'articleFeed' ?
                             // <ArticleStatusFilterComponent 
@@ -584,6 +603,7 @@ class ModeratorCurateComponent extends PureComponent {
                             newsSourceArray={this.state.newsSourceArray} 
                             addNewsSourceToFilter={this.addNewsSourceToFilter}
                             newsSourceFilterArray={this.state.newsSourceFilterArray}
+                            deleteNewsSourceFromFilter={this.deleteNewsSourceFromFilter}
                             />
                             :
                             <IndividualArticleTopActionComponent 
@@ -592,7 +612,7 @@ class ModeratorCurateComponent extends PureComponent {
                             previousArticle={this.previousArticle} 
                             />
                         }
-                    </FilterWrapper>
+                    </FilterWrapperTwo>
                 </FilterActionsWrapper>
                 <MiddleFeedWrapper>
                     {

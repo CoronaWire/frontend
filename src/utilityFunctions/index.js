@@ -3,4 +3,7 @@ export {
     transformIntoArticleObject, 
     createObjectOfArticleIDs, 
     removeHoursFromDate,
-    getSelectedArticles } from './articleFeed';
+    getSelectedArticles,
+    removeStandardTimeFromDate,
+    removeElementFromArray,
+ } from './articleFeed';

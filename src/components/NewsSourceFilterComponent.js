@@ -6,24 +6,33 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 
+
 const NewsSourceFilterWrapper = styled.div`
-    background-color: red;
+    background-color: transparent;
     display: flex;
     min-height: 64px;
     flex-direction: row;
     justify-content: left;
     align-items: center;
+    overflow-x: scroll;
+    width: 100%;
+    height: 100%;
 `
 
 const FilterBarWrapper = styled.div`
     height: auto;
-    background-color: orange;
+    background-color: transparent;
     display: flex,
     flex-direction: row;
     margin-left: 20px;
     justify-content: center;
     align-items: center;
     width: auto;
+    overflow-x: scroll;
+`
+
+const FilterBarWrapperOverflow = styled(FilterBarWrapper)`
+    overflow-x: scroll;
 `
 
 const FilterBarTitle = styled.p`
@@ -57,6 +66,7 @@ const DropDownListWrapper = styled.select`
     padding-bottom: 5px;
     padding-left: 4px;
     display: inline-block;
+    outline: none;
 `
 
 const DropDownListOption = styled.option`
@@ -73,59 +83,53 @@ const NewsSourceList = styled.div`
 `
 
 const NewsSourceWrapper = styled.div`
-    border-radius: 20px;
     margin-right: 15px;
     height: 40px;
     width: auto;
     cursor: pointer;
-    padding-left: 10px;
-    padding-right: 10px;
     min-width: 30px;
-    border: solid 1px grey;
+    border: solid 1px transparent;
     background-color: white;
     &:hover {
         background-color: white;
-        border: solid 1px black;
     }
     display: inline-block;
-`;
+`; 
+// border: solid 1px black;
 
 const NewsSourceText = styled.p`
     font-weight: 600;
     color: black;
     font-size: 15px;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
     text-align: center;
-    width: 80%;
     height: 100%;
     box-sizing: border-box;
     margin-top: 0px;
     margin-bottom: 0px;
     display: inline-block;
-    background-color: green;
+    background-color: #6558f5;
     padding-left: 20px;
     padding-right: 20px;
     line-height: 40px;
-
 `
 
 const NewsSourceCancelButton = styled.p`
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     &:hover { 
-        color: red;
+        color: white;
     }
     text-align: center;
-    width: 20%;
+    width: 40px;
     height: 100%;
     font-size: 15px;
     box-sizing: border-box;
     margin-top: 0px;
     margin-bottom: 0px;
     display: inline-block;
-    background-color: blue;
-    margin-left: 10px;
+    background-color: #6558f5;;
     padding-left: 8px;
     padding-right: 8px;
     line-height: 40px;
@@ -152,7 +156,7 @@ class NewsSourceFilterComponent extends Component {
                     <NewsSourceText>
                         {newsSourceURL}
                     </NewsSourceText>
-                    <NewsSourceCancelButton>
+                    <NewsSourceCancelButton onClick={() => this.props.deleteNewsSourceFromFilter(newsSourceURL)}>
                         x
                     </NewsSourceCancelButton>
                 </NewsSourceWrapper>
@@ -170,9 +174,9 @@ class NewsSourceFilterComponent extends Component {
                         }
                     </DropDownListWrapper>
                 </FilterBarWrapper>
-                <FilterBarWrapper>
+                <FilterBarWrapperOverflow>
                     {NewsFilters}
-                </FilterBarWrapper>
+                </FilterBarWrapperOverflow>
             </NewsSourceFilterWrapper>
         )
     }
