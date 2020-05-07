@@ -22,13 +22,13 @@ const ArticleDataWrapper = styled.div`
     flex-direction: column;
     margin: auto auto;
     margin-bottom: 50px;
-    padding-bottom: 50px;
-`;
+`; //     padding-bottom: 50px;
+
 
 const InputTitle = styled.p`
     background-color: transparent;
     font-size: 14px;
-    color: black;
+    color: ${props => props.success ? '#1AAE9F' : 'black'};
     margin-bottom: 5px;
     display: inline-block;
     font-weight: 600;
@@ -72,6 +72,10 @@ const InputWrapper = styled.div`
     background-color: transparent;
     display: flex;
     flex-direction: column;
+`
+
+const LastInputWrapper = styled(InputWrapper)`
+    margin-top: 40px;
 `
 
 const IFrame = styled.iframe`
@@ -257,7 +261,21 @@ class ModeratorIndividualArticleComponent extends Component {
                                 <SmallTextField id='country' value={country} onChange={this.handleChange}>
                                 </SmallTextField>
                             </InputWrapper>
+                            <LastInputWrapper>
+                                <InputTitle success>
+                                    Article successfully fips_processed. Locations associated to it found above.
+                                </InputTitle>
+                            </LastInputWrapper>
+                        
                             </>
+                        }
+                        {
+                            fipsProcessed === false &&
+                            <LastInputWrapper>
+                                <InputTitle>
+                                    Article hasn't been fips_processed. No locations associated to it yet.
+                                </InputTitle>
+                            </LastInputWrapper>
                         }
                     </ArticleDataWrapper>
                 </HalfGrid>
