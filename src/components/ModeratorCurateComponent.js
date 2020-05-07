@@ -365,6 +365,7 @@ class ModeratorCurateComponent extends PureComponent {
         if (newNewsSourceURL !== 'placeholder') {
             console.log('News source added to filter', newNewsSourceURL);
             let newsSourceFilterArray = [...this.state.newsSourceFilterArray];
+
             console.log('News source array', newsSourceFilterArray);
     
             // Source_id are currently set to 'sfchronicle.com/'. Adding the '/' in the API call creates problems
@@ -372,18 +373,26 @@ class ModeratorCurateComponent extends PureComponent {
             // the string comparison can be made and articles can be found for 'sfchronicle.com/'
             // #toDo: ideally remove the '/' at the end of the URL on the back-end
             let newsSource = newNewsSourceURL.split('/')[0];
-            newsSourceFilterArray.push(newsSource);
-    
-            this.setState({newsSourceFilterArray: newsSourceFilterArray});
             
-            const paramObject = {
-                offset: 0,
-                region: this.state.locationFilter,
-                status: this.state.statusFilter,
-                sourceArray: newsSourceFilterArray
-            }
+            // We check if newsSourceUrl is not already in array
+            // We only add the news source if it's not already added
+            if (newsSourceFilterArray.indexOf(newsSource) == -1) {
+                newsSourceFilterArray.push(newsSource);
     
-            this.retrieveArticle(paramObject);
+                this.setState({newsSourceFilterArray: newsSourceFilterArray});
+                
+                const paramObject = {
+                    offset: 0,
+                    region: this.state.locationFilter,
+                    status: this.state.statusFilter,
+                    sourceArray: newsSourceFilterArray
+                }
+        
+                this.retrieveArticle(paramObject);
+
+            } else {
+                console.log('News source already added');
+            }
         }
     }
 
