@@ -23,7 +23,7 @@ const menuOptions = [
    path: '/',
  },
  {
-   title: 'About CovidWire',
+   title: 'About Covid Wire',
    subTitle: 'Donate & learn about the site',
    path: '/about',
  },
