@@ -12,11 +12,12 @@ import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import TabularButton from '../styledComponents/TabularButton';
-import { LeftPositionedWrapper, RightPositionedWrapper } from '../styledComponents/PositionedWrappers';
+import { LeftPositionedWrapper, RightPositionedWrapper, MiddleWrapper } from '../styledComponents/PositionedWrappers';
 import { MediumText } from '../styledComponents/Text';
 
-const CityFilterWrapper = styled.div`
-    width: auto;
+
+const FiltersWrapper = styled.div`
+    width: 100%;
     height: 60px;
     background-color: transparent;
     display: flex;
@@ -31,9 +32,41 @@ const CityFilterWrapper = styled.div`
 const CityButton = styled(TabularButton)`
     background-color: transparent;
     padding-top: 20px;
+    &:hover {
+        border-bottom-color: #6558F5;
+    }
 `
 
-class CityFilterComponent extends PureComponent {
+// Added to make space for the News Source Filter component which will replace the ArticleStatusFilterComponent's place
+// Taken from the ArticleStatusFilterComponent
+
+
+const StatusButton = styled.button`
+    background-color: ${props => props.chosenStatus === props.id ? '#6558f5' : 'white'}; 
+    border-radius: 20px;
+    margin-right: 15px;
+    height: 40px;
+    outline: none;
+    font-size: 15px;
+    cursor: pointer;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 90px;
+    cursor: pointer;
+    font-weight: 600;
+    color: ${props => props.chosenStatus === props.id ? '#293845' : '#6558f5'};
+    border-style: none; 
+    padding-left: 20px;
+    padding-right: 20px;
+    &:hover {
+        background-color: #6558f5;
+        color: #293845;
+    }
+    transition: background-color 0.2s ease-in;
+`;
+
+
+class RegionStatusFilterComponent extends PureComponent {
     constructor(props){
         super(props);
         this.state = {
@@ -43,7 +76,7 @@ class CityFilterComponent extends PureComponent {
 
     render(){
         return(
-                <CityFilterWrapper>
+                <FiltersWrapper>
                     <LeftPositionedWrapper>
                         <CityButton id='all' // #toDo: Make 'all' capitalized in both moderation-app-engine service and ModeratorCurateFunction
                         selectedID={this.props.locationFilter} 
@@ -75,18 +108,40 @@ class CityFilterComponent extends PureComponent {
                         > 
                         National
                         </CityButton>
+                        <MiddleWrapper>
+                        <StatusButton 
+                        id='pending' 
+                        onClick={this.props.changeStatusFilter} 
+                        chosenStatus={this.props.statusFilter}
+                        > 
+                        Needs Review
+                        </StatusButton>
+                        <StatusButton 
+                        id='approved' 
+                        onClick={this.props.changeStatusFilter} 
+                        chosenStatus={this.props.statusFilter}
+                        > 
+                        Approved 
+                        </StatusButton>
+                        <StatusButton 
+                        id='rejected' 
+                        onClick={this.props.changeStatusFilter} 
+                        chosenStatus={this.props.statusFilter}
+                        > 
+                        Rejected 
+                        </StatusButton>
+                    </MiddleWrapper>
                     </LeftPositionedWrapper>
-                    
                     <RightPositionedWrapper>
                         {/* <NoBorderButton>
                             Add Area
                         </NoBorderButton> */}
-                        <MediumText> {this.props.articleCount} Total Articles </MediumText>
+                        <MediumText> {this.props.totalArticlesCount} Total Articles </MediumText>
 
                     </RightPositionedWrapper>
-                </CityFilterWrapper>
+                </FiltersWrapper>
         )
     }
 }
 
-export default CityFilterComponent;
+export default RegionStatusFilterComponent;

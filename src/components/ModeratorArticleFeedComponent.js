@@ -68,6 +68,9 @@ class ModeratorArticleFeedComponent extends PureComponent {
                 <TinyGrid >
                     {/* <ParentCheckbox  allArticlesSelected={this.state.allArticlesSelected} onClick={this.selectAllArticles} /> */}
                 </TinyGrid>
+                <TinyGrid>
+                    {/* Added here in order to make the alignment consistent with the below elements */}
+                </TinyGrid>
                 <LargeGrid> 
                     <GreyMediumText> Article </GreyMediumText>
                 </LargeGrid>
@@ -95,6 +98,8 @@ class ModeratorArticleFeedComponent extends PureComponent {
                                 articleIndex={index}
                                 undoArticleApprovalRejection={this.props.undoArticleApprovalRejection}
                                 selectIndividualArticle={this.props.selectIndividualArticle}
+                                approveArticleAndDeleteFromFeed={this.props.approveArticleAndDeleteFromFeed}
+                                rejectArticleAndDeleteFromFeed={this.props.rejectArticleAndDeleteFromFeed}
                                 />
                     })
                 }

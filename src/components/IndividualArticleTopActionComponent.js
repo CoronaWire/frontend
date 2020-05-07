@@ -14,7 +14,7 @@ const ActionsWrapper = styled.div`
     background-color: transparent;
     min-height: 64px;
     height: 100%;
-    width: auto;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -25,7 +25,6 @@ const SmallOutlineButton = styled(OutlineButton)`
     margin-left: 20px;
     width: 80px;
 `
-
 
 class IndividualArticleTopActionComponent extends PureComponent {
     constructor(props) {

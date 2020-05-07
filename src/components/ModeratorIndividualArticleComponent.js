@@ -137,7 +137,7 @@ const DropDownListWrapper = styled.select`
 
 const DropDownListOption = styled.option`
     height: 60px;
-    backgroun-color: green;
+    background-color: transparent;
     color: black;
 `
 
@@ -183,6 +183,7 @@ class ModeratorIndividualArticleComponent extends Component {
     render(){
         const { title, author, summary, specificity, city, state, country, content } = this.props.articleObject;
         const articleURL = this.props.articleObject.article_url;
+        const fipsProcessed = this.props.articleObject.fips_processed;
         const outlineURL = 'https://outline.com/' + articleURL;
         const dropdownOptions = ['Local', 'Regional', 'National', 'Global'];
         const defaultOption = dropdownOptions[0];
@@ -227,26 +228,30 @@ class ModeratorIndividualArticleComponent extends Component {
                                 <DropDownListOption id='global' value='global'> Global </DropDownListOption>
                             </DropDownListWrapper>
                         </InputWrapper>
-                        <InputWrapper>
-                            <InputTitle>
-                            City
-                            </InputTitle>
-                            <SmallTextField id='city' value={city} onChange={this.handleChange} />
-                        </InputWrapper>
-                        <InputWrapper>
-                            <InputTitle>
-                            State
-                            </InputTitle>
-                            <SmallTextField id='state' value={state} onChange={this.handleChange}/>
-            
-                        </InputWrapper>
-                        <InputWrapper>
-                            <InputTitle>
-                            Country
-                            </InputTitle>
-                            <SmallTextField id='country' value={country} onChange={this.handleChange}>
-                            </SmallTextField>
-                        </InputWrapper>
+                        {
+                            fipsProcessed === true &&
+                            <>
+                            <InputWrapper>
+                                <InputTitle>
+                                City
+                                </InputTitle>
+                                <SmallTextField id='city' value={city} onChange={this.handleChange} />
+                            </InputWrapper>
+                            <InputWrapper>
+                                <InputTitle>
+                                State
+                                </InputTitle>
+                                <SmallTextField id='state' value={state} onChange={this.handleChange}/>
+                            </InputWrapper>
+                            <InputWrapper>
+                                <InputTitle>
+                                Country
+                                </InputTitle>
+                                <SmallTextField id='country' value={country} onChange={this.handleChange}>
+                                </SmallTextField>
+                            </InputWrapper>
+                            </>
+                        }
                     </ArticleDataWrapper>
                 </HalfGrid>
                 <HalfGrid>

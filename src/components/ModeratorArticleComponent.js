@@ -13,7 +13,8 @@ import moment from 'moment';
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid } from '../styledComponents/GridLayout';
 import { LargeText, SmallText, UnderlinedMediumText, MediumText } from '../styledComponents/Text';
-import { removeHoursFromDate } from '../utilityFunctions';
+import { removeHoursFromDate, removeStandardTimeFromDate } from '../utilityFunctions';
+import { timeSince } from './../helpers/datetime';
 
 const IndividualArticleWrapper = styled.div`
     background-color: transparent;
@@ -106,6 +107,33 @@ const TinyArticleGrid = styled(TinyGrid)`
         background-color: ${props => props.modStatus != 'pending' ? 'transparent' : '#B2ACFA'};
     }
 `
+const ArticleGridApproveReject = styled(TinyGrid)`
+    flex-direction: column;
+    background-color: transparent;
+    height: 100%;
+`
+
+const ApproveRejectButton = styled.div`
+    height: 50%;
+    width: 100%;
+    background-color: ${props => props.id === 'approve' ?   '#1AAE9F' : '#D3455B'};
+    text-align: center;
+    align-items: center;
+    color: white;
+    display: flex;
+    font-size: 14px;
+    font-weight: 500;
+    &:hover {
+        background-color: ${props => props.id === 'approve' ?   '#179a8d' : '#ad384a'};
+    } 
+`
+
+const Text = styled.p`
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+`
 
 class ModeratorArticleComponent extends Component {
     constructor(props){
@@ -117,12 +145,18 @@ class ModeratorArticleComponent extends Component {
     }
 
     render() {
-        const { articleID, articleIndex } = this.props;
-        const status = this.props.articleObject.mod_status
-        const { articleObject } = this.props
+        const { articleID, articleIndex, articleObject } = this.props;
+        const status = articleObject.mod_status
         const publishedTime = articleObject.published_at;
-        const publishedAt = removeHoursFromDate(this.props.articleObject.published_at);
-        const relativeTime = moment(`${publishedAt}`, "YYYY-MM-DD").fromNow();
+        // console.log('Published Time on article', publishedTime);
+        // const publishedAt = removeHoursFromDate(this.props.articleObject.published_at);
+        // console.log('Published at after hours removed', publishedAt);
+        // const relativeTime = moment(`${publishedTime}`, "YYYY-MM-DDTHH:MM:SSZ").fromNow();
+        // console.log('Relative time given by the moment js library', relativeTime);
+        let readable = new Date(publishedTime);
+        readable = readable.toString()
+        readable = removeStandardTimeFromDate(readable);
+
         // Capitalizes mod_status
         const mod_status =  status.charAt(0).toUpperCase() + status.slice(1)
         return (
@@ -142,6 +176,18 @@ class ModeratorArticleComponent extends Component {
 
                         }
                     </TinyArticleGrid>
+                    <ArticleGridApproveReject>
+                        { this.props.articleObject.mod_status === 'pending' &&
+                            <>
+                            <ApproveRejectButton id='approve' onClick={() => this.props.approveArticleAndDeleteFromFeed(articleID)}>
+                                <Text> Approve </Text>
+                            </ApproveRejectButton>
+                            <ApproveRejectButton id='reject' onClick={() => this.props.rejectArticleAndDeleteFromFeed(articleID)}>
+                                <Text> Reject </Text>
+                            </ApproveRejectButton>
+                            </>
+                        }
+                    </ArticleGridApproveReject>
                     <LargeArticleGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex, articleObject)} id={articleID}>
                         {/* <ArticleImage src={this.props.articleObject.image_url} /> */}
                         <ArticleText>
@@ -157,7 +203,7 @@ class ModeratorArticleComponent extends Component {
                         <ArticleMetaDataText> {this.props.articleObject.source_id} </ArticleMetaDataText>
                     </SmallGrid>
                     <SmallGrid>
-                        <ArticleMetaDataText> {relativeTime} </ArticleMetaDataText>
+                        <ArticleMetaDataText> {readable} </ArticleMetaDataText>
                     </SmallGrid>
                     <SmallGrid>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >

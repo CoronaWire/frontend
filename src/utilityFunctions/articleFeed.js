@@ -105,3 +105,43 @@ export const removeHoursFromDate = (dateString) => {
 export const countNumOfArticles = (articlesArray) => {
     return articlesArray.length;
 }
+
+/*
+* Takes a string like this 'Wed May 06 2020 20:18:12 GMT-0400 (Eastern Daylight Time)'
+* and makes it like this 'Wed May 06 2020 20:18:12'
+*
+* I know, pretty revolutionary stuff.
+* Used in ../components/ModeratorArticleComponent to format the date returned by the Date()  object
+*/
+
+export const removeStandardTimeFromDate = (dateString) => {
+    let dateStringLength = dateString.length;
+    let counter = 0;
+    let index = 0;
+    for (let i=0; i < dateStringLength; i++) {
+        let currentChar = dateString[i];
+        if (currentChar === ':') {
+            counter += 1;
+        }
+        if (counter === 2) {
+            index = i+3;
+            break;
+        }
+    }
+    return dateString.slice(0,index);
+}
+
+/*
+*   Removes an element from array. If input array [1,4, 39, 32] and element=39
+*   Then output --> [1,4,32]
+*
+*   Used initially to remove the selected newsSource from the array of newsSources 
+*   Present in ../components/ModeratorCurateComponent
+*/
+export const removeElementFromArray = (element, array) => {
+    const index = array.indexOf(element);
+    if (index > -1) {
+        array.splice(index, 1);
+    };
+    return array;
+}

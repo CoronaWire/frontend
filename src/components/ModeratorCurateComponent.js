@@ -9,18 +9,27 @@ import axios from 'axios';
 // Styled Components
 // import { NoBorderButton } from '../styledComponents/Buttons';
 // Sub-Components
-import CityFilterComponent from './CityFilterComponent'
+import RegionStatusFilterComponent from './RegionStatusFilterComponent'
 import ModeratorArticleFeedComponent from './ModeratorArticleFeedComponent';
 import ModeratorIndividualArticleComponent from './ModeratorIndividualArticleComponent';
 import ModeratorArticleFeedBottomBar from './ModeratorArticleFeedBottomBar'
 import ModeratorIndividualArticleBottomBar from './ModeratorIndividualArticleBottomBar';
 import ArticleStatusFilterComponent from './ArticleStatusFilterComponent';
 import IndividualArticleTopActionComponent from './IndividualArticleTopActionComponent';
+import NewsSourceFilterComponent from './NewsSourceFilterComponent';
 // Utility Function
-import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles} from '../utilityFunctions';
+import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles, removeElementFromArray } from '../utilityFunctions';
 
 // URLs
-import { ARTICLE_URL, APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticlesURL, retrieveGlobalArticleURL, retrieveNationalArticleURL } from '../URL';
+import { ARTICLE_URL, 
+        APPROVE_ARTICLE_URL, 
+        REJECT_ARTICLE_URL, 
+        MAKE_ARTICLE_PENDING_URL, 
+        retrieveArticleURL, 
+        retrieveAllSources, 
+        retrieveStateSources, 
+        retrieveCountURL} 
+            from '../URL';
 
 // #toDo: create index.jsfile in styled components to get all of components out
 const FeedWrapper = styled.div`
@@ -35,21 +44,32 @@ const FeedWrapper = styled.div`
 // #toDo: change names
 const FilterActionsWrapper = styled.div`
     width: 100%;
-    height: 16%;
-    background-color: transparent;
-    display: flex;
-    flex-direction: row;
-    min-height: 140px;
-`
-
-const FilterWrapper = styled.div`
-    height: auto;
-    width: 100%;
-    box-sizing: content-box;
     background-color: transparent;
     display: flex;
     flex-direction: column;
+    overflow: visible;
+`
+
+const FilterWrapper = styled.div`
+    height: 60px;
+    width: 100%;
+    box-sizing: content-box;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
 `;
+
+// Created in order to make sure no width is set, so that the more 'NewsSource' filter the user adds, the more they
+// get added to the right of the container without overflowing. We'll implement overflow-x scroll in order to ensure that.
+const FilterWrapperTwo = styled(FilterWrapper)`
+    height: 64px;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+`
 
 // #toFix: middlefeedwrapper and bottomfeedwrapper do not render properly
 // will cause issues with different screen sizes, since height is partly % and partly
@@ -92,7 +112,9 @@ class ModeratorCurateComponent extends PureComponent {
             articleDisplayedIndex: null,
             numOfArticlesReturned: 0,
             currentlySelectedArticle: {},
-
+            newsSourceArray: [],
+            newsSourceFilterArray: [],
+            totalArticlesCount: 0,
         }
         // #comment: articles will be either stored in redux state or locally.
     }
@@ -103,8 +125,10 @@ class ModeratorCurateComponent extends PureComponent {
             status: 'pending', 
             region: 'all',
             offset: 0,
+            sourceArray: []
         }
         this.retrieveArticle(paramObject);
+        this.retrieveNewsSources('all'); // Gets all news sources
     }
 
     selectAllArticles = () => {
@@ -114,26 +138,74 @@ class ModeratorCurateComponent extends PureComponent {
     }
 
     retrieveArticle = async (paramObject) => {
-        const { status, region, offset} = paramObject;
-        let returnedResponse, articlesArray;
+        const { status, region, offset, sourceArray } = paramObject;
+        let returnedResponse, articlesArray, returnedCountObject, totalArticlesCount;
+        let newParamObject = {};
 
         if (region === 'National') {
-            const NATIONAL_API_URL = retrieveNationalArticleURL(status, offset);
-            returnedResponse = await axios.get(NATIONAL_API_URL);
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray
+            }
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('national', status, newParamObject);
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
             articlesArray = returnedResponse.data;
+
+            // Gets the total count of articles
+            const ARTICLE_COUNT_ENDPOINT = retrieveCountURL('national', status, newParamObject);
+            returnedCountObject = await axios.get(ARTICLE_COUNT_ENDPOINT);
+            totalArticlesCount = returnedCountObject.data[0].count;
             // #toDo: this needs to be done either on back-end or within the individual component
+            this.setState({totalArticlesCount})
+
                      
         } else if (region === 'Global') {
-            const GLOBAL_API_URL = retrieveGlobalArticleURL(status, offset);
-            returnedResponse = await axios.get(GLOBAL_API_URL);
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray
+            }
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('global', status, newParamObject);
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
             articlesArray = returnedResponse.data;
-                   
+
+            // Gets the total count of articles
+            const ARTICLE_COUNT_ENDPOINT = retrieveCountURL('global', status, newParamObject);
+            returnedCountObject = await axios.get(ARTICLE_COUNT_ENDPOINT);
+            totalArticlesCount = returnedCountObject.data[0].count;
+            this.setState({totalArticlesCount})
+        } else  if (region === 'all') {
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray
+            }
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('all', status, newParamObject);            
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
+            articlesArray = returnedResponse.data;
+            // let articleCount = returnedResponse.data.articleCount[0].count;
+            // this.setState({articleCount})
+
+            // Gets the total count of articles
+            const ARTICLE_COUNT_ENDPOINT = retrieveCountURL('all', status, newParamObject);
+            returnedCountObject = await axios.get(ARTICLE_COUNT_ENDPOINT);
+            totalArticlesCount = returnedCountObject.data[0].count;
+            this.setState({totalArticlesCount})
         } else {
-            const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset); // #Need to change the offset initially
-            returnedResponse = await axios.get(MODERATOR_API_URL);
-            articlesArray = returnedResponse.data.articlesArray;
-            let articleCount = returnedResponse.data.articleCount[0].count;
-            this.setState({articleCount})
+            console.log('STATE REGION HIT', region)
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray,
+                state: region
+            }
+            // Retrieves all articles for that state
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('state', status, newParamObject);            
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
+            articlesArray = returnedResponse.data;
+
+            // Gets the total count of articles
+            const ARTICLE_COUNT_ENDPOINT = retrieveCountURL('state', status, newParamObject);
+            returnedCountObject = await axios.get(ARTICLE_COUNT_ENDPOINT);
+            totalArticlesCount = returnedCountObject.data[0].count;
+            this.setState({totalArticlesCount})
         }
         console.log('Returned response from back-end', returnedResponse);
         let articleFeedObject = transformIntoArticleObject(articlesArray)
@@ -159,6 +231,7 @@ class ModeratorCurateComponent extends PureComponent {
             status: status,
             region: this.state.locationFilter,
             offset: 0,
+            sourceArray: this.state.newsSourceFilterArray
         }
         // Call the retrieveArticle function to retrieve articles
         
@@ -180,13 +253,14 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({
             locationFilter: location
         })
-
+        console.log('Location changed to ', location)
         // #toDo: function name and location in state should be changed
         // Object passed in order to retrieve articles by status
         const paramObject = {
             status: this.state.statusFilter,
             region: location, // #toDo: get rid of this useless ternary operator,
             offset: 0,
+            sourceArray: this.state.newsSourceFilterArray
         }
 
         // Ensures that we're able to use the numOfArticles returned as an offset later for pagination
@@ -194,6 +268,12 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({
             numOfArticlesReturned: numOfArticles
         })
+
+        // Retrieves all news sources for the region
+        this.retrieveNewsSources(location);
+
+        // Clear out the newsSourceFilterArray
+        // this.clearNewsSourceFilter(); 
 
         // Call the retrieveArticle function to retrieve articles
         this.retrieveArticle(paramObject);
@@ -204,23 +284,69 @@ class ModeratorCurateComponent extends PureComponent {
     retrieveMoreArticles = async () => {
         const articleLength = Object.keys(this.state.articleFeed).length;
         console.log(`Offset is ${articleLength}`);
-        let status = this.state.statusFilter, region = this.state.locationFilter, offset = articleLength;
-        let returnedResponse, URL, articlesArray, articleCount;
+        let status = this.state.statusFilter, 
+            region = this.state.locationFilter, 
+            offset = articleLength, 
+            sourceArray = this.state.newsSourceFilterArray;
+
+        let returnedResponse, newParamObject, articlesArray, articleCount;
 
         if (region === 'National') {
-            URL = retrieveNationalArticleURL(status, offset);
-            returnedResponse = await axios.get(URL);
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray
+            }
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('national', status, newParamObject);
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
             articlesArray = returnedResponse.data ? returnedResponse.data : [];
+            // #toDo: this needs to be done either on back-end or within the individual component
+                     
         } else if (region === 'Global') {
-            URL = retrieveGlobalArticleURL(status, offset);
-            returnedResponse = await axios.get(URL);
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray
+            }
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('global', status, newParamObject);
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
             articlesArray = returnedResponse.data ? returnedResponse.data : [];
+                   
+        } else  if (region === 'all') {
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray
+            }
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('all', status, newParamObject);            
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
+            articlesArray = returnedResponse.data ? returnedResponse.data : [];
+            // let articleCount = returnedResponse.data.articleCount[0].count;
+            // this.setState({articleCount})
         } else {
-            URL = retrieveArticlesURL(status, region, offset);
-            returnedResponse = await axios.get(URL);
-            articlesArray = returnedResponse.data.articlesArray;
-            articleCount = returnedResponse.data.articleCount[0].count;
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray,
+                state: region
+            }
+            // Retrieves all articles for that state
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('state', status, newParamObject);            
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
+            articlesArray = returnedResponse.data ? returnedResponse.data : [];
+            
         }
+
+        // if (region === 'National') {
+        //     URL = retrieveNationalArticleURL(status, offset);
+        //     returnedResponse = await axios.get(URL);
+        //     articlesArray = returnedResponse.data ? returnedResponse.data : [];
+        // } else if (region === 'Global') {
+        //     URL = retrieveGlobalArticleURL(status, offset);
+        //     returnedResponse = await axios.get(URL);
+        //     articlesArray = returnedResponse.data ? returnedResponse.data : [];
+        // } else {
+        //     URL = retrieveArticlesURL(status, region, offset);
+        //     returnedResponse = await axios.get(URL);
+        //     articlesArray = returnedResponse.data.articlesArray;
+        //     articleCount = returnedResponse.data.articleCount[0].count;
+        // }
         console.log(`Returned response`);
         console.log(returnedResponse);
         // #toDo: this needs to be done either on back-end or within the individual component
@@ -242,6 +368,103 @@ class ModeratorCurateComponent extends PureComponent {
 
     }
 
+    retrieveNewsSources = async (region) => {
+        console.log('Region selected ', region);
+        try {
+            if (region === 'all' || region === 'national' || region === 'global' || region === 'Global' || region === 'National') {
+                const SOURCE_URL = retrieveAllSources();
+                let newsSourceArray = await axios.get(SOURCE_URL);
+                newsSourceArray = newsSourceArray.data;
+                this.setState({
+                    newsSourceArray: newsSourceArray
+                })
+        
+            } else {
+                // Retrieves all news sources for that state
+                let SOURCE_URL = retrieveStateSources(region);
+                let newsSourceArray = await axios.get(SOURCE_URL);
+                newsSourceArray = newsSourceArray.data;
+                this.setState({
+                    newsSourceArray: newsSourceArray
+                })
+            }
+        } catch (error) {
+            console.error('Error caught in retrieveNewsSources function', error);
+        }
+
+    }
+
+    addNewsSourceToFilter = (newNewsSourceURL) => {
+        console.log('NEWS SOURCE URL', newNewsSourceURL)
+        if (newNewsSourceURL !== 'placeholder') {
+            
+            console.log('News source added to filter', newNewsSourceURL);
+            let newsSourceFilterArray = [...this.state.newsSourceFilterArray];
+            console.log('News source array', newsSourceFilterArray);
+    
+            // Source_id are currently set to 'sfchronicle.com/'. Adding the '/' in the API call creates problems
+            // So it needs to be removed from the URL before it's sent. It is re-added on the back-end server so that
+            // the string comparison can be made and articles can be found for 'sfchronicle.com/'
+            // #toDo: ideally remove the '/' at the end of the URL on the back-end
+            let newsSource = newNewsSourceURL.split('/')[0];
+            
+            // We check if newsSourceUrl is not already in array
+            // We only add the news source if it's not already added
+            if (newsSourceFilterArray.indexOf(newsSource) == -1) {
+                newsSourceFilterArray.push(newsSource);
+    
+                this.setState({newsSourceFilterArray: newsSourceFilterArray});
+                
+                const paramObject = {
+                    offset: 0,
+                    region: this.state.locationFilter,
+                    status: this.state.statusFilter,
+                    sourceArray: newsSourceFilterArray
+                }
+        
+                this.retrieveArticle(paramObject);
+
+            } else {
+                console.log('News source already added');
+            }
+        }
+    }
+
+    deleteNewsSourceFromFilter = (newsSourceURL) => {
+        console.log('Removing news source ', newsSourceURL, ' from array');
+        let newsSourceFilterArray = [...this.state.newsSourceFilterArray];
+        newsSourceFilterArray = removeElementFromArray(newsSourceURL, newsSourceFilterArray);
+        this.setState({newsSourceFilterArray})
+
+        const paramObject = {
+            offset: 0,
+            region: this.state.locationFilter,
+            status: this.state.statusFilter,
+            sourceArray: newsSourceFilterArray
+        }
+
+        this.retrieveArticle(paramObject);
+
+    }
+
+    // Ensures that the news source array is cleared out whenever the user toggles the location. Different location potentially implies
+    // different news sources available
+    // Unused for now
+    clearNewsSourceFilter = () => {
+        console.log('Called clear news sources filter')
+        this.setState({
+            newsSourceFilterArray: []
+        })
+
+        const paramObject = {
+            status: this.state.statusFilter,
+            region: this.state.locationFilter,
+            offset: 0,
+            sourceArray: []
+        }
+
+        this.retrieveArticle(paramObject);
+    }
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
     // to be the simplest solution in order to ensure that we can update our components accordingly
     toggleArticleSelected = (articleID) => {
@@ -363,16 +586,32 @@ class ModeratorCurateComponent extends PureComponent {
         // this.setState({articleFeed})
         const URL = APPROVE_ARTICLE_URL;
         let articleIDArray = [articleID];
-        console.log('article ID Array', articleIDArray)
+        console.log('Article ID Array', articleIDArray)
         try {
             let approveArticleResponse = await axios.put(URL, { articleIDArray: articleIDArray });
             console.log('Approve article', approveArticleResponse);
+            // Used to reset the state in order to eliminate the article from the queue since it's been approved
         } catch (error) {
             console.error(`Error caught in approveIndividualArticle function ${error}`)
         }
     }
 
-    rejetIndividualArticle = async (articleID) => {
+    approveArticleAndDeleteFromFeed = async (articleID) => {
+        console.log('Approving article and deleting from feed')
+        const URL = APPROVE_ARTICLE_URL;
+        let articleIDArray = [articleID];
+        console.log('Article ID Array', articleIDArray)
+        try {
+            let approveArticleResponse = await axios.put(URL, { articleIDArray: articleIDArray });
+            console.log('Approve article', approveArticleResponse);
+            // Used to reset the state in order to eliminate the article from the queue since it's been approved
+            this.deleteArticleFromFeed(articleID);
+        } catch (error) {
+            console.error(`Error caught in approveIndividualArticle function ${error}`)
+        }
+    }
+
+    rejectIndividualArticle = async (articleID) => {
         // const articleFeed = {...this.state.articleFeed};
         // articleFeed[articleID].mod_status = 'Rejected';
         // this.setState({articleFeed})
@@ -381,8 +620,23 @@ class ModeratorCurateComponent extends PureComponent {
         try {
             let rejectArticleResponse = await axios.put(URL, { articleIDArray: articleIDArray });
             console.log('Reject article', rejectArticleResponse);
+            // Used to reset the state in order to eliminate the article from the queue since it's been rejected
         } catch (error) {
-            console.error(`Error caught in rejetIndividualArticle function ${error}`)
+            console.error(`Error caught in rejectIndividualArticle function ${error}`)
+        }
+    }
+
+    rejectArticleAndDeleteFromFeed = async (articleID) => {
+        console.log('Rejecting article & deleting from feed')
+        const URL = REJECT_ARTICLE_URL;
+        let articleIDArray = [articleID];
+        try {
+            let rejectArticleResponse = await axios.put(URL, { articleIDArray: articleIDArray });
+            console.log('Reject article', rejectArticleResponse);
+            // Used to reset the state in order to eliminate the article from the queue since it's been rejected
+            this.deleteArticleFromFeed(articleID)
+        } catch (error) {
+            console.error(`Error caught in rejectIndividualArticle function ${error}`)
         }
     }
     
@@ -415,7 +669,8 @@ class ModeratorCurateComponent extends PureComponent {
         const paramObject = {
             region: this.state.locationFilter,
             status: this.state.statusFilter,
-            offset: 0
+            offset: 0,
+            sourceArray: this.state.newsSourceFilterArray
         }
 
         this.retrieveArticle(paramObject);
@@ -467,12 +722,12 @@ class ModeratorCurateComponent extends PureComponent {
 
     approveAndNextArticle = () => {
         const { articleDisplayedIndex, articleFeed } = this.state;
-        console.log('current article before next called', articleDisplayedIndex);
+        console.log('Current article before next called', articleDisplayedIndex);
         const articleKey = Object.keys(articleFeed)[Number(articleDisplayedIndex)];
         const articleObject = articleFeed[articleKey]
         const articleID = articleObject.article_id;
         this.nextArticle();
-        console.log('current article ID', articleID);
+        console.log('Current article ID', articleID);
         this.approveIndividualArticle(articleID);
         this.deleteArticleFromFeed(articleKey);
     }
@@ -484,7 +739,7 @@ class ModeratorCurateComponent extends PureComponent {
         const articleObject = articleFeed[articleKey]
         const articleID = articleObject.article_id;
         this.nextArticle();
-        this.rejetIndividualArticle(articleID);
+        this.rejectIndividualArticle(articleID);
         this.deleteArticleFromFeed(articleKey);
 
     }
@@ -530,7 +785,7 @@ class ModeratorCurateComponent extends PureComponent {
         // Array of all the different article_ids for the articles displayed. Allows us to loop through
         // list of articles when attempting to edit
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
-        const {articleCount} = this.state;
+        const {totalArticlesCount} = this.state;
         // Current article chosen by the user
         // console.log('Index of article displayed', this.state.articleDisplayedIndex)
         // console.log('Current article object', this.state.currentlySelectedArticle);
@@ -538,22 +793,32 @@ class ModeratorCurateComponent extends PureComponent {
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         // console.log('Article currently displayed ', this.state.articleCurrentlyDisplayed);
         // console.log('Current article', currentArticle);
-
         return(
             <FeedWrapper>
                 <FilterActionsWrapper>
                     <FilterWrapper>
-                        <CityFilterComponent 
+                        <RegionStatusFilterComponent 
                             locationFilter={this.state.locationFilter} 
                             toggleLocationFilter={this.toggleLocationFilter}
-                            articleCount={articleCount} />
-                        {
-                            this.state.pageDisplayed === 'articleFeed' ?
-                            <ArticleStatusFilterComponent 
+                            totalArticlesCount={totalArticlesCount} 
                             statusFilter={this.state.statusFilter} 
                             changeStatusFilter={this.changeStatusFilter} 
-                            articleCount={articleCount}
-                            />   
+                            />
+                    </FilterWrapper>
+                    <FilterWrapperTwo>
+                        {
+                            this.state.pageDisplayed === 'articleFeed' ?
+                            // <ArticleStatusFilterComponent 
+                            // statusFilter={this.state.statusFilter} 
+                            // changeStatusFilter={this.changeStatusFilter} 
+                            // />   
+                            <NewsSourceFilterComponent 
+                            newsSourceArray={this.state.newsSourceArray} 
+                            addNewsSourceToFilter={this.addNewsSourceToFilter}
+                            newsSourceFilterArray={this.state.newsSourceFilterArray}
+                            deleteNewsSourceFromFilter={this.deleteNewsSourceFromFilter}
+                            clearNewsSourceFilter={this.clearNewsSourceFilter}
+                            />
                             :
                             <IndividualArticleTopActionComponent 
                             togglePageDisplayed={this.togglePageDisplayed}
@@ -561,7 +826,7 @@ class ModeratorCurateComponent extends PureComponent {
                             previousArticle={this.previousArticle} 
                             />
                         }
-                    </FilterWrapper>
+                    </FilterWrapperTwo>
                 </FilterActionsWrapper>
                 <MiddleFeedWrapper>
                     {
@@ -573,6 +838,8 @@ class ModeratorCurateComponent extends PureComponent {
                         articleFeed={this.state.articleFeed}
                         selectIndividualArticle={this.selectIndividualArticle}
                         retrieveMoreArticles={this.retrieveMoreArticles}
+                        approveArticleAndDeleteFromFeed={this.approveArticleAndDeleteFromFeed}
+                        rejectArticleAndDeleteFromFeed={this.rejectArticleAndDeleteFromFeed}
                         />
                         :
                         <ModeratorIndividualArticleComponent 

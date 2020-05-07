@@ -30,7 +30,6 @@ const StatusButton = styled.button`
     padding-left: 10px;
     padding-right: 10px;
     min-width: 90px;
-    cursor: pointer;
     font-weight: 600;
     color: ${props => props.chosenStatus === props.id ? '#293845' : '#6558f5'};
     border-style: none; 
