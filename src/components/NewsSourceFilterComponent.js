@@ -109,17 +109,21 @@ const NewsSourceText = styled.p`
     margin-top: 0px;
     margin-bottom: 0px;
     display: inline-block;
-    background-color: #6558f5;
+    border-left: solid #6558f5 1px;
+    border-top: solid #6558f5 1px;
+    border-bottom: solid #6558f5 1px;
+    border-right: solid white 1px;
     padding-left: 20px;
     padding-right: 20px;
     line-height: 40px;
+    background-color: white;
 `
 
 const NewsSourceCancelButton = styled.p`
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     &:hover { 
-        color: white;
+        color: #6558f5;
     }
     text-align: center;
     width: 40px;
@@ -129,10 +133,14 @@ const NewsSourceCancelButton = styled.p`
     margin-top: 0px;
     margin-bottom: 0px;
     display: inline-block;
-    background-color: #6558f5;;
     padding-left: 8px;
     padding-right: 8px;
     line-height: 40px;
+    border-right: solid #6558f5 1px;
+    border-top: solid #6558f5 1px;
+    border-bottom: solid #6558f5 1px;
+    border-left: solid white 1px;
+    background-color: white
 `
 
 class NewsSourceFilterComponent extends Component {
