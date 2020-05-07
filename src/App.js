@@ -7,6 +7,12 @@ import { ThemeProvider } from 'styled-components';
 import PropTypes from 'prop-types';
 // Internal Modules
 import Routes from './routing/Routes';
+// Redux-related
+import store from './store/store';
+import {
+    authenticateUser 
+} from './actionCreators/actions';
+
 // Styled Components
 import AppComponentWrapper from './styledComponents/AppComponentWrapper';
 import GlobalTheme from './styledComponents/GlobalTheme';
@@ -27,6 +33,10 @@ class App extends Component {
       isAuthenticated: this.props.isAuthenticated,
     }
 
+    const token = localStorage.getItem('token');
+    if (token) {
+      store.dispatch(authenticateUser(true));
+    }
     // Provider component from react-redux will be added here at the top
     // level of the hierarchy in order to give access to the redux state to
     // the sub components

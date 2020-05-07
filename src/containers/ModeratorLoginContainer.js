@@ -196,7 +196,12 @@ class ModeratorLoginContainer extends Component{
                     email: email, //varEmail is a variable which holds the email
                     password: password
                 })
-                // console.log('Authentication result?');
+                console.log('Authentication result', authenticationResult);
+                let accessToken = authenticationResult.data.user.stsTokenManager.accessToken;
+                console.log('Access token', accessToken)
+                // Set token in the local storage to avoid authentication on Refresh
+                localStorage.setItem('token', accessToken);
+
                 // console.log(authenticationResult)
                 store.dispatch(authenticateUser(true));
                 try {
