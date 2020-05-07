@@ -221,12 +221,17 @@ class ModeratorIndividualArticleComponent extends Component {
                             <InputTitle>
                             Specificity
                             </InputTitle>
-                            <DropDownListWrapper onChange={this.dropdownChange} >
-                                <DropDownListOption id='' value='null' selected={this.state.specificity === null ? 'selected': ''}> Not Specified </DropDownListOption>
+                            <DropDownListWrapper onChange={this.dropdownChange} defaultValue={this.state.specificity}>
+                                {/* <DropDownListOption id='' value={null} selected={this.state.specificity === null ? 'selected': ''}> Not Specified </DropDownListOption>
                                 <DropDownListOption id='local' value='local' selected={this.state.specificity === 'local' ? 'selected': ''}> Local </DropDownListOption>
                                 <DropDownListOption id='regional' value='regional' selected={this.state.specificity ===  'regional' ? 'selected': ''} > Regional </DropDownListOption>
                                 <DropDownListOption id='national' value='national' selected={this.state.specificity === 'national' ? 'selected': ''}> National </DropDownListOption>
-                                <DropDownListOption id='global' value='global' selected={this.state.specificity === 'global' ? 'selected': ''}> Global </DropDownListOption>
+                                <DropDownListOption id='global' value='global' selected={this.state.specificity === 'global' ? 'selected': ''}> Global </DropDownListOption> */}
+                                <DropDownListOption id='' value={null} > Not Specified </DropDownListOption>
+                                <DropDownListOption id='local' value='local' > Local </DropDownListOption>
+                                <DropDownListOption id='regional' value='regional'  > Regional </DropDownListOption>
+                                <DropDownListOption id='national' value='national' > National </DropDownListOption>
+                                <DropDownListOption id='global' value='global' > Global </DropDownListOption>
                             </DropDownListWrapper>
                         </InputWrapper>
                         { 

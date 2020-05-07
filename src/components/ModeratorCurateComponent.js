@@ -190,7 +190,6 @@ class ModeratorCurateComponent extends PureComponent {
             totalArticlesCount = returnedCountObject.data[0].count;
             this.setState({totalArticlesCount})
         } else {
-            console.log('STATE REGION HIT', region)
             newParamObject = {
                 offset: offset,
                 sourceArray: sourceArray,
@@ -369,7 +368,6 @@ class ModeratorCurateComponent extends PureComponent {
     }
 
     retrieveNewsSources = async (region) => {
-        console.log('Region selected ', region);
         try {
             if (region === 'all' || region === 'national' || region === 'global' || region === 'Global' || region === 'National') {
                 const SOURCE_URL = retrieveAllSources();
