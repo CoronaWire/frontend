@@ -75,13 +75,6 @@ const DropDownListOption = styled.option`
     color: black;
 `
 
-const NewsSourceList = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-`
-
 const NewsSourceWrapper = styled.div`
     margin-right: 15px;
     height: 40px;
@@ -153,12 +146,16 @@ class NewsSourceFilterComponent extends Component {
 
     render() {
 
+        // Creates an array of options populated by all the news sources available in the database
         const optionsList = this.props.newsSourceArray.map((newsSourceURL) => {
             return <DropDownListOption value={newsSourceURL} id={newsSourceURL} >
                 {newsSourceURL}
             </DropDownListOption>
         })
 
+        // Creates buttons representing each news sources used as an extra filter to moderate the articles
+        // Has an 'x' on the side, representing a delete operation, which allows the moderator to remove the
+        // news source from the filtering 
         const NewsFilters = this.props.newsSourceFilterArray.map((newsSourceURL) => {
             return <NewsSourceWrapper>
                     <NewsSourceText>
@@ -177,6 +174,10 @@ class NewsSourceFilterComponent extends Component {
                         Add News Source to Filter: 
                     </FilterBarTitle>
                     <DropDownListWrapper onChange={(event) => this.props.addNewsSourceToFilter(event.target.value)}>
+                        {/* Added here so that the first option is not a source but an empty space. 'placeholder' value added
+                        so that the function can detect when the blank place is clicked and know that it isn't a newsSourceURL to
+                        add to the newsSourceFilterArray in the parent component (ModeratorCurateComponent)'s state  */}
+                        <DropDownListOption value='placeholder'/> 
                         {
                             optionsList
                         }

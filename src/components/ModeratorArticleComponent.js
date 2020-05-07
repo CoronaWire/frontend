@@ -128,9 +128,7 @@ class ModeratorArticleComponent extends Component {
         // console.log('Relative time given by the moment js library', relativeTime);
         let readable = new Date(publishedTime);
         readable = readable.toString()
-        console.log('Readable 1', readable);
         readable = removeStandardTimeFromDate(readable);
-        console.log('Readable 2', readable)
 
         // Capitalizes mod_status
         const mod_status =  status.charAt(0).toUpperCase() + status.slice(1)

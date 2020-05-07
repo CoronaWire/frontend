@@ -25,3 +25,39 @@ export const retrieveGlobalArticleURL = (status, offset) => {
 export const retrieveNationalArticleURL = (status, offset) => {
     return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/national?status=${status}&offset=${offset}`
 }
+
+export const retrieveArticleURL = (scope, status, paramObject) => {
+    const { state, offset, sourceArray } = paramObject; 
+
+    let sourceString = '';
+    if (sourceArray.length > 0) {
+        sourceString = sourceArray.join(',');
+    }
+
+    // Status will always be provided
+    if (scope === 'global') {
+        if (sourceArray.length > 0) {
+            return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/global?status=${status}&offset=${offset}&sources=${sourceString}`;
+        } else {
+            return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/global?status=${status}&offset=${offset}`;
+        } 
+    } else if (scope === 'national') {
+        if (sourceArray.length > 0) {
+            return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/national?status=${status}&offset=${offset}&sources=${sourceString}`;
+        } else {
+            return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/national?status=${status}&offset=${offset}`;
+        } 
+    } else if (scope === 'all') {
+        if (sourceArray.length > 0) {
+            return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/all?status=${status}&offset=${offset}&sources=${sourceString}`;
+        } else {
+            return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/all?status=${status}&offset=${offset}`;
+        } 
+    } else if (scope === 'state') {
+        if (sourceArray.length > 0) {
+            return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/state?state=${state}&status=${status}&offset=${offset}&sources=${sourceString}`;
+        } else {
+            return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/scope/state?state=${state}&status=${status}&offset=${offset}`;
+        } 
+    }
+}

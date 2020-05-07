@@ -21,7 +21,7 @@ import NewsSourceFilterComponent from './NewsSourceFilterComponent';
 import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles, removeElementFromArray } from '../utilityFunctions';
 
 // URLs
-import { ARTICLE_URL, APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticlesURL, retrieveGlobalArticleURL, retrieveNationalArticleURL } from '../URL';
+import { ARTICLE_URL, APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticleURL } from '../URL';
 
 // #toDo: create index.jsfile in styled components to get all of components out
 const FeedWrapper = styled.div`
@@ -114,6 +114,7 @@ class ModeratorCurateComponent extends PureComponent {
             status: 'pending', 
             region: 'all',
             offset: 0,
+            sourceArray: []
         }
         this.retrieveArticle(paramObject);
         this.retrieveNewsSources();
@@ -126,26 +127,49 @@ class ModeratorCurateComponent extends PureComponent {
     }
 
     retrieveArticle = async (paramObject) => {
-        const { status, region, offset} = paramObject;
+        const { status, region, offset, sourceArray } = paramObject;
         let returnedResponse, articlesArray;
+        let newParamObject = {};
 
         if (region === 'National') {
-            const NATIONAL_API_URL = retrieveNationalArticleURL(status, offset);
-            returnedResponse = await axios.get(NATIONAL_API_URL);
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray
+            }
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('national', status, newParamObject);
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
             articlesArray = returnedResponse.data;
             // #toDo: this needs to be done either on back-end or within the individual component
                      
         } else if (region === 'Global') {
-            const GLOBAL_API_URL = retrieveGlobalArticleURL(status, offset);
-            returnedResponse = await axios.get(GLOBAL_API_URL);
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray
+            }
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('global', status, newParamObject);
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
             articlesArray = returnedResponse.data;
                    
+        } else  if (region === 'all') {
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray
+            }
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('all', status, newParamObject);            
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
+            articlesArray = returnedResponse.data;
+            // let articleCount = returnedResponse.data.articleCount[0].count;
+            // this.setState({articleCount})
         } else {
-            const MODERATOR_API_URL = retrieveArticlesURL(status, region, offset); // #Need to change the offset initially
-            returnedResponse = await axios.get(MODERATOR_API_URL);
-            articlesArray = returnedResponse.data.articlesArray;
-            let articleCount = returnedResponse.data.articleCount[0].count;
-            this.setState({articleCount})
+            console.log('STATE REGION HIT', region)
+            newParamObject = {
+                offset: offset,
+                sourceArray: sourceArray,
+                state: region
+            }
+            const ARTICLE_URL_ENDPOINT = retrieveArticleURL('state', status, newParamObject);            
+            returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
+            articlesArray = returnedResponse.data;
         }
         console.log('Returned response from back-end', returnedResponse);
         let articleFeedObject = transformIntoArticleObject(articlesArray)
@@ -171,6 +195,7 @@ class ModeratorCurateComponent extends PureComponent {
             status: status,
             region: this.state.locationFilter,
             offset: 0,
+            sourceArray: this.state.newsSourceFilterArray
         }
         // Call the retrieveArticle function to retrieve articles
         
@@ -199,6 +224,7 @@ class ModeratorCurateComponent extends PureComponent {
             status: this.state.statusFilter,
             region: location, // #toDo: get rid of this useless ternary operator,
             offset: 0,
+            sourceArray: this.state.newsSourceFilterArray
         }
 
         // Ensures that we're able to use the numOfArticles returned as an offset later for pagination
@@ -213,46 +239,46 @@ class ModeratorCurateComponent extends PureComponent {
         this.goBackToArticleFeed()
     }
 
-    retrieveMoreArticles = async () => {
-        const articleLength = Object.keys(this.state.articleFeed).length;
-        console.log(`Offset is ${articleLength}`);
-        let status = this.state.statusFilter, region = this.state.locationFilter, offset = articleLength;
-        let returnedResponse, URL, articlesArray, articleCount;
+    // retrieveMoreArticles = async () => {
+    //     const articleLength = Object.keys(this.state.articleFeed).length;
+    //     console.log(`Offset is ${articleLength}`);
+    //     let status = this.state.statusFilter, region = this.state.locationFilter, offset = articleLength;
+    //     let returnedResponse, URL, articlesArray, articleCount;
 
-        if (region === 'National') {
-            URL = retrieveNationalArticleURL(status, offset);
-            returnedResponse = await axios.get(URL);
-            articlesArray = returnedResponse.data ? returnedResponse.data : [];
-        } else if (region === 'Global') {
-            URL = retrieveGlobalArticleURL(status, offset);
-            returnedResponse = await axios.get(URL);
-            articlesArray = returnedResponse.data ? returnedResponse.data : [];
-        } else {
-            URL = retrieveArticlesURL(status, region, offset);
-            returnedResponse = await axios.get(URL);
-            articlesArray = returnedResponse.data.articlesArray;
-            articleCount = returnedResponse.data.articleCount[0].count;
-        }
-        console.log(`Returned response`);
-        console.log(returnedResponse);
-        // #toDo: this needs to be done either on back-end or within the individual component
-        let articleFeedObject = transformIntoArticleObject(articlesArray)
-        let hashOfArticleIDs = createObjectOfArticleIDs(articlesArray);
+    //     if (region === 'National') {
+    //         URL = retrieveNationalArticleURL(status, offset);
+    //         returnedResponse = await axios.get(URL);
+    //         articlesArray = returnedResponse.data ? returnedResponse.data : [];
+    //     } else if (region === 'Global') {
+    //         URL = retrieveGlobalArticleURL(status, offset);
+    //         returnedResponse = await axios.get(URL);
+    //         articlesArray = returnedResponse.data ? returnedResponse.data : [];
+    //     } else {
+    //         URL = retrieveArticlesURL(status, region, offset);
+    //         returnedResponse = await axios.get(URL);
+    //         articlesArray = returnedResponse.data.articlesArray;
+    //         articleCount = returnedResponse.data.articleCount[0].count;
+    //     }
+    //     console.log(`Returned response`);
+    //     console.log(returnedResponse);
+    //     // #toDo: this needs to be done either on back-end or within the individual component
+    //     let articleFeedObject = transformIntoArticleObject(articlesArray)
+    //     let hashOfArticleIDs = createObjectOfArticleIDs(articlesArray);
  
-        // Merge the objects together
-        const previousArticleFeed = this.state.articleFeed;
-        const previousSelectedArticles = this.state.selectedArticles;
+    //     // Merge the objects together
+    //     const previousArticleFeed = this.state.articleFeed;
+    //     const previousSelectedArticles = this.state.selectedArticles;
         
-        articleFeedObject = Object.assign({}, previousArticleFeed, articleFeedObject);
-        hashOfArticleIDs = Object.assign({}, previousSelectedArticles, hashOfArticleIDs);
+    //     articleFeedObject = Object.assign({}, previousArticleFeed, articleFeedObject);
+    //     hashOfArticleIDs = Object.assign({}, previousSelectedArticles, hashOfArticleIDs);
 
-        this.setState({
-            articleFeed: articleFeedObject,
-            selectedArticles: hashOfArticleIDs,
-            articleCount: articleCount
-        })
+    //     this.setState({
+    //         articleFeed: articleFeedObject,
+    //         selectedArticles: hashOfArticleIDs,
+    //         articleCount: articleCount
+    //     })
 
-    }
+    // }
 
     retrieveNewsSources = async () => {
         const SOURCE_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/sources';
@@ -269,11 +295,30 @@ class ModeratorCurateComponent extends PureComponent {
     }
 
     addNewsSourceToFilter = (newNewsSourceURL) => {
-        console.log('News source added to filter', newNewsSourceURL);
-        let newsSourceFilterArray = [...this.state.newsSourceFilterArray];
-        console.log('News source array', newsSourceFilterArray);
-        newsSourceFilterArray.push(newNewsSourceURL);
-        this.setState({newsSourceFilterArray: newsSourceFilterArray});
+        console.log('NEWS SOURCE URL', newNewsSourceURL)
+        if (newNewsSourceURL !== 'placeholder') {
+            console.log('News source added to filter', newNewsSourceURL);
+            let newsSourceFilterArray = [...this.state.newsSourceFilterArray];
+            console.log('News source array', newsSourceFilterArray);
+    
+            // Source_id are currently set to 'sfchronicle.com/'. Adding the '/' in the API call creates problems
+            // So it needs to be removed from the URL before it's sent. It is re-added on the back-end server so that
+            // the string comparison can be made and articles can be found for 'sfchronicle.com/'
+            // #toDo: ideally remove the '/' at the end of the URL on the back-end
+            let newsSource = newNewsSourceURL.split('/')[0];
+            newsSourceFilterArray.push(newsSource);
+    
+            this.setState({newsSourceFilterArray: newsSourceFilterArray});
+            
+            const paramObject = {
+                offset: 0,
+                region: this.state.locationFilter,
+                status: this.state.statusFilter,
+                sourceArray: newsSourceFilterArray
+            }
+    
+            this.retrieveArticle(paramObject);
+        }
     }
 
     deleteNewsSourceFromFilter = (newsSourceURL) => {
@@ -281,6 +326,15 @@ class ModeratorCurateComponent extends PureComponent {
         let newsSourceFilterArray = [...this.state.newsSourceFilterArray];
         newsSourceFilterArray = removeElementFromArray(newsSourceURL, newsSourceFilterArray);
         this.setState({newsSourceFilterArray})
+
+        const paramObject = {
+            offset: 0,
+            region: this.state.locationFilter,
+            status: this.state.statusFilter,
+            sourceArray: newsSourceFilterArray
+        }
+
+        this.retrieveArticle(paramObject);
 
     }
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
@@ -456,7 +510,8 @@ class ModeratorCurateComponent extends PureComponent {
         const paramObject = {
             region: this.state.locationFilter,
             status: this.state.statusFilter,
-            offset: 0
+            offset: 0,
+            sourceArray: this.state.newsSourceFilterArray
         }
 
         this.retrieveArticle(paramObject);
