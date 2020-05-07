@@ -107,6 +107,33 @@ const TinyArticleGrid = styled(TinyGrid)`
         background-color: ${props => props.modStatus != 'pending' ? 'transparent' : '#B2ACFA'};
     }
 `
+const ArticleGridApproveReject = styled(TinyGrid)`
+    flex-direction: column;
+    background-color: transparent;
+    height: 100%;
+`
+
+const ApproveRejectButton = styled.div`
+    height: 50%;
+    width: 100%;
+    background-color: ${props => props.id === 'approve' ?   '#1AAE9F' : '#D3455B'};
+    text-align: center;
+    align-items: center;
+    color: white;
+    display: flex;
+    font-size: 14px;
+    font-weight: 500;
+    &:hover {
+        background-color: ${props => props.id === 'approve' ?   '#179a8d' : '#ad384a'};
+    } 
+`
+
+const Text = styled.p`
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+`
 
 class ModeratorArticleComponent extends Component {
     constructor(props){
@@ -149,6 +176,18 @@ class ModeratorArticleComponent extends Component {
 
                         }
                     </TinyArticleGrid>
+                    <ArticleGridApproveReject>
+                        { this.props.articleObject.mod_status === 'pending' &&
+                            <>
+                            <ApproveRejectButton id='approve' onClick={() => this.props.approveArticleAndDeleteFromFeed(articleID)}>
+                                <Text> Approve </Text>
+                            </ApproveRejectButton>
+                            <ApproveRejectButton id='reject' onClick={() => this.props.rejectArticleAndDeleteFromFeed(articleID)}>
+                                <Text> Reject </Text>
+                            </ApproveRejectButton>
+                            </>
+                        }
+                    </ArticleGridApproveReject>
                     <LargeArticleGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex, articleObject)} id={articleID}>
                         {/* <ArticleImage src={this.props.articleObject.image_url} /> */}
                         <ArticleText>

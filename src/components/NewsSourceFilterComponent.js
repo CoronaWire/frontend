@@ -213,7 +213,7 @@ class NewsSourceFilterComponent extends Component {
                             optionsList
                         }
                     </DropDownListWrapper>
-                    <Button onClick={this.props.clearNewsSourceFilter}> Clear Sources </Button>
+                    <Button onClick={this.clearNewsSourceFilter}> Clear Sources </Button>
                 </FilterBarWrapper>
                 <FilterBarWrapperOverflow>
                     {NewsFilters}

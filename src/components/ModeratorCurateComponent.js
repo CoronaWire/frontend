@@ -221,7 +221,7 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({
             locationFilter: location
         })
-
+        console.log('Location changed to ', location)
         // #toDo: function name and location in state should be changed
         // Object passed in order to retrieve articles by status
         const paramObject = {
@@ -363,9 +363,9 @@ class ModeratorCurateComponent extends PureComponent {
     addNewsSourceToFilter = (newNewsSourceURL) => {
         console.log('NEWS SOURCE URL', newNewsSourceURL)
         if (newNewsSourceURL !== 'placeholder') {
+            
             console.log('News source added to filter', newNewsSourceURL);
             let newsSourceFilterArray = [...this.state.newsSourceFilterArray];
-
             console.log('News source array', newsSourceFilterArray);
     
             // Source_id are currently set to 'sfchronicle.com/'. Adding the '/' in the API call creates problems
@@ -428,7 +428,7 @@ class ModeratorCurateComponent extends PureComponent {
             sourceArray: []
         }
 
-        this.retrieveArticle(paramObject);
+        // this.retrieveArticle(paramObject);
     }
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
     // to be the simplest solution in order to ensure that we can update our components accordingly
@@ -555,12 +555,28 @@ class ModeratorCurateComponent extends PureComponent {
         try {
             let approveArticleResponse = await axios.put(URL, { articleIDArray: articleIDArray });
             console.log('Approve article', approveArticleResponse);
+            // Used to reset the state in order to eliminate the article from the queue since it's been approved
         } catch (error) {
             console.error(`Error caught in approveIndividualArticle function ${error}`)
         }
     }
 
-    rejetIndividualArticle = async (articleID) => {
+    approveArticleAndDeleteFromFeed = async (articleID) => {
+        console.log('Approving article and deleting from feed')
+        const URL = APPROVE_ARTICLE_URL;
+        let articleIDArray = [articleID];
+        console.log('Article ID Array', articleIDArray)
+        try {
+            let approveArticleResponse = await axios.put(URL, { articleIDArray: articleIDArray });
+            console.log('Approve article', approveArticleResponse);
+            // Used to reset the state in order to eliminate the article from the queue since it's been approved
+            this.deleteArticleFromFeed(articleID);
+        } catch (error) {
+            console.error(`Error caught in approveIndividualArticle function ${error}`)
+        }
+    }
+
+    rejectIndividualArticle = async (articleID) => {
         // const articleFeed = {...this.state.articleFeed};
         // articleFeed[articleID].mod_status = 'Rejected';
         // this.setState({articleFeed})
@@ -569,8 +585,23 @@ class ModeratorCurateComponent extends PureComponent {
         try {
             let rejectArticleResponse = await axios.put(URL, { articleIDArray: articleIDArray });
             console.log('Reject article', rejectArticleResponse);
+            // Used to reset the state in order to eliminate the article from the queue since it's been rejected
         } catch (error) {
-            console.error(`Error caught in rejetIndividualArticle function ${error}`)
+            console.error(`Error caught in rejectIndividualArticle function ${error}`)
+        }
+    }
+
+    rejectArticleAndDeleteFromFeed = async (articleID) => {
+        console.log('Rejecting article & deleting from feed')
+        const URL = REJECT_ARTICLE_URL;
+        let articleIDArray = [articleID];
+        try {
+            let rejectArticleResponse = await axios.put(URL, { articleIDArray: articleIDArray });
+            console.log('Reject article', rejectArticleResponse);
+            // Used to reset the state in order to eliminate the article from the queue since it's been rejected
+            this.deleteArticleFromFeed(articleID)
+        } catch (error) {
+            console.error(`Error caught in rejectIndividualArticle function ${error}`)
         }
     }
     
@@ -673,7 +704,7 @@ class ModeratorCurateComponent extends PureComponent {
         const articleObject = articleFeed[articleKey]
         const articleID = articleObject.article_id;
         this.nextArticle();
-        this.rejetIndividualArticle(articleID);
+        this.rejectIndividualArticle(articleID);
         this.deleteArticleFromFeed(articleKey);
 
     }
@@ -772,6 +803,8 @@ class ModeratorCurateComponent extends PureComponent {
                         articleFeed={this.state.articleFeed}
                         selectIndividualArticle={this.selectIndividualArticle}
                         retrieveMoreArticles={this.retrieveMoreArticles}
+                        approveArticleAndDeleteFromFeed={this.approveArticleAndDeleteFromFeed}
+                        rejectArticleAndDeleteFromFeed={this.rejectArticleAndDeleteFromFeed}
                         />
                         :
                         <ModeratorIndividualArticleComponent 
