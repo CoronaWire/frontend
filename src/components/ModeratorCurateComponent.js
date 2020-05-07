@@ -273,7 +273,7 @@ class ModeratorCurateComponent extends PureComponent {
         this.retrieveNewsSources(location);
 
         // Clear out the newsSourceFilterArray
-        // this.clearNewsSourceFilter(); 
+        this.clearNewsSourceFilter(); 
 
         // Call the retrieveArticle function to retrieve articles
         this.retrieveArticle(paramObject);
@@ -456,14 +456,14 @@ class ModeratorCurateComponent extends PureComponent {
             newsSourceFilterArray: []
         })
 
-        const paramObject = {
-            status: this.state.statusFilter,
-            region: this.state.locationFilter,
-            offset: 0,
-            sourceArray: []
-        }
+        // const paramObject = {
+        //     status: this.state.statusFilter,
+        //     region: this.state.locationFilter,
+        //     offset: 0,
+        //     sourceArray: []
+        // }
 
-        this.retrieveArticle(paramObject);
+        // this.retrieveArticle(paramObject);
     }
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
     // to be the simplest solution in order to ensure that we can update our components accordingly
