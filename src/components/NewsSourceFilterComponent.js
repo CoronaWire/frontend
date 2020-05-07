@@ -146,6 +146,27 @@ const NewsSourceCancelButton = styled.p`
     background-color: white
 `
 
+const Button = styled.button`
+    margin-left: 17px;
+    outline: none;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border: solid 2px #6558f5;
+    color: black;
+    border-radius: 5px;
+    background-color: white
+    &:hover {
+        color: white;
+        background-color: #6558f5;
+    }
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+`
+
 class NewsSourceFilterComponent extends Component {
     constructor(props){
         super(props);
@@ -181,7 +202,7 @@ class NewsSourceFilterComponent extends Component {
             <NewsSourceFilterWrapper>
                 <FilterBarWrapper>
                     <FilterBarTitle>
-                        News Sources filter: 
+                        Add Sources filter: 
                     </FilterBarTitle>
                     <DropDownListWrapper onChange={(event) => this.props.addNewsSourceToFilter(event.target.value)}>
                         {/* Added here so that the first option is not a source but an empty space. 'placeholder' value added
@@ -192,6 +213,7 @@ class NewsSourceFilterComponent extends Component {
                             optionsList
                         }
                     </DropDownListWrapper>
+                    <Button onClick={this.props.clearNewsSourceFilter}> Clear Sources </Button>
                 </FilterBarWrapper>
                 <FilterBarWrapperOverflow>
                     {NewsFilters}

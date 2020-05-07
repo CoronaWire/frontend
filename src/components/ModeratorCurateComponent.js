@@ -407,9 +407,19 @@ class ModeratorCurateComponent extends PureComponent {
     // Ensures that the news source array is cleared out whenever the user toggles the location. Different location potentially implies
     // different news sources available
     clearNewsSourceFilter = () => {
+        console.log('Called clear news sources filter')
         this.setState({
             newsSourceFilterArray: []
         })
+
+        const paramObject = {
+            status: this.state.statusFilter,
+            region: this.state.locationFilter,
+            offset: 0,
+            sourceArray: []
+        }
+
+        this.retrieveArticle(paramObject);
     }
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
     // to be the simplest solution in order to ensure that we can update our components accordingly
@@ -732,6 +742,7 @@ class ModeratorCurateComponent extends PureComponent {
                             addNewsSourceToFilter={this.addNewsSourceToFilter}
                             newsSourceFilterArray={this.state.newsSourceFilterArray}
                             deleteNewsSourceFromFilter={this.deleteNewsSourceFromFilter}
+                            clearNewsSourceFilter={this.clearNewsSourceFilter}
                             />
                             :
                             <IndividualArticleTopActionComponent 
