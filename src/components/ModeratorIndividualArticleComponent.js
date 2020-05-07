@@ -156,7 +156,8 @@ class ModeratorIndividualArticleComponent extends Component {
             country: props.articleObject.country,
             contentTypeDisplayed: 'Outline',
             articleURL: props.articleObject.article_url,
-            outline: 'https://outline.com/' + props.articleObject.article_url
+            outline: 'https://outline.com/' + props.articleObject.article_url,
+            specificity: props.articleObject.specificity
         }
     }
 
@@ -187,7 +188,7 @@ class ModeratorIndividualArticleComponent extends Component {
         const outlineURL = 'https://outline.com/' + articleURL;
         const dropdownOptions = ['Local', 'Regional', 'National', 'Global'];
         const defaultOption = dropdownOptions[0];
-
+        console.log('Specificity of this object is', specificity);
         return (
             <IndividualArticleWrapper>
                 <HalfGrid>
@@ -221,15 +222,16 @@ class ModeratorIndividualArticleComponent extends Component {
                             Specificity
                             </InputTitle>
                             <DropDownListWrapper onChange={this.dropdownChange} >
-                                <DropDownListOption id='' value=''>  </DropDownListOption>
-                                <DropDownListOption id='local' value='local'> Local </DropDownListOption>
-                                <DropDownListOption id='regional' value='regional'> Regional </DropDownListOption>
-                                <DropDownListOption id='national' value='national'> National </DropDownListOption>
-                                <DropDownListOption id='global' value='global'> Global </DropDownListOption>
+                                <DropDownListOption id='' value='null' selected={this.state.specificity === null ? 'selected': ''}> Not Specified </DropDownListOption>
+                                <DropDownListOption id='local' value='local' selected={this.state.specificity === 'local' ? 'selected': ''}> Local </DropDownListOption>
+                                <DropDownListOption id='regional' value='regional' selected={this.state.specificity ===  'regional' ? 'selected': ''} > Regional </DropDownListOption>
+                                <DropDownListOption id='national' value='national' selected={this.state.specificity === 'national' ? 'selected': ''}> National </DropDownListOption>
+                                <DropDownListOption id='global' value='global' selected={this.state.specificity === 'global' ? 'selected': ''}> Global </DropDownListOption>
                             </DropDownListWrapper>
                         </InputWrapper>
-                        {
-                            fipsProcessed === true &&
+                        { 
+                            // Currently only shows the City, State, Country fields if it's fips_processed = Location associated with article by our cron job 'successfully'
+                            fipsProcessed === true && 
                             <>
                             <InputWrapper>
                                 <InputTitle>
