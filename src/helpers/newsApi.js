@@ -10,14 +10,9 @@ const resolvePath = ({ scope, location, options }) => {
     case 'national':
       return `/articles/scope/${scope}/`;
     case 'local':
-      const { countyFipsCode, state, lat, lng } = location;
-      const { localType } = options;
-      if (localType === 'fips') {
-        return `/articles/scope/fips/${countyFipsCode}/`;
-      } else if (localType === 'coord') {
-        return `/articles/scope/local/${lat},${lng}/`;
-      }
-      return `/articles/scope/regional/${state}/`;
+      const { lat, lng } = location;
+      return `/articles/scope/local/${lat},${lng}/`;
+      // return `/articles/scope/regional/${state}/`;
     default:
       throw new Error('Please specify scope');
       return '';
@@ -28,12 +23,11 @@ export const fetchArticles = async ({
   scope,
   location = {},
   query = {},
-  options = {},
 }) => {
   const apiUrl = process.env.REACT_APP_NEWS_API_URL;
   const params = queryToParams(query);
   const paramsFragment = params ? `?${params}` : '';
-  const pathFragment = resolvePath({ location, scope, options });
+  const pathFragment = resolvePath({ location, scope });
   try {
     return await axios.get(`${apiUrl}${pathFragment}${paramsFragment}`);
   } catch (err) {
