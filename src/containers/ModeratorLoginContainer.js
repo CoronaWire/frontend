@@ -42,6 +42,9 @@ const Header = styled.div`
     flex-direction: row;
     justify-content: left;
     align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
 `
 
 const HeaderLink = styled(LargeText)`
