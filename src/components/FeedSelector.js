@@ -53,6 +53,5 @@ export const FeedSelector = ({ activeFeed, setActiveFeed }) => (
         />
       </React.Fragment>
     ))}
-    <EndDivider />
   </Container>
 );
