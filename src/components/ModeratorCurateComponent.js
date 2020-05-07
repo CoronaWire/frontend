@@ -239,6 +239,8 @@ class ModeratorCurateComponent extends PureComponent {
 
         // Retrieves all news sources for the region
         this.retrieveNewsSources(location);
+        // Clear out the newsSourceFilterArray
+        this.clearNewsSourceFilter();
         // Call the retrieveArticle function to retrieve articles
         this.retrieveArticle(paramObject);
         // Makes sure we go back to article feed component
@@ -400,6 +402,14 @@ class ModeratorCurateComponent extends PureComponent {
 
         this.retrieveArticle(paramObject);
 
+    }
+
+    // Ensures that the news source array is cleared out whenever the user toggles the location. Different location potentially implies
+    // different news sources available
+    clearNewsSourceFilter = () => {
+        this.setState({
+            newsSourceFilterArray: []
+        })
     }
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
     // to be the simplest solution in order to ensure that we can update our components accordingly
