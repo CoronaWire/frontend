@@ -2,16 +2,12 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 // Internal Modules
+import { media } from './../helpers/media';
 import LeftMenuButtonComponent from './LeftMenuComplexButtonComponent';
 import DividingLine from '../styledComponents/DividingLine';
 import { B1, Container, Button } from './core';
 
 // #toDo: Needs to be connected to parent component, Dashboard and send up the actual news
-
-const LeftMenuWrapper = styled.div`
-  background-color: transparent;
-  width: 100%
-`
 
 const Separator = styled(DividingLine)`
   ${({ theme }) => `background-color: ${theme.newsColors.midGrey}`};
@@ -41,6 +37,9 @@ const MenuContent = styled(Container)`
 const FeedbackText = styled(B1)`
   ${({ theme }) => `color: ${theme.newsColors.navy}`};
   margin-bottom: 16px;
+  ${media.mobile`
+    ${({ theme }) => `color: ${theme.newsColors.lightGrey}`};
+  `};
 `;
 
 const FeedbackButton = styled(Button)`
@@ -49,6 +48,11 @@ const FeedbackButton = styled(Button)`
     color: ${theme.newsColors.white};
   `};
   text-transform: uppercase;
+`;
+
+const LeftMenuWrapper = styled.div`
+  background-color: transparent;
+  width: 100%
 `;
 
 const LeftClientMenuComponent = () => (

@@ -17,7 +17,9 @@ import TabularButton from '../styledComponents/TabularButton';
 import store from '../store/store';
 import { signoutUser } from '../actionCreators/actions';
 import { MobileFeedSelector } from './../components/MobileFeedSelector';
+import { HamburgerMenu } from './../components/HamburgerMenu';
 import { media } from './../helpers/media';
+import { Container } from './../components/core';
 
 // #toDo: move all exports to index.js file to make quicker imports?
 // #toDo #UIUX: figure out mobile responsiveness look
@@ -26,7 +28,6 @@ import { media } from './../helpers/media';
 const LogoContainer = styled.div`
   width: 183px;
   ${media.mobile`
-    margin-bottom: 21px;
     width: 137px;
   `};
 `;
@@ -172,6 +173,23 @@ const NavBarButton = styled(TabularButton)`
     background-color: transparent
 `
 
+const HamburgerSpace = styled.div`
+  width: 24px;
+`;
+
+const LogoWrapper = styled(Container)`
+  ${media.mobile`
+    width: 100%;
+    padding: 0 16px;
+    margin-bottom: 21px;
+  `};
+  ${media.aboveMobile`
+    & > svg:first-child, ${HamburgerSpace} {
+      display: none;
+    }
+  `};
+`;
+
 class AuthenticatedNavigationBar extends Component {
     constructor(props){
         super(props);
@@ -235,11 +253,15 @@ class UnauthenticatedNavigationBar extends Component {
     render(){
         return (
             <NavigationBarWrapper isAuthenticated={this.props.isAuthenticated} >
-              <Link to="/">
-                <LogoContainer>
-                  <LogoIcon width="100%" />
-                </LogoContainer>
-              </Link>
+              <LogoWrapper align="center" justify="space-between">
+                <HamburgerMenu />
+                <Link to="/">
+                  <LogoContainer>
+                    <LogoIcon width="100%" />
+                  </LogoContainer>
+                </Link>
+                <HamburgerSpace />
+              </LogoWrapper>
 
               <SearchBarContainer>
                 <SearchBarComponent />

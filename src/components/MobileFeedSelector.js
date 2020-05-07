@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation, useHistory } from 'react-router-dom';
 import { setScopeAction } from './../actionCreators/actions';
 import styled, { css } from 'styled-components';
 import { H3, Container } from './core';
@@ -36,14 +37,20 @@ const options = [
 
 export const MobileFeedSelector = () => {
   const activeScope = useSelector(({ newsFeed: { scope } }) => scope);
+  const location = useLocation();
+  const history = useHistory();
   const dispatch = useDispatch();
+  const handleSelect = (id) => {
+    dispatch(setScopeAction(id));
+    if (location.pathname !== '/') {
+      history.push('/');
+    }
+  };
   return (
     <Container width="100%">
       {options.map(({ id, name }, index) => (
         <Option
-          onClick={() => {
-            dispatch(setScopeAction(id));
-          }}
+          onClick={() => handleSelect(id)}
           total={options.length}
           active={id === activeScope}
           name={name}
