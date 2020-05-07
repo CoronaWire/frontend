@@ -198,7 +198,6 @@ class ModeratorLoginContainer extends Component{
                 })
                 console.log('Authentication result', authenticationResult);
                 let accessToken = authenticationResult.data.user.stsTokenManager.accessToken;
-                console.log('Access token', accessToken)
                 // Set token in the local storage to avoid authentication on Refresh
                 localStorage.setItem('token', accessToken);
 

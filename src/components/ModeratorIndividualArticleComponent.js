@@ -22,13 +22,13 @@ const ArticleDataWrapper = styled.div`
     flex-direction: column;
     margin: auto auto;
     margin-bottom: 50px;
-    padding-bottom: 50px;
-`;
+`; //     padding-bottom: 50px;
+
 
 const InputTitle = styled.p`
     background-color: transparent;
     font-size: 14px;
-    color: black;
+    color: ${props => props.success ? '#1AAE9F' : 'black'};
     margin-bottom: 5px;
     display: inline-block;
     font-weight: 600;
@@ -72,6 +72,10 @@ const InputWrapper = styled.div`
     background-color: transparent;
     display: flex;
     flex-direction: column;
+`
+
+const LastInputWrapper = styled(InputWrapper)`
+    margin-top: 40px;
 `
 
 const IFrame = styled.iframe`
@@ -221,12 +225,17 @@ class ModeratorIndividualArticleComponent extends Component {
                             <InputTitle>
                             Specificity
                             </InputTitle>
-                            <DropDownListWrapper onChange={this.dropdownChange} >
-                                <DropDownListOption id='' value='null' selected={this.state.specificity === null ? 'selected': ''}> Not Specified </DropDownListOption>
+                            <DropDownListWrapper onChange={this.dropdownChange} defaultValue={this.state.specificity}>
+                                {/* <DropDownListOption id='' value={null} selected={this.state.specificity === null ? 'selected': ''}> Not Specified </DropDownListOption>
                                 <DropDownListOption id='local' value='local' selected={this.state.specificity === 'local' ? 'selected': ''}> Local </DropDownListOption>
                                 <DropDownListOption id='regional' value='regional' selected={this.state.specificity ===  'regional' ? 'selected': ''} > Regional </DropDownListOption>
                                 <DropDownListOption id='national' value='national' selected={this.state.specificity === 'national' ? 'selected': ''}> National </DropDownListOption>
-                                <DropDownListOption id='global' value='global' selected={this.state.specificity === 'global' ? 'selected': ''}> Global </DropDownListOption>
+                                <DropDownListOption id='global' value='global' selected={this.state.specificity === 'global' ? 'selected': ''}> Global </DropDownListOption> */}
+                                <DropDownListOption id='' value={null} > Not Specified </DropDownListOption>
+                                <DropDownListOption id='local' value='local' > Local </DropDownListOption>
+                                <DropDownListOption id='regional' value='regional'  > Regional </DropDownListOption>
+                                <DropDownListOption id='national' value='national' > National </DropDownListOption>
+                                <DropDownListOption id='global' value='global' > Global </DropDownListOption>
                             </DropDownListWrapper>
                         </InputWrapper>
                         { 
@@ -252,7 +261,21 @@ class ModeratorIndividualArticleComponent extends Component {
                                 <SmallTextField id='country' value={country} onChange={this.handleChange}>
                                 </SmallTextField>
                             </InputWrapper>
+                            <LastInputWrapper>
+                                <InputTitle success>
+                                    Article successfully fips_processed. Locations associated to it found above.
+                                </InputTitle>
+                            </LastInputWrapper>
+                        
                             </>
+                        }
+                        {
+                            fipsProcessed === false &&
+                            <LastInputWrapper>
+                                <InputTitle>
+                                    Article hasn't been fips_processed yet. No locations associated to it for the moment.
+                                </InputTitle>
+                            </LastInputWrapper>
                         }
                     </ArticleDataWrapper>
                 </HalfGrid>

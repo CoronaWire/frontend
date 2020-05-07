@@ -6,18 +6,16 @@ export const ErrorText = styled.div`
     color: red;
     font-size: 12px;
 `
-
-export const MediumText = styled.p`
-    font-size: 14px;
-    color: black;
-    font-weight: 600;
-    background-color: transparent;
-    display: inline-block;
-`
-
-export const SmallText = styled(MediumText)`
+export const SmallText = styled.p`
     font-size: 12px;
+    color: black;
+    background-color: transparent;
+    font-weight: 600;
 `
+
+export const MediumText = styled(SmallText)`
+    font-size: 14px;
+`;
 
 export const LargeText = styled(MediumText)`
     font-size: 15px;
@@ -48,4 +46,4 @@ export const GradientText = styled.p`
     font-size: 16px;
     cursor: pointer;
     font-weight: 600;
-`
+`;
