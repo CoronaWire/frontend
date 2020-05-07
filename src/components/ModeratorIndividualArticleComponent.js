@@ -273,7 +273,7 @@ class ModeratorIndividualArticleComponent extends Component {
                             fipsProcessed === false &&
                             <LastInputWrapper>
                                 <InputTitle>
-                                    Article hasn't been fips_processed. No locations associated to it yet.
+                                    Article hasn't been fips_processed yet. No locations associated to it for the moment.
                                 </InputTitle>
                             </LastInputWrapper>
                         }
