@@ -21,7 +21,15 @@ import NewsSourceFilterComponent from './NewsSourceFilterComponent';
 import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles, removeElementFromArray } from '../utilityFunctions';
 
 // URLs
-import { ARTICLE_URL, APPROVE_ARTICLE_URL, REJECT_ARTICLE_URL, MAKE_ARTICLE_PENDING_URL, retrieveArticleURL, retrieveAllSources, retrieveStateSources } from '../URL';
+import { ARTICLE_URL, 
+        APPROVE_ARTICLE_URL, 
+        REJECT_ARTICLE_URL, 
+        MAKE_ARTICLE_PENDING_URL, 
+        retrieveArticleURL, 
+        retrieveAllSources, 
+        retrieveStateSources, 
+        retrieveCountURL} 
+            from '../URL';
 
 // #toDo: create index.jsfile in styled components to get all of components out
 const FeedWrapper = styled.div`
@@ -106,6 +114,7 @@ class ModeratorCurateComponent extends PureComponent {
             currentlySelectedArticle: {},
             newsSourceArray: [],
             newsSourceFilterArray: [],
+            totalArticlesCount: 0,
         }
         // #comment: articles will be either stored in redux state or locally.
     }
@@ -130,7 +139,7 @@ class ModeratorCurateComponent extends PureComponent {
 
     retrieveArticle = async (paramObject) => {
         const { status, region, offset, sourceArray } = paramObject;
-        let returnedResponse, articlesArray;
+        let returnedResponse, articlesArray, returnedCountObject, totalArticlesCount;
         let newParamObject = {};
 
         if (region === 'National') {
@@ -141,7 +150,14 @@ class ModeratorCurateComponent extends PureComponent {
             const ARTICLE_URL_ENDPOINT = retrieveArticleURL('national', status, newParamObject);
             returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
             articlesArray = returnedResponse.data;
+
+            // Gets the total count of articles
+            const ARTICLE_COUNT_ENDPOINT = retrieveCountURL('national', status, newParamObject);
+            returnedCountObject = await axios.get(ARTICLE_COUNT_ENDPOINT);
+            totalArticlesCount = returnedCountObject.data[0].count;
             // #toDo: this needs to be done either on back-end or within the individual component
+            this.setState({totalArticlesCount})
+
                      
         } else if (region === 'Global') {
             newParamObject = {
@@ -151,7 +167,12 @@ class ModeratorCurateComponent extends PureComponent {
             const ARTICLE_URL_ENDPOINT = retrieveArticleURL('global', status, newParamObject);
             returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
             articlesArray = returnedResponse.data;
-                   
+
+            // Gets the total count of articles
+            const ARTICLE_COUNT_ENDPOINT = retrieveCountURL('global', status, newParamObject);
+            returnedCountObject = await axios.get(ARTICLE_COUNT_ENDPOINT);
+            totalArticlesCount = returnedCountObject.data[0].count;
+            this.setState({totalArticlesCount})
         } else  if (region === 'all') {
             newParamObject = {
                 offset: offset,
@@ -162,6 +183,12 @@ class ModeratorCurateComponent extends PureComponent {
             articlesArray = returnedResponse.data;
             // let articleCount = returnedResponse.data.articleCount[0].count;
             // this.setState({articleCount})
+
+            // Gets the total count of articles
+            const ARTICLE_COUNT_ENDPOINT = retrieveCountURL('all', status, newParamObject);
+            returnedCountObject = await axios.get(ARTICLE_COUNT_ENDPOINT);
+            totalArticlesCount = returnedCountObject.data[0].count;
+            this.setState({totalArticlesCount})
         } else {
             console.log('STATE REGION HIT', region)
             newParamObject = {
@@ -173,7 +200,12 @@ class ModeratorCurateComponent extends PureComponent {
             const ARTICLE_URL_ENDPOINT = retrieveArticleURL('state', status, newParamObject);            
             returnedResponse = await axios.get(ARTICLE_URL_ENDPOINT);
             articlesArray = returnedResponse.data;
-            
+
+            // Gets the total count of articles
+            const ARTICLE_COUNT_ENDPOINT = retrieveCountURL('state', status, newParamObject);
+            returnedCountObject = await axios.get(ARTICLE_COUNT_ENDPOINT);
+            totalArticlesCount = returnedCountObject.data[0].count;
+            this.setState({totalArticlesCount})
         }
         console.log('Returned response from back-end', returnedResponse);
         let articleFeedObject = transformIntoArticleObject(articlesArray)
@@ -239,8 +271,10 @@ class ModeratorCurateComponent extends PureComponent {
 
         // Retrieves all news sources for the region
         this.retrieveNewsSources(location);
+
         // Clear out the newsSourceFilterArray
-        this.clearNewsSourceFilter();
+        // this.clearNewsSourceFilter(); 
+
         // Call the retrieveArticle function to retrieve articles
         this.retrieveArticle(paramObject);
         // Makes sure we go back to article feed component
@@ -415,6 +449,7 @@ class ModeratorCurateComponent extends PureComponent {
 
     // Ensures that the news source array is cleared out whenever the user toggles the location. Different location potentially implies
     // different news sources available
+    // Unused for now
     clearNewsSourceFilter = () => {
         console.log('Called clear news sources filter')
         this.setState({
@@ -428,7 +463,7 @@ class ModeratorCurateComponent extends PureComponent {
             sourceArray: []
         }
 
-        // this.retrieveArticle(paramObject);
+        this.retrieveArticle(paramObject);
     }
     // Generally recommended to avoid nesting within React Component state, but in this case, it seems 
     // to be the simplest solution in order to ensure that we can update our components accordingly
@@ -750,7 +785,7 @@ class ModeratorCurateComponent extends PureComponent {
         // Array of all the different article_ids for the articles displayed. Allows us to loop through
         // list of articles when attempting to edit
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
-        const {articleCount} = this.state;
+        const {totalArticlesCount} = this.state;
         // Current article chosen by the user
         // console.log('Index of article displayed', this.state.articleDisplayedIndex)
         // console.log('Current article object', this.state.currentlySelectedArticle);
@@ -765,7 +800,7 @@ class ModeratorCurateComponent extends PureComponent {
                         <RegionStatusFilterComponent 
                             locationFilter={this.state.locationFilter} 
                             toggleLocationFilter={this.toggleLocationFilter}
-                            articleCount={articleCount} 
+                            totalArticlesCount={totalArticlesCount} 
                             statusFilter={this.state.statusFilter} 
                             changeStatusFilter={this.changeStatusFilter} 
                             />

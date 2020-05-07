@@ -136,7 +136,7 @@ class RegionStatusFilterComponent extends PureComponent {
                         {/* <NoBorderButton>
                             Add Area
                         </NoBorderButton> */}
-                        <MediumText> {this.props.articleCount} Total Articles </MediumText>
+                        <MediumText> {this.props.totalArticlesCount} Total Articles </MediumText>
 
                     </RightPositionedWrapper>
                 </FiltersWrapper>

@@ -33,7 +33,7 @@ const FilterBarWrapper = styled.div`
 
 const FilterBarWrapperOverflow = styled.div`
     overflow-x: scroll;
-    width: 60%;
+    width: 64%;
     height: 100%;
     background-color: transparent;
     white-space: nowrap;
@@ -41,8 +41,10 @@ const FilterBarWrapperOverflow = styled.div`
     align-items: center;
     flex-direction: row;
     padding-left: 20px;
-    border-left: 2px solid #DFE6ED
+    border-left: 2px solid #DFE6ED;
+    border-right: 2px solid #DFE6ED;
 `
+
 
 const FilterBarTitle = styled.p`
     font-size: 15px;
@@ -167,6 +169,14 @@ const Button = styled.button`
     cursor: pointer;
 `
 
+const RightText = styled.p`
+    display: inline-block;
+    color: black;
+    margin-left: 13px;
+    font-weight: 600;
+    font-size: 14px;
+`
+
 class NewsSourceFilterComponent extends Component {
     constructor(props){
         super(props);
@@ -176,7 +186,8 @@ class NewsSourceFilterComponent extends Component {
     }
 
     render() {
-
+        const sourcesLength = this.props.newsSourceFilterArray.length;
+        
         // Creates an array of options populated by all the news sources available in the database
         const optionsList = this.props.newsSourceArray.map((newsSourceURL) => {
             return <DropDownListOption value={newsSourceURL} id={newsSourceURL} >
@@ -213,11 +224,14 @@ class NewsSourceFilterComponent extends Component {
                             optionsList
                         }
                     </DropDownListWrapper>
-                    <Button onClick={this.clearNewsSourceFilter}> Clear Sources </Button>
+                    {/* <Button onClick={this.props.clearNewsSourceFilter}> Clear Sources </Button> */}
                 </FilterBarWrapper>
                 <FilterBarWrapperOverflow>
                     {NewsFilters}
                 </FilterBarWrapperOverflow>
+                <RightText>
+                    {sourcesLength} sources selected
+                </RightText>
             </NewsSourceFilterWrapper>
         )
     }
