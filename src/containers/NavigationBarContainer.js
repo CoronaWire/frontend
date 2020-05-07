@@ -206,6 +206,8 @@ class AuthenticatedNavigationBar extends Component {
 
     handleSignOut = () => {
         store.dispatch(signoutUser());
+        // Ensures that the user is logged out and token removed successfully
+        localStorage.removeItem('token');
     }
 
     render(){

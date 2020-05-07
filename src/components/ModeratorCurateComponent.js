@@ -260,7 +260,7 @@ class ModeratorCurateComponent extends PureComponent {
             status: this.state.statusFilter,
             region: location, // #toDo: get rid of this useless ternary operator,
             offset: 0,
-            sourceArray: this.state.newsSourceFilterArray
+            sourceArray: []
         }
 
         // Ensures that we're able to use the numOfArticles returned as an offset later for pagination
@@ -729,6 +729,7 @@ class ModeratorCurateComponent extends PureComponent {
         this.nextArticle();
         console.log('Current article ID', articleID);
         this.approveIndividualArticle(articleID);
+        this.saveArticleToDatabase();
         this.deleteArticleFromFeed(articleKey);
     }
 
@@ -740,6 +741,7 @@ class ModeratorCurateComponent extends PureComponent {
         const articleID = articleObject.article_id;
         this.nextArticle();
         this.rejectIndividualArticle(articleID);
+        this.saveArticleToDatabase();
         this.deleteArticleFromFeed(articleKey);
 
     }
