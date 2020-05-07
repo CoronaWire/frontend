@@ -10,7 +10,7 @@ import LoginInput from '../styledComponents/LoginInput';
 import LoginButton from '../styledComponents/LoginButton';
 import LoginForm from '../styledComponents/LoginForm';
 import LinkTypeText from '../styledComponents/LinkTypeText';
-import { ErrorText } from '../styledComponents/Text';
+import { ErrorText, LargeText } from '../styledComponents/Text';
 
 // Redux-related
 import store from '../store/store';
@@ -32,8 +32,40 @@ const ModeratorContainerWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-
+    flex-direction: column;
 `
+const Header = styled.div`
+    height: 80px;
+    width: 100vw;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+`
+
+const HeaderLink = styled(LargeText)`
+    color: white;
+    margin-left: 20px;
+    padding-bottom: 5px;
+    border-bottom: solid 2px transparent;
+    &:hover {
+        border-bottom: solid 2px white;
+    }
+    font-size: 17px;
+    transition: border-bottom 0.2s ease-in;
+    cursor: pointer;
+`
+
+const LoginBoxWrapper = styled.div`
+    height: 100%;
+    width: 100vw;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
 const FormHeaderText = styled.p`
     color: ${props => props.applicationInputColor};
     font-size: 24px;
@@ -224,50 +256,59 @@ class ModeratorLoginContainer extends Component{
         }
     }
 
+    goToNewsFeed = () => {
+        this.props.history.push('/');
+    }
+
     render() {
         // console.log('Re-rendered unsuccessfulConnectionStatus', this.state.unsuccessfulConnection)
         return(
             <ModeratorContainerWrapper>
-            <LoginContainerBox GlobalTheme={GlobalTheme} >
-            <LoginForm onSubmit={this.handleSignIn}>
-                <FormHeaderText GlobalTheme={GlobalTheme} >
-                    {this.state.headerText}
-                </FormHeaderText>
-                <LoginInput 
-                type="email" 
-                placeholder="Email" 
-                GlobalTheme={GlobalTheme} 
-                id="email" 
-                onChange={this.handleChange} 
-                InputStyling={this.state} 
-                value={this.state.email}/> 
-                <LoginInput 
-                type={this.state.showPassword ? "text" : "password"} 
-                placeholder="Password" onChange={this.handleChange} 
-                value={this.state.password} 
-                GlobalTheme={GlobalTheme} 
-                id="password"
-                InputStyling={this.state}
-                /> 
-                <CheckboxRememberMeContainer>
-                    <CheckboxContainer>
-                        <input type='checkbox' onClick={this.handleRememberMeClick} checked={this.state.rememberMeClicked} name='loginCheckbox' />
-                        <CheckboxLabel for='loginContainer'> Remember Me </CheckboxLabel>
-                    </CheckboxContainer>
+            <Header>
+                <HeaderLink onClick={this.goToNewsFeed}> Go to News Feed </HeaderLink>
+            </Header>
+            <LoginBoxWrapper>
+                <LoginContainerBox GlobalTheme={GlobalTheme} >
+                <LoginForm onSubmit={this.handleSignIn}>
+                    <FormHeaderText GlobalTheme={GlobalTheme} >
+                        {this.state.headerText}
+                    </FormHeaderText>
+                    <LoginInput 
+                    type="email" 
+                    placeholder="Email" 
+                    GlobalTheme={GlobalTheme} 
+                    id="email" 
+                    onChange={this.handleChange} 
+                    InputStyling={this.state} 
+                    value={this.state.email}/> 
+                    <LoginInput 
+                    type={this.state.showPassword ? "text" : "password"} 
+                    placeholder="Password" onChange={this.handleChange} 
+                    value={this.state.password} 
+                    GlobalTheme={GlobalTheme} 
+                    id="password"
+                    InputStyling={this.state}
+                    /> 
+                    <CheckboxRememberMeContainer>
+                        <CheckboxContainer>
+                            <input type='checkbox' onClick={this.handleRememberMeClick} checked={this.state.rememberMeClicked} name='loginCheckbox' />
+                            <CheckboxLabel for='loginContainer'> Remember Me </CheckboxLabel>
+                        </CheckboxContainer>
 
-                    {
-                        this.state.showPassword ? 
-                        <LinkTypeText GlobalTheme={GlobalTheme} onClick={this.handleShowPassword}> Hide Password </LinkTypeText> 
-                        : 
-                        <LinkTypeText GlobalTheme={GlobalTheme} onClick={this.handleShowPassword}> Show Password </LinkTypeText>
-                    }
-                </CheckboxRememberMeContainer>
+                        {
+                            this.state.showPassword ? 
+                            <LinkTypeText GlobalTheme={GlobalTheme} onClick={this.handleShowPassword}> Hide Password </LinkTypeText> 
+                            : 
+                            <LinkTypeText GlobalTheme={GlobalTheme} onClick={this.handleShowPassword}> Show Password </LinkTypeText>
+                        }
+                    </CheckboxRememberMeContainer>
 
-                <LoginErrorText  unsuccessfulConnectionStatus={this.state.unsuccessfulConnection} > Email or password information incorrect </LoginErrorText> 
-            
-                <LoginButtonWithGradient type="submit" GlobalTheme={GlobalTheme} disabled={!this.validateForm()} > Sign In </LoginButtonWithGradient>
-            </LoginForm>
-            </LoginContainerBox>
+                    <LoginErrorText  unsuccessfulConnectionStatus={this.state.unsuccessfulConnection} > Email or password information incorrect </LoginErrorText> 
+                
+                    <LoginButtonWithGradient type="submit" GlobalTheme={GlobalTheme} disabled={!this.validateForm()} > Sign In </LoginButtonWithGradient>
+                </LoginForm>
+                </LoginContainerBox>
+                </LoginBoxWrapper>
             </ModeratorContainerWrapper>
 
 
