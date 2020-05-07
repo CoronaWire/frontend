@@ -189,8 +189,8 @@ class NewsSourceFilterComponent extends Component {
         const sourcesLength = this.props.newsSourceFilterArray.length;
         
         // Creates an array of options populated by all the news sources available in the database
-        const optionsList = this.props.newsSourceArray.map((newsSourceURL) => {
-            return <DropDownListOption value={newsSourceURL} id={newsSourceURL} >
+        const optionsList = this.props.newsSourceArray.map((newsSourceURL, index) => {
+            return <DropDownListOption value={newsSourceURL} id={newsSourceURL} key={index}>
                 {newsSourceURL}
             </DropDownListOption>
         })
@@ -198,8 +198,8 @@ class NewsSourceFilterComponent extends Component {
         // Creates buttons representing each news sources used as an extra filter to moderate the articles
         // Has an 'x' on the side, representing a delete operation, which allows the moderator to remove the
         // news source from the filtering 
-        const NewsFilters = this.props.newsSourceFilterArray.map((newsSourceURL) => {
-            return <NewsSourceWrapper>
+        const NewsFilters = this.props.newsSourceFilterArray.map((newsSourceURL, index) => {
+            return <NewsSourceWrapper key={index}>
                     <NewsSourceText>
                         {newsSourceURL}
                     </NewsSourceText>
