@@ -61,3 +61,11 @@ export const retrieveArticleURL = (scope, status, paramObject) => {
         } 
     }
 }
+
+export const retrieveStateSources = (state) => {
+    return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/sources/scope/state?state=${state}`;
+}
+
+export const retrieveAllSources = () => {
+    return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/sources`
+}

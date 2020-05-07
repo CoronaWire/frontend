@@ -14,7 +14,7 @@ const NewsSourceFilterWrapper = styled.div`
     flex-direction: row;
     justify-content: left;
     align-items: center;
-    overflow-x: scroll;
+    overflow-x: auto;
     width: 100%;
     height: 100%;
 `
@@ -28,11 +28,20 @@ const FilterBarWrapper = styled.div`
     justify-content: center;
     align-items: center;
     width: auto;
-    overflow-x: scroll;
+    padding-right: 20px;
 `
 
-const FilterBarWrapperOverflow = styled(FilterBarWrapper)`
+const FilterBarWrapperOverflow = styled.div`
     overflow-x: scroll;
+    width: 60%;
+    height: 100%;
+    background-color: transparent;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    padding-left: 20px;
+    border-left: 2px solid #DFE6ED
 `
 
 const FilterBarTitle = styled.p`
@@ -76,7 +85,7 @@ const DropDownListOption = styled.option`
 `
 
 const NewsSourceWrapper = styled.div`
-    margin-right: 15px;
+    margin-left: 15px;
     height: 40px;
     width: auto;
     cursor: pointer;
@@ -87,13 +96,14 @@ const NewsSourceWrapper = styled.div`
         background-color: white;
     }
     display: inline-block;
+    flex: 0 0 auto;
 `; 
 // border: solid 1px black;
 
 const NewsSourceText = styled.p`
     font-weight: 600;
     color: black;
-    font-size: 15px;
+    font-size: 13px;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
     text-align: center;
@@ -121,7 +131,7 @@ const NewsSourceCancelButton = styled.p`
     text-align: center;
     width: 40px;
     height: 100%;
-    font-size: 15px;
+    font-size: 13px;
     box-sizing: border-box;
     margin-top: 0px;
     margin-bottom: 0px;
@@ -171,7 +181,7 @@ class NewsSourceFilterComponent extends Component {
             <NewsSourceFilterWrapper>
                 <FilterBarWrapper>
                     <FilterBarTitle>
-                        Add News Source to Filter: 
+                        News Sources filter: 
                     </FilterBarTitle>
                     <DropDownListWrapper onChange={(event) => this.props.addNewsSourceToFilter(event.target.value)}>
                         {/* Added here so that the first option is not a source but an empty space. 'placeholder' value added
