@@ -6,16 +6,18 @@ import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
-import { MediumText } from '../styledComponents/Text';
+import { SmallText } from '../styledComponents/Text';
 import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid } from '../styledComponents/GridLayout';
 import { OutlineButton } from '../styledComponents/Buttons';
 
 // Sub-Components
 import ModeratorArticleComponent from './ModeratorArticleComponent'
 
-const GreyMediumText = styled(MediumText)`
+const BoldSmallText = styled(SmallText)`
     color: #646464;
+    font-weight: 600;
 `;
+
 
 const ArticleFeedTitleBar = styled.div`
     height: 40px;
@@ -66,22 +68,22 @@ class ModeratorArticleFeedComponent extends PureComponent {
             <>
             <ArticleFeedTitleBar GlobalTheme={GlobalTheme} >
                 <TinyGrid >
-                    {/* <ParentCheckbox  allArticlesSelected={this.state.allArticlesSelected} onClick={this.selectAllArticles} /> */}
+                    <BoldSmallText> Select </BoldSmallText>
                 </TinyGrid>
                 <TinyGrid>
                     {/* Added here in order to make the alignment consistent with the below elements */}
                 </TinyGrid>
                 <LargeGrid> 
-                    <GreyMediumText> Article </GreyMediumText>
+                    <BoldSmallText> Article </BoldSmallText>
                 </LargeGrid>
                 <SmallGrid>
-                    <GreyMediumText> Source </GreyMediumText>
+                    <BoldSmallText> Source </BoldSmallText>
                 </SmallGrid>
                 <SmallGrid>
-                    <GreyMediumText> Published </GreyMediumText>
+                    <BoldSmallText> Published </BoldSmallText>
                 </SmallGrid>
                 <SmallGrid>
-                    <MediumText> Status </MediumText>
+                    <BoldSmallText> Status </BoldSmallText>
                 </SmallGrid>
             </ArticleFeedTitleBar>
             <ArticleFeedWrapper>

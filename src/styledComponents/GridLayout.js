@@ -30,6 +30,7 @@ export const MediumGrid = styled.div`
     padding-left: 20px;
     justify-content: center;
     align-items: center;
+    display: flex;
 `
 
 export const SmallGrid = styled.div`

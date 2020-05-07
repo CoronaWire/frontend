@@ -22,7 +22,7 @@ export const Button = styled.div`
 export const FilledButton = styled(Button)`
     background-color: #6558f5;
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     border-radius: 5px;
 `;
 
