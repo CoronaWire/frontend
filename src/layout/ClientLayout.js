@@ -19,7 +19,7 @@ const DashboardWrapper = styled.div`
   background-color: transparent;
   display: flex;
   flex-direction: row;
-  ${media.mobile`
+  ${media.mobileLayout`
     padding-top: 16px;
     margin-top: 147px;
   `};
@@ -30,7 +30,7 @@ const LeftSideContainer = styled.div`
   position: fixed;
   left: 0;
   top: 120px;
-  ${media.mobile`
+  ${media.mobileLayout`
     display: none;
   `};
 `
@@ -40,7 +40,7 @@ const MiddleContainer = styled.div`
   background-color: transparent;
   padding: 0 330px;
   margin-bottom: 80px;
-  ${media.mobile`
+  ${media.mobileLayout`
     width: 100%;
     padding: 0 16px;
     margin-bottom: 24px;
@@ -55,7 +55,7 @@ const RightSideContainer = styled.div`
   display: flex;
   justify-content: center;
   padding: 0 24px;
-  ${media.mobile`
+  ${media.mobileLayout`
     display: none;
   `};
 `
