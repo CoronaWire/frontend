@@ -8,7 +8,6 @@ import styled from 'styled-components';
 // Internal Modules
 import NewsDashboardComponent from '../components/MainDashboardComponent';
 import InformationFeedComponent from '../components/InformationFeedComponent';
-import { media } from './../helpers/media';
 import { ClientLayout } from './../layout/ClientLayout';
 
 const NewsDashboard = () => {

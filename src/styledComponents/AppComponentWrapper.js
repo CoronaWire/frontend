@@ -13,7 +13,7 @@ const AppComponentWrapper = styled.div`
   align-items: center;
   top: 0;
   left: 0;
-  ${media.aboveMobile`
+  ${media.desktopLayout`
     min-width: 600px;
   `};
   font-family: 'Muli', sans-serif;
