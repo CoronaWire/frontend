@@ -14,7 +14,7 @@ import GlobalTheme from '../styledComponents/GlobalTheme';
 import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
 import { LocalZeroState } from './ZeroState';
-import { Container, H3, H2 } from './core';
+import { Container, H3, H2, Button as BaseButton } from './core';
 
 // #toDo: make paddingLeft and marginLeft below 30px
 
@@ -114,6 +114,24 @@ const Title = styled(H2)`
   text-transform: uppercase;
 `;
 
+const ToggleButton = styled(BaseButton)`
+  ${({ theme, active }) => css`
+    background: ${theme.newsColors.pink};
+    color: ${theme.newsColors.white};
+    &:disabled {
+      background: ${theme.newsColors.midGrey};
+    }
+  `};
+  margin-left: 16px;
+  &:first-child {
+    margin-left: 0;
+  }
+`;
+
+const ToggleContainer = styled(Container)`
+  margin-bottom: 24px;
+`;
+
 // #toFix: set margin-left and right of both styled components through Global Theming or through
 // # a common stylesheet for a single source of truth
 // #toFix: also centralize border-radius of article cards
@@ -130,6 +148,7 @@ const STARTING_RADIUS = 0.1;
 const MainDashboardComponent = () => {
   const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
 
+ const [localType, setLocalType] = useState('coord');
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -137,15 +156,15 @@ const MainDashboardComponent = () => {
   const dispatch = useDispatch();
   const { scope, location } = useSelector(({ newsFeed }) => newsFeed);
 
-  const handleFetch = async (scope, location, query) => {
+  const handleFetch = async (scope, location, query, options) => {
     setLoading(true);
-    const data = await fetchArticles({ scope, location, query });
+    const data = await fetchArticles({ scope, location, query, options });
     const articles = data && data.data;
     if (articles) {
       setMainFeed(articles);
     }
     const length = articles && articles.length;
-    if (scope === 'local' && !length && radius < 0.5) {
+    if (options.localType === 'coord' && scope === 'local' && !length && radius < 0.5) {
       setRadius(query.radius + STARTING_RADIUS);
     } else {
       setLoading(false);
@@ -161,6 +180,7 @@ const MainDashboardComponent = () => {
       scope,
       location,
       query: { max, radius },
+      options: { localType },
     });
     if (data && data.data && data.data.length) {
       setMainFeed([...mainFeed, ...data.data]);
@@ -171,15 +191,20 @@ const MainDashboardComponent = () => {
 
   useEffect(() => {
     if (radius > STARTING_RADIUS) {
-      handleFetch(scope, location, { radius });
+      handleFetch(scope, location, { radius }, { localType });
     }
   }, [radius])
 
   useEffect(() => {
-    handleFetch(scope, location, { radius: STARTING_RADIUS });
+    handleFetch(
+      scope,
+      location,
+      { radius: STARTING_RADIUS },
+      { localType },
+    );
     setRadius(STARTING_RADIUS);
     setHasMore(true);
-  }, [scope, location]);
+  }, [scope, location, localType]);
 
   return (
     <OuterWrapper>
@@ -190,7 +215,7 @@ const MainDashboardComponent = () => {
           ))}
         </ButtonsContainer>
       )}
-      {scope !== 'local' && (
+      {scope !== 'local' ? (
         <React.Fragment>
           <BackToNews
             onClick={() => {
@@ -201,7 +226,25 @@ const MainDashboardComponent = () => {
           </BackToNews>
           <Title>{`${scope} news`}</Title>
         </React.Fragment>
-      )}
+      ) : (
+        <ToggleContainer flexColumn width="100%">
+          <Title>{`Showing results for "${localType}"`}</Title>
+          <Container>
+            <ToggleButton
+              onClick={() => setLocalType('coord')}
+              disabled={localType === 'coord'}
+            >
+              Lat / Long
+            </ToggleButton>
+            <ToggleButton
+              onClick={() => setLocalType('fips')}
+              disabled={localType === 'fips'}
+            >
+              FIPS
+            </ToggleButton>
+          </Container>
+        </ToggleContainer>
+			)}
       {!loading && scope === 'local' && !mainFeed.length ? (
         <LocalZeroState />
       ) : (
