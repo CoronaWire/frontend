@@ -115,11 +115,12 @@ const Title = styled(H2)`
 `;
 
 const ToggleButton = styled(BaseButton)`
-  ${({ theme, active }) => css`
-    background: ${theme.newsColors.pink};
+  ${({ theme }) => css`
+    background: ${theme.newsColors.midGrey};
     color: ${theme.newsColors.white};
     &:disabled {
-      background: ${theme.newsColors.midGrey};
+      background: ${theme.newsColors.pink};
+      cursor: not-allowed;
     }
   `};
   margin-left: 16px;
