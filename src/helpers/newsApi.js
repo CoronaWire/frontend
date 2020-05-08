@@ -12,7 +12,6 @@ const resolvePath = ({ scope, location, options }) => {
     case 'local':
       const { lat, lng } = location;
       return `/articles/scope/local/${lat},${lng}/`;
-      // return `/articles/scope/regional/${state}/`;
     default:
       throw new Error('Please specify scope');
       return '';
@@ -22,10 +21,11 @@ const resolvePath = ({ scope, location, options }) => {
 export const fetchArticles = async ({
   scope,
   location = {},
-  query = {},
+  query: { radius, ...query } = {},
 }) => {
   const apiUrl = process.env.REACT_APP_NEWS_API_URL;
-  const params = queryToParams(query);
+  const radiusQuery = scope === 'local' ? { radius } : {};
+  const params = queryToParams({ ...query, ...radiusQuery });
   const paramsFragment = params ? `?${params}` : '';
   const pathFragment = resolvePath({ location, scope });
   try {

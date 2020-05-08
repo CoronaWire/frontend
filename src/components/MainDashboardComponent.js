@@ -122,6 +122,10 @@ const NewsListWrapper = styled.div``;
 
 const OuterWrapper = styled.div``;
 
+const Loading = () => null;
+
+const STARTING_RADIUS = 0.1;
+
 // #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
 const MainDashboardComponent = () => {
   const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
@@ -129,16 +133,23 @@ const MainDashboardComponent = () => {
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [radius, setRadius] = useState(STARTING_RADIUS);
   const dispatch = useDispatch();
   const { scope, location } = useSelector(({ newsFeed }) => newsFeed);
 
-  const handleFetch = async (scope, location, options) => {
+  const handleFetch = async (scope, location, query) => {
     setLoading(true);
-    const data = await fetchArticles({ scope, location, options });
-    if (data && data.data) {
-      setMainFeed(data.data);
+    const data = await fetchArticles({ scope, location, query });
+    const articles = data && data.data;
+    if (articles) {
+      setMainFeed(articles);
     }
-    setLoading(false);
+    const length = articles && articles.length;
+    if (scope === 'local' && !length && radius < 0.5) {
+      setRadius(query.radius + STARTING_RADIUS);
+    } else {
+      setLoading(false);
+    }
   };
 
   const handleFetchMore = async () => {
@@ -149,7 +160,7 @@ const MainDashboardComponent = () => {
     const data = await fetchArticles({
       scope,
       location,
-      query: { max },
+      query: { max, radius },
     });
     if (data && data.data && data.data.length) {
       setMainFeed([...mainFeed, ...data.data]);
@@ -159,7 +170,14 @@ const MainDashboardComponent = () => {
   }
 
   useEffect(() => {
-    handleFetch(scope, location);
+    if (radius > STARTING_RADIUS) {
+      handleFetch(scope, location, { radius });
+    }
+  }, [radius])
+
+  useEffect(() => {
+    handleFetch(scope, location, { radius: STARTING_RADIUS });
+    setRadius(STARTING_RADIUS);
     setHasMore(true);
   }, [scope, location]);
 
@@ -190,7 +208,7 @@ const MainDashboardComponent = () => {
         <InfiniteScroll
           hasMore={!loading && hasMore}
           pageStart={0}
-          loader={() => null}
+          loader={<Loading />}
           loadMore={handleFetchMore}
         >
           <NewsListWrapper>
