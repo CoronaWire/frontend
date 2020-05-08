@@ -124,6 +124,8 @@ const OuterWrapper = styled.div``;
 
 const Loading = () => null;
 
+const STARTING_RADIUS = 0.1;
+
 // #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
 const MainDashboardComponent = () => {
   const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
@@ -131,7 +133,7 @@ const MainDashboardComponent = () => {
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [radius, setRadius] = useState(0.1);
+  const [radius, setRadius] = useState(STARTING_RADIUS);
   const dispatch = useDispatch();
   const { scope, location } = useSelector(({ newsFeed }) => newsFeed);
 
@@ -144,7 +146,7 @@ const MainDashboardComponent = () => {
     }
     const length = articles && articles.length;
     if (scope === 'local' && !length && radius < 0.5) {
-      setRadius(query.radius + 0.1);
+      setRadius(query.radius + STARTING_RADIUS);
     } else {
       setLoading(false);
     }
@@ -168,14 +170,14 @@ const MainDashboardComponent = () => {
   }
 
   useEffect(() => {
-    if (radius > 0.1) {
+    if (radius > STARTING_RADIUS) {
       handleFetch(scope, location, { radius });
     }
   }, [radius])
 
   useEffect(() => {
-    handleFetch(scope, location, { radius: 0.1 });
-    setRadius(0.1);
+    handleFetch(scope, location, { radius: STARTING_RADIUS });
+    setRadius(STARTING_RADIUS);
     setHasMore(true);
   }, [scope, location]);
 
