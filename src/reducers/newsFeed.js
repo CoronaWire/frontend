@@ -3,11 +3,11 @@ import { SET_LOCATION, SET_SCOPE } from '../actionCreators/constants';
 import { getLocationFromLocalStorage } from './../helpers/localStorage';
 
 const defaultLocation = {
-  lat: 37.3860517,
-  lng: -122.0838511,
-  name: 'Mountain View, CA, USA',
-  state: 'California',
-  countyFipsCode: '06085',
+  "lat": 37.7749295,
+  "lng": -122.4194155,
+  "name": "San Francisco, CA, USA",
+  "state": "California",
+  "countyFipsCode": "06075"
 };
 
 const initialState = {
@@ -23,6 +23,7 @@ export const newsFeed = (state = initialState, action) => {
         scope: action.scope,
       };
     case SET_LOCATION:
+      console.log(action.location);
       return {
         ...state,
         location: action.location,
