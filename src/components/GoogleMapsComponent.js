@@ -7,7 +7,7 @@ import { compose, withProps } from "recompose"
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
 const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel");
 
-const API_KEY = 'AIzaSyDJwNo00t912aMJzNmwzGcH8RfADFC3dCk';
+const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY_TWO;
 
 const GoogleMapsComponent = compose(
   withProps({
