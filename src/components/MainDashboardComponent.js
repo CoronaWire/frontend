@@ -167,7 +167,7 @@ const MainDashboardComponent = () => {
     const length = articles && articles.length;
     // try again with increased radius if using coord
     if (options.localType === 'coord' && scope === 'local' && !length && radius < 0.5) {
-      setRadius(query.radius + STARTING_RADIUS);
+      setRadius(query.radius + 0.1);
     } else {
       setLoading(false);
     }
