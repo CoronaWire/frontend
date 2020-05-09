@@ -225,9 +225,6 @@ class ModeratorIndividualArticleComponent extends Component {
         }
         const defaultOption = dropdownOptions[0];
         console.log('Article object', this.props.articleObject);
-        console.log('Before GoogleMapsComponent');
-        console.log('BEFORE longitude', longitude);
-        console.log('Before latitude', latitude);
         return (
             <IndividualArticleWrapper>
                 <HalfGrid>

@@ -61,35 +61,33 @@ class GoogleMapsHOC extends Component {
     }
 
     render() {
-    const { longitude, latitude } = this.props.position;
-    let position;
+        const { longitude, latitude } = this.props.position;
+        let position;
 
-    // Created in the event that a user clicks on Next while they are looking at the MAP.
-    // There's a slight chance that the following (NEXT) article does not have any longitude or latitude associated with it 
-    // and since the component rendered would still be the map (GoogleMapsComponent), it would return an error 
-    // This ensures that the state in the parent component is changed so that the 'Outline' (Text) is showed instead
-    if (longitude === 'None') {
-        this.props.changeContentDisplay('Outline');
-    } else {
-        position = {
-            longitude: longitude ,
-            latitude: latitude,
+        // Created in the event that a user clicks on Next while they are looking at the MAP.
+        // There's a slight chance that the following (NEXT) article does not have any longitude or latitude associated with it 
+        // and since the component rendered would still be the map (GoogleMapsComponent), it would return an error 
+        // This ensures that the state in the parent component is changed so that the 'Outline' (Text) is showed instead
+        if (longitude === 'None') {
+            this.props.changeContentDisplay('Outline');
+        } else {
+            position = {
+                longitude: longitude ,
+                latitude: latitude,
+            }
         }
-        console.log(`Longitude passed: ${longitude}`);
-        console.log(`Latitude passed: ${latitude}`)
-    }
 
-    return (
-        <>
-        {
-            longitude !== 'None' &&   <GoogleMapsComponent
-                                        isMarkerShown={this.state.isMarkerShown}
-                                        onMarkerClick={this.handleMarkerClick}
-                                        position={position}
-                                        />
-        }
-        </>
-    )
+        return (
+            <>
+            {
+                longitude !== 'None' &&   <GoogleMapsComponent
+                                            isMarkerShown={this.state.isMarkerShown}
+                                            onMarkerClick={this.handleMarkerClick}
+                                            position={position}
+                                            />
+            }
+            </>
+        )
     }
 }
 
