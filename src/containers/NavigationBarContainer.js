@@ -27,7 +27,7 @@ import { Container } from './../components/core';
 
 const LogoContainer = styled.div`
   width: 183px;
-  ${media.mobile`
+  ${media.mobileLayout`
     width: 137px;
   `};
 `;
@@ -45,10 +45,10 @@ const NavigationBarWrapper = styled.div`
     z-index: 5;
     flex-direction: row;
     box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
-    ${media.aboveMobile`
+    ${media.desktopLayout`
       min-width: 640px;
     `};
-    ${media.mobile`
+    ${media.mobileLayout`
       flex-direction: column;
       padding: 13px 0 0;
       height: auto;
@@ -71,7 +71,7 @@ const AuthenticatedNavBarWrapper = styled.div`
     box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.1);
     min-width: 640px;
     box-sizing: border-width;
-    ${media.mobile`
+    ${media.mobileLayout`
       flex-direction: column;
       padding: 13px 0 0;
       height: auto;
@@ -95,7 +95,7 @@ const SearchBarContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    ${media.mobile`
+    ${media.mobileLayout`
       width: 100%;
       padding: 0 16px;
       margin-bottom: 18px;
@@ -108,7 +108,7 @@ const Spacer = styled.div`
 
 const SelectorWrapper = styled.div`
   width: 100%;
-  ${media.aboveMobile`
+  ${media.desktopLayout`
     display: none;
   `};
 `;
@@ -178,12 +178,12 @@ const HamburgerSpace = styled.div`
 `;
 
 const LogoWrapper = styled(Container)`
-  ${media.mobile`
+  ${media.mobileLayout`
     width: 100%;
     padding: 0 16px;
     margin-bottom: 21px;
   `};
-  ${media.aboveMobile`
+  ${media.desktopLayout`
     & > svg:first-child, ${HamburgerSpace} {
       display: none;
     }

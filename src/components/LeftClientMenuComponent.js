@@ -37,7 +37,7 @@ const MenuContent = styled(Container)`
 const FeedbackText = styled(B1)`
   ${({ theme }) => `color: ${theme.newsColors.navy}`};
   margin-bottom: 16px;
-  ${media.mobile`
+  ${media.mobileLayout`
     ${({ theme }) => `color: ${theme.newsColors.lightGrey}`};
   `};
 `;
