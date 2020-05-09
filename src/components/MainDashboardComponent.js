@@ -145,11 +145,11 @@ const Loading = () => null;
 
 const STARTING_RADIUS = 0.1;
 
-// #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
+// #mainNewsFeedQuery
 const MainDashboardComponent = () => {
   const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
 
- const [localType, setLocalType] = useState('coord');
+ const [localType, setLocalType] = useState('fips');
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -165,6 +165,7 @@ const MainDashboardComponent = () => {
       setMainFeed(articles);
     }
     const length = articles && articles.length;
+    // try again with increased radius if using coord
     if (options.localType === 'coord' && scope === 'local' && !length && radius < 0.5) {
       setRadius(query.radius + STARTING_RADIUS);
     } else {
@@ -228,7 +229,8 @@ const MainDashboardComponent = () => {
           <Title>{`${scope} news`}</Title>
         </React.Fragment>
       ) : (
-        <ToggleContainer flexColumn width="100%">
+        false && (
+          <ToggleContainer flexColumn width="100%">
           <Title>{`Showing results for "${localType}"`}</Title>
           <Container>
             <ToggleButton
@@ -245,7 +247,8 @@ const MainDashboardComponent = () => {
             </ToggleButton>
           </Container>
         </ToggleContainer>
-			)}
+        )
+      )}
       {!loading && scope === 'local' && !mainFeed.length ? (
         <LocalZeroState />
       ) : (
