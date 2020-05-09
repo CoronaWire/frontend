@@ -71,6 +71,7 @@ const SmallTextField = styled(MediumTextField)`
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 10px;
+    cursor: ${props => props.disabled ?'not-allowed' : 'pointer' };
 `
 
 const InputWrapper = styled.div`
@@ -247,7 +248,7 @@ class ModeratorIndividualArticleComponent extends Component {
                             <InputTitle>
                             Article ID
                             </InputTitle>
-                            <SmallTextField id='id' value={articleID} disabled     />
+                            <SmallTextField id='id' value={articleID} disabled />
                         </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
