@@ -84,7 +84,7 @@ const StatusCircle = styled.div`
     width: 15px;
     border-radius: 50%;
     outline: none;
-    background-color: ${props => props.status === 'approved' ? '#1AAE9F' : '#D3455B' }
+    background-color: ${props => props.status === null || props.status === false ? '#D3455B' : '#1AAE9F'  }
 `
 
 // #toFix #toDo: create a core component that styles column
@@ -158,7 +158,9 @@ class ModeratorArticleComponent extends Component {
         readable = removeStandardTimeFromDate(readable);
 
         // Capitalizes mod_status
-        const mod_status =  status.charAt(0).toUpperCase() + status.slice(1)
+        const mod_status =  status.charAt(0).toUpperCase() + status.slice(1);
+        const hasLongLat = articleObject.longlat;
+        const fipsProcessed = articleObject.fips_processed;
         return (
             <>
                 <IndividualArticleWrapper 
@@ -170,24 +172,29 @@ class ModeratorArticleComponent extends Component {
                     <TinyArticleGrid onClick={() => this.props.toggleArticleSelected(articleID)} modStatus={this.props.articleObject.mod_status}>
                         {
                             (this.props.articleObject.mod_status === 'approved' || this.props.articleObject.mod_status === 'rejected') ?
-                            <StatusCircle status={this.props.articleObject.mod_status} />
+                            // If article is approved or rejected, then we show whether it was already FIPS processed
+                            <StatusCircle status={fipsProcessed} />
                             :
                             <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(articleID)} />
 
                         }
                     </TinyArticleGrid>
-                    <ArticleGridApproveReject>
-                        { this.props.articleObject.mod_status === 'pending' &&
-                            <>
+                    {
+                        this.props.articleObject.mod_status === 'pending' ?
+                        <ArticleGridApproveReject>
                             <ApproveRejectButton id='approve' onClick={() => this.props.approveArticleAndDeleteFromFeed(articleID)}>
                                 <Text> Approve </Text>
                             </ApproveRejectButton>
                             <ApproveRejectButton id='reject' onClick={() => this.props.rejectArticleAndDeleteFromFeed(articleID)}>
                                 <Text> Reject </Text>
                             </ApproveRejectButton>
-                            </>
-                        }
-                    </ArticleGridApproveReject>
+                        </ArticleGridApproveReject>
+                        :
+                        // If article is approved or rejected, we show a status to show whether it has longLat values yet
+                        <TinyGrid>
+                                <StatusCircle status={hasLongLat} />
+                        </TinyGrid>
+                    }
                     <LargeArticleGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex, articleObject)} id={articleID}>
                         {/* <ArticleImage src={this.props.articleObject.image_url} /> */}
                         <ArticleText>

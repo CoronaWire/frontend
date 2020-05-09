@@ -18,6 +18,9 @@ const BoldSmallText = styled(SmallText)`
     font-weight: 600;
 `;
 
+const BoldSmallerText = styled(BoldSmallText)`
+    font-size: 9px;
+`
 
 const ArticleFeedTitleBar = styled.div`
     height: 40px;
@@ -54,6 +57,23 @@ const Button = styled(OutlineButton)`
     transition: background-color 0.2s ease-in, color 0.2s ease-in;
 `
 
+const FeedWrapper = styled.div`
+    background-color: white;
+    color:black;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+const CenterFeedMessage = styled.h4`
+    font-weight: 600;
+    color: black;
+    font-size:20px;
+    text-align: center;
+`
+
 class ModeratorArticleFeedComponent extends PureComponent {
     constructor(props) {
         super(props);
@@ -64,15 +84,30 @@ class ModeratorArticleFeedComponent extends PureComponent {
 
     render(){
         const articleKeysArray = Object.keys(this.props.articleFeed);
+        const { modStatus, loadingStatus } = this.props;
         return(
             <>
             <ArticleFeedTitleBar GlobalTheme={GlobalTheme} >
-                <TinyGrid >
-                    <BoldSmallText> Select </BoldSmallText>
-                </TinyGrid>
-                <TinyGrid>
-                    {/* Added here in order to make the alignment consistent with the below elements */}
-                </TinyGrid>
+                    {
+                    modStatus === 'pending' ? 
+                    <>
+                    <TinyGrid >
+                        <BoldSmallText> Select </BoldSmallText>
+                    </TinyGrid>
+                    <TinyGrid>
+                        {/* Added here in order to make the alignment consistent with the below elements */}
+                    </TinyGrid>
+                    </>
+                    : 
+                    <>
+                    <TinyGrid >
+                        <BoldSmallerText> PROCESSED </BoldSmallerText>
+                    </TinyGrid>
+                    <TinyGrid>
+                        <BoldSmallerText> GEOSET </BoldSmallerText>
+                    </TinyGrid>
+                    </>
+                    }
                 <LargeGrid> 
                     <BoldSmallText> Article </BoldSmallText>
                 </LargeGrid>
@@ -87,29 +122,46 @@ class ModeratorArticleFeedComponent extends PureComponent {
                 </SmallGrid>
             </ArticleFeedTitleBar>
             <ArticleFeedWrapper>
-                {
-                    articleKeysArray.map((objectKey, index) => {
-                        const articleObject = this.props.articleFeed[objectKey];
-                        const articleKey = objectKey;
-                        return <ModeratorArticleComponent 
-                                articleObject={articleObject} 
-                                key={articleKey} 
-                                toggleArticleSelected={this.props.toggleArticleSelected}
-                                checked={this.props.selectedArticles[articleKey]}
-                                articleID={articleKey}
-                                articleIndex={index}
-                                undoArticleApprovalRejection={this.props.undoArticleApprovalRejection}
-                                selectIndividualArticle={this.props.selectIndividualArticle}
-                                approveArticleAndDeleteFromFeed={this.props.approveArticleAndDeleteFromFeed}
-                                rejectArticleAndDeleteFromFeed={this.props.rejectArticleAndDeleteFromFeed}
-                                />
-                    })
-                }
-                <EndOfFeedContainer>
+                {   loadingStatus === 'loaded' ?
+                    <>
                     {
-                        articleKeysArray.length > 0 && <Button onClick={this.props.retrieveMoreArticles}> Load more Articles </Button>
+                        articleKeysArray.map((objectKey, index) => {
+                            const articleObject = this.props.articleFeed[objectKey];
+                            const articleKey = objectKey;
+                            return <ModeratorArticleComponent 
+                                    articleObject={articleObject} 
+                                    key={articleKey} 
+                                    toggleArticleSelected={this.props.toggleArticleSelected}
+                                    checked={this.props.selectedArticles[articleKey]}
+                                    articleID={articleKey}
+                                    articleIndex={index}
+                                    undoArticleApprovalRejection={this.props.undoArticleApprovalRejection}
+                                    selectIndividualArticle={this.props.selectIndividualArticle}
+                                    approveArticleAndDeleteFromFeed={this.props.approveArticleAndDeleteFromFeed}
+                                    rejectArticleAndDeleteFromFeed={this.props.rejectArticleAndDeleteFromFeed}
+                                    />
+                        })
                     }
-                </EndOfFeedContainer>
+                    <EndOfFeedContainer>
+                        {
+                            articleKeysArray.length > 0 && <Button onClick={this.props.retrieveMoreArticles}> Load more Articles </Button>
+                        }
+                    </EndOfFeedContainer>
+                    </>
+                    :
+                    <>
+                    {
+                        loadingStatus === 'loading' ?
+                            <FeedWrapper>
+                                <CenterFeedMessage> Loading... </CenterFeedMessage>
+                            </FeedWrapper>
+                            : 
+                            <FeedWrapper>
+                                <CenterFeedMessage> No articles to display </CenterFeedMessage>
+                            </FeedWrapper>
+                    }
+                    </>
+                }
             </ArticleFeedWrapper>
         </>
         )
