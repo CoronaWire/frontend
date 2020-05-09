@@ -5,7 +5,7 @@ import { 
  } from '../actionCreators/constants';
 
 const initialState = {
-    isAuthenticated: true,
+    isAuthenticated: false,
 }
 
 export default function (state = initialState, action) {
