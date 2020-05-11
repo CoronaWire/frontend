@@ -240,15 +240,21 @@ const MainDashboardComponent = () => {
             <Container>
               <ToggleButton
                 onClick={() => setLocalType('coord')}
-                active={localType === 'coord'}
+                disabled={localType === 'coord'}
               >
                 Lat / Long
               </ToggleButton>
               <ToggleButton
                 onClick={() => setLocalType('fips')}
-                active={localType === 'fips'}
+                disabled={localType === 'fips'}
               >
                 FIPS
+              </ToggleButton>
+              <ToggleButton
+                onClick={() => setLocalType('nearby')}
+                disabled={localType === 'nearby'}
+              >
+                Nearby
               </ToggleButton>
             </Container>
           </ToggleContainer>
