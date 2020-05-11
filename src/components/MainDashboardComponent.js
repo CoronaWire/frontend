@@ -15,6 +15,7 @@ import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
 import { LocalZeroState } from './ZeroState';
 import { Container, H3, H2, Button as BaseButton } from './core';
+import { CurrentLocationButton } from './CurrentLocationButton';
 
 // #toDo: make paddingLeft and marginLeft below 30px
 
@@ -123,6 +124,9 @@ const ToggleButton = styled(BaseButton)`
       cursor: not-allowed;
     }
   `};
+  ${({ theme, active }) => active && css`
+
+  `};
   margin-left: 16px;
   &:first-child {
     margin-left: 0;
@@ -145,11 +149,11 @@ const Loading = () => null;
 
 const STARTING_RADIUS = 0.1;
 
-// #toDo: enable different layout between different newsType (twitter vs. "formal" news outlet)
+// #mainNewsFeedQuery
 const MainDashboardComponent = () => {
   const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
 
- const [localType, setLocalType] = useState('coord');
+  const [localType, setLocalType] = useState('fips');
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -165,8 +169,9 @@ const MainDashboardComponent = () => {
       setMainFeed(articles);
     }
     const length = articles && articles.length;
+    // try again with increased radius if using coord
     if (options.localType === 'coord' && scope === 'local' && !length && radius < 0.5) {
-      setRadius(query.radius + STARTING_RADIUS);
+      setRadius(query.radius + 0.1);
     } else {
       setLoading(false);
     }
@@ -228,23 +233,26 @@ const MainDashboardComponent = () => {
           <Title>{`${scope} news`}</Title>
         </React.Fragment>
       ) : (
-        <ToggleContainer flexColumn width="100%">
-          <Title>{`Showing results for "${localType}"`}</Title>
-          <Container>
-            <ToggleButton
-              onClick={() => setLocalType('coord')}
-              disabled={localType === 'coord'}
-            >
-              Lat / Long
-            </ToggleButton>
-            <ToggleButton
-              onClick={() => setLocalType('fips')}
-              disabled={localType === 'fips'}
-            >
-              FIPS
-            </ToggleButton>
-          </Container>
-        </ToggleContainer>
+        <React.Fragment>
+          <CurrentLocationButton />
+          <ToggleContainer flexColumn width="100%">
+            <Title>{`Showing results for "${localType}"`}</Title>
+            <Container>
+              <ToggleButton
+                onClick={() => setLocalType('coord')}
+                active={localType === 'coord'}
+              >
+                Lat / Long
+              </ToggleButton>
+              <ToggleButton
+                onClick={() => setLocalType('fips')}
+                active={localType === 'fips'}
+              >
+                FIPS
+              </ToggleButton>
+            </Container>
+          </ToggleContainer>
+        </React.Fragment>
 			)}
       {!loading && scope === 'local' && !mainFeed.length ? (
         <LocalZeroState />
