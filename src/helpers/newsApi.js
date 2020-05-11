@@ -12,16 +12,21 @@ const resolvePath = ({ scope, location, options }) => {
     case 'local':
       const { localType } = options;
       const { countyFipsCode, lat, lng } = location;
-      if (localType === 'coord') {
-        return `/articles/scope/local/${lat},${lng}/`;
-      } else {
-        return `/articles/scope/fips/${countyFipsCode}/`
+      switch (localType) {
+        case 'coord':
+          return `/articles/scope/local/${lat},${lng}/`;
+        case 'fips':
+          return `/articles/scope/fips/${countyFipsCode}/`
+        default:
+          return `/articles/nearby/`;
       }
     default:
       throw new Error('Please specify scope');
       return '';
   }
 };
+
+const getLocationQuery = ({ countyFipsCode: fips, lat, lng }) => ({ fips, lat, lng });
 
 export const fetchArticles = async ({
   scope,
@@ -30,8 +35,17 @@ export const fetchArticles = async ({
   options = {},
 }) => {
   const apiUrl = process.env.REACT_APP_NEWS_API_URL;
+
   const radiusQuery = scope === 'local' && options.localType === 'coord' ? { radius } : {};
-  const params = queryToParams({ ...query, ...radiusQuery });
+  const locationQuery =
+    scope === 'local' && options.localType === 'nearby' ? getLocationQuery(location) : {};
+
+  const params = queryToParams({
+    ...query,
+    ...radiusQuery,
+    ...locationQuery,
+  });
+
   const paramsFragment = params ? `?${params}` : '';
   const pathFragment = resolvePath({ location, scope, options });
   try {
