@@ -26,7 +26,7 @@ const LoaderItem = () => {
     <LoadingContainer>
       <ContentLoader
         backgroundColor={theme.newsColors.loadingGrey}
-        foregroundCOlor={theme.newsColors.white}
+        foregroundColor={theme.newsColors.white}
         viewBox="0 0 684 178"
       >
         <circle cx="28" cy="28" r="12" />
