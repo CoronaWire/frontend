@@ -15,7 +15,7 @@ import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
 import { LocalZeroState } from './ZeroState';
 import { Container, H3, H2, Button as BaseButton } from './core';
-import { NewsFeedLoader } from './Loading/NewsFeed';
+import { NewsFeedLoader } from './Loading/';
 
 // #toDo: make paddingLeft and marginLeft below 30px
 
