@@ -15,6 +15,7 @@ import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
 import { LocalZeroState } from './ZeroState';
 import { Container, H3, H2, Button as BaseButton } from './core';
+import { NewsFeedLoader } from './Loading/NewsFeed';
 
 // #toDo: make paddingLeft and marginLeft below 30px
 
@@ -208,6 +209,10 @@ const MainDashboardComponent = () => {
     setHasMore(true);
   }, [scope, location, localType]);
 
+  if (loading) {
+    return <NewsFeedLoader />
+  }
+
   return (
     <OuterWrapper>
       {false && (
@@ -255,11 +260,11 @@ const MainDashboardComponent = () => {
         <InfiniteScroll
           hasMore={!loading && hasMore}
           pageStart={0}
-          loader={<Loading />}
+          loader={<NewsFeedLoader showText={false} count={1} />}
           loadMore={handleFetchMore}
         >
           <NewsListWrapper>
-            {!loading && mainFeed.map(article => (
+            {!loading ? mainFeed.map(article => (
               <SingleNewsComponent
                 key={article.id}
                 title={article.title}
@@ -268,7 +273,9 @@ const MainDashboardComponent = () => {
                 articleUrl={article.article_url}
                 source={article.source_id}
               />
-            ))}
+            )) : (
+              <NewsFeedLoader />
+            )}
           </NewsListWrapper>
         </InfiniteScroll>
       )}

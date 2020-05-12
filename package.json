@@ -13,6 +13,7 @@
     "moment": "2.24.0",
     "no-scroll": "^2.1.1",
     "react": "^16.13.1",
+    "react-content-loader": "^5.0.4",
     "react-dom": "^16.13.1",
     "react-google-maps": "^9.4.5",
     "react-infinite-scroller": "^1.2.4",
