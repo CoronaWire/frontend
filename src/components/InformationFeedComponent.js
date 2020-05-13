@@ -11,6 +11,8 @@ import { setScopeAction } from './../actionCreators/actions';
 import { H3, H4, Metadata, Link } from './core';
 import { FeedSelector } from './FeedSelector';
 import { timeSince } from './../helpers/datetime';
+import { trackEvent } from './../helpers/ga';
+import { capitalize } from './../helpers/utilities';
 
 // #toFix: make components responsive
 // #toDo: decide between show more button that extends feed (limits other features) or simple left and right
@@ -83,6 +85,11 @@ const InformationFeedComponent = () => {
       ))}
       <MoreText
         onClick={() => {
+          trackEvent({
+            category: 'homepage',
+            action: 'click',
+            label: `showMore${capitalize(activeFeed)}`,
+          });
           dispatch(setScopeAction(activeFeed));
         }}
       >
