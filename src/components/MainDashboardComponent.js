@@ -1,7 +1,7 @@
 // Main Dashboard Component = renders the News Aggregation
 
 // External Packages
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
@@ -16,6 +16,7 @@ import { media } from './../helpers/media';
 import { LocalZeroState } from './ZeroState';
 import { Container, H3, H2, Button as BaseButton } from './core';
 import { trackEvent } from './../helpers/ga';
+import { useTimingEffect } from './../helpers/hooks';
 
 // #toDo: make paddingLeft and marginLeft below 30px
 
@@ -150,13 +151,14 @@ const STARTING_RADIUS = 0.1;
 const MainDashboardComponent = () => {
   const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
 
- const [localType, setLocalType] = useState('fips');
+  const [localType, setLocalType] = useState('fips');
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [radius, setRadius] = useState(STARTING_RADIUS);
   const dispatch = useDispatch();
   const { scope, location } = useSelector(({ newsFeed }) => newsFeed);
+  useTimingEffect(scope);
 
   const handleFetch = async (scope, location, query, options) => {
     setLoading(true);
