@@ -15,6 +15,7 @@ import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
 import { LocalZeroState } from './ZeroState';
 import { Container, H3, H2, Button as BaseButton } from './core';
+import { trackEvent } from './../helpers/ga';
 
 // #toDo: make paddingLeft and marginLeft below 30px
 
@@ -208,6 +209,14 @@ const MainDashboardComponent = () => {
     setHasMore(true);
   }, [scope, location, localType]);
 
+  const trackArticleClick = () => {
+    trackEvent({
+      category: 'homepage',
+      action: 'click',
+      label: `${scope}Article`,
+    })
+  };
+
   return (
     <OuterWrapper>
       {false && (
@@ -267,6 +276,7 @@ const MainDashboardComponent = () => {
                 summary={article.summary}
                 articleUrl={article.article_url}
                 source={article.source_id}
+                onClick={trackArticleClick}
               />
             ))}
           </NewsListWrapper>

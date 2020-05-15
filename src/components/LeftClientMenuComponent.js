@@ -6,6 +6,7 @@ import { media } from './../helpers/media';
 import LeftMenuButtonComponent from './LeftMenuComplexButtonComponent';
 import DividingLine from '../styledComponents/DividingLine';
 import { B1, Container, Button } from './core';
+import { trackEvent } from './../helpers/ga';
 
 // #toDo: Needs to be connected to parent component, Dashboard and send up the actual news
 
@@ -26,6 +27,13 @@ const menuOptions = [
    title: 'About Covid Wire',
    subTitle: 'Donate & learn about the site',
    path: '/about',
+   onClick: () => {
+     trackEvent({
+       category: 'homepage',
+       action: 'click',
+       label: 'about',
+     });
+   },
  },
 ];
 
@@ -57,12 +65,18 @@ const LeftMenuWrapper = styled.div`
 
 const LeftClientMenuComponent = () => (
   <LeftMenuWrapper>
-    {menuOptions.map(({ title, subTitle, path }) => (
+    {menuOptions.map(({
+      title,
+      subTitle,
+      path,
+      onClick = () => null,
+    }) => (
       <LeftMenuButtonComponent
         path={path}
         title={title}
         subTitle={subTitle}
         key={title}
+        onClick={onClick}
       />
     ))}
     <MenuContent flexColumn>

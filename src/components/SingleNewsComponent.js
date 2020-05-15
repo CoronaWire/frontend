@@ -77,13 +77,14 @@ const SingleNewsComponent = ({
   title,
   summary,
   source,
-  articleUrl
+  articleUrl,
+  onClick = () => null,
 }) => (
   <SingleNewsWrapper>
     <SourceContainer>
       <DataSource>{source}</DataSource>
     </SourceContainer>
-    <Link target="_blank" href={articleUrl}>
+    <Link onClick={onClick} target="_blank" href={articleUrl}>
       <NewsTitle>{title}</NewsTitle>
     </Link>
     <NewsTextContainer>
