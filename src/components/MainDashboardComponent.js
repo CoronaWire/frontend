@@ -17,6 +17,7 @@ import { LocalZeroState } from './ZeroState';
 import { Container, H3, H2, Button as BaseButton } from './core';
 import { trackEvent } from './../helpers/ga';
 import { useTimingEffect } from './../helpers/hooks';
+import { NewsFeedLoader } from './Loading/';
 
 // #toDo: make paddingLeft and marginLeft below 30px
 
@@ -124,6 +125,9 @@ const ToggleButton = styled(BaseButton)`
       background: ${theme.newsColors.pink};
       cursor: not-allowed;
     }
+  `};
+  ${({ theme, active }) => active && css`
+
   `};
   margin-left: 16px;
   &:first-child {
@@ -241,36 +245,44 @@ const MainDashboardComponent = () => {
         </React.Fragment>
       ) : (
         false && (
-          <ToggleContainer flexColumn width="100%">
-          <Title>{`Showing results for "${localType}"`}</Title>
-          <Container>
-            <ToggleButton
-              onClick={() => setLocalType('coord')}
-              disabled={localType === 'coord'}
-            >
-              Lat / Long
-            </ToggleButton>
-            <ToggleButton
-              onClick={() => setLocalType('fips')}
-              disabled={localType === 'fips'}
-            >
-              FIPS
-            </ToggleButton>
-          </Container>
-        </ToggleContainer>
+          <React.Fragment>
+            <ToggleContainer flexColumn width="100%">
+              <Title>{`Showing results for "${localType}"`}</Title>
+              <Container>
+                <ToggleButton
+                  onClick={() => setLocalType('coord')}
+                  disabled={localType === 'coord'}
+                >
+                  Lat / Long
+                </ToggleButton>
+                <ToggleButton
+                  onClick={() => setLocalType('fips')}
+                  disabled={localType === 'fips'}
+                >
+                  FIPS
+                </ToggleButton>
+                <ToggleButton
+                  onClick={() => setLocalType('nearby')}
+                  disabled={localType === 'nearby'}
+                >
+                  Nearby
+                </ToggleButton>
+              </Container>
+            </ToggleContainer>
+          </React.Fragment>
         )
-      )}
+			)}
       {!loading && scope === 'local' && !mainFeed.length ? (
         <LocalZeroState />
       ) : (
         <InfiniteScroll
           hasMore={!loading && hasMore}
           pageStart={0}
-          loader={<Loading />}
+          loader={<NewsFeedLoader showText={false} count={1} />}
           loadMore={handleFetchMore}
         >
           <NewsListWrapper>
-            {!loading && mainFeed.map(article => (
+            {!loading ? mainFeed.map(article => (
               <SingleNewsComponent
                 key={article.id}
                 title={article.title}
@@ -280,7 +292,9 @@ const MainDashboardComponent = () => {
                 source={article.source_id}
                 onClick={trackArticleClick}
               />
-            ))}
+            )) : (
+              <NewsFeedLoader />
+            )}
           </NewsListWrapper>
         </InfiniteScroll>
       )}

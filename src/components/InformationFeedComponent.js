@@ -13,6 +13,7 @@ import { FeedSelector } from './FeedSelector';
 import { timeSince } from './../helpers/datetime';
 import { trackEvent } from './../helpers/ga';
 import { capitalize } from './../helpers/utilities';
+import { InformationFeedLoader } from './Loading/';
 
 // #toFix: make components responsive
 // #toDo: decide between show more button that extends feed (limits other features) or simple left and right
@@ -79,26 +80,27 @@ const InformationFeedComponent = () => {
   return (
     <FeedWrapper>
       <FeedSelector activeFeed={activeFeed} setActiveFeed={setActiveFeed} />
-      {!loading && feed.map((article) => (
-        <FeedArticle key={article.id}>
-          <Link onClick={trackArticleClick} href={article.article_url} target="_blank">
-            <ArticleTitle> {article.title} </ArticleTitle>
-          </Link>
-          <ArticleMetaData>{timeSince(article.published_at)} - {article.source_id}</ArticleMetaData>
-        </FeedArticle>
-      ))}
-      <MoreText
-        onClick={() => {
-          trackEvent({
-            category: 'homepage',
-            action: 'click',
-            label: `showMore${capitalize(activeFeed)}`,
-          });
-          dispatch(setScopeAction(activeFeed));
-        }}
-      >
-        Show more
-      </MoreText>
+      {loading ? (
+        <InformationFeedLoader />
+      ) : (
+        <React.Fragment>
+          {feed.map((article) => (
+            <FeedArticle key={article.id}>
+              <Link onClick={trackArticleClick} href={article.article_url} target="_blank">
+                <ArticleTitle> {article.title} </ArticleTitle>
+              </Link>
+              <ArticleMetaData>{timeSince(article.published_at)} - {article.source_id}</ArticleMetaData>
+            </FeedArticle>
+          ))}
+          <MoreText
+            onClick={() => {
+              dispatch(setScopeAction(activeFeed));
+            }}
+          >
+            Show more
+          </MoreText>
+        </React.Fragment>
+      )}
     </FeedWrapper>
   );
 };

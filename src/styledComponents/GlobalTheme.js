@@ -47,6 +47,7 @@ const GlobalTheme = {
     darkGrey: '#4F536B',
     midGrey: '#9194A4',
     lightGrey: '#E9EAED',
+    loadingGrey: '#F3F3F3',
     white: '#ffffff',
   },
   moderationPlatform: {
