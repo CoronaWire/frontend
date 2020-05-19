@@ -1,7 +1,7 @@
 // Main Dashboard Component = renders the News Aggregation
 
 // External Packages
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
