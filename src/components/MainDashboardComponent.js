@@ -212,10 +212,6 @@ const MainDashboardComponent = () => {
     setHasMore(true);
   }, [scope, location, localType]);
 
-  if (loading) {
-    return <NewsFeedLoader />
-  }
-
   return (
     <OuterWrapper>
       {false && (
