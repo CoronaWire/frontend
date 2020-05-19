@@ -53,6 +53,7 @@ export const MobileFeedSelector = () => {
           onClick={() => handleSelect(id)}
           total={options.length}
           active={id === activeScope}
+          key={id}
           name={name}
         />
       ))}

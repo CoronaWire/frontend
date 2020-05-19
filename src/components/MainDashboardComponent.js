@@ -15,6 +15,7 @@ import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
 import { LocalZeroState } from './ZeroState';
 import { Container, H3, H2, Button as BaseButton } from './core';
+import { NewsFeedLoader } from './Loading/';
 
 // #toDo: make paddingLeft and marginLeft below 30px
 
@@ -123,6 +124,9 @@ const ToggleButton = styled(BaseButton)`
       cursor: not-allowed;
     }
   `};
+  ${({ theme, active }) => active && css`
+
+  `};
   margin-left: 16px;
   &:first-child {
     margin-left: 0;
@@ -149,7 +153,7 @@ const STARTING_RADIUS = 0.1;
 const MainDashboardComponent = () => {
   const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
 
- const [localType, setLocalType] = useState('fips');
+  const [localType, setLocalType] = useState('nearby');
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -230,36 +234,44 @@ const MainDashboardComponent = () => {
         </React.Fragment>
       ) : (
         false && (
-          <ToggleContainer flexColumn width="100%">
-          <Title>{`Showing results for "${localType}"`}</Title>
-          <Container>
-            <ToggleButton
-              onClick={() => setLocalType('coord')}
-              disabled={localType === 'coord'}
-            >
-              Lat / Long
-            </ToggleButton>
-            <ToggleButton
-              onClick={() => setLocalType('fips')}
-              disabled={localType === 'fips'}
-            >
-              FIPS
-            </ToggleButton>
-          </Container>
-        </ToggleContainer>
+          <React.Fragment>
+            <ToggleContainer flexColumn width="100%">
+              <Title>{`Showing results for "${localType}"`}</Title>
+              <Container>
+                <ToggleButton
+                  onClick={() => setLocalType('coord')}
+                  disabled={localType === 'coord'}
+                >
+                  Lat / Long
+                </ToggleButton>
+                <ToggleButton
+                  onClick={() => setLocalType('fips')}
+                  disabled={localType === 'fips'}
+                >
+                  FIPS
+                </ToggleButton>
+                <ToggleButton
+                  onClick={() => setLocalType('nearby')}
+                  disabled={localType === 'nearby'}
+                >
+                  Nearby
+                </ToggleButton>
+              </Container>
+            </ToggleContainer>
+          </React.Fragment>
         )
-      )}
+			)}
       {!loading && scope === 'local' && !mainFeed.length ? (
         <LocalZeroState />
       ) : (
         <InfiniteScroll
           hasMore={!loading && hasMore}
           pageStart={0}
-          loader={<Loading />}
+          loader={<NewsFeedLoader showText={false} count={1} />}
           loadMore={handleFetchMore}
         >
           <NewsListWrapper>
-            {!loading && mainFeed.map(article => (
+            {!loading ? mainFeed.map(article => (
               <SingleNewsComponent
                 key={article.id}
                 title={article.title}
@@ -268,7 +280,9 @@ const MainDashboardComponent = () => {
                 articleUrl={article.article_url}
                 source={article.source_id}
               />
-            ))}
+            )) : (
+              <NewsFeedLoader />
+            )}
           </NewsListWrapper>
         </InfiniteScroll>
       )}

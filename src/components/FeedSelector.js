@@ -42,7 +42,7 @@ const options = [
 export const FeedSelector = ({ activeFeed, setActiveFeed }) => (
   <Container align="flex-end" width="100%">
     {options.map(({ id, name }, index) => (
-      <React.Fragment>
+      <React.Fragment key={id}>
         {!!index && <Divider />}
         <Option
           onClick={() => {
