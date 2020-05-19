@@ -151,7 +151,7 @@ const STARTING_RADIUS = 0.1;
 const MainDashboardComponent = () => {
   const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
 
-  const [localType, setLocalType] = useState('fips');
+  const [localType, setLocalType] = useState('nearby');
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
