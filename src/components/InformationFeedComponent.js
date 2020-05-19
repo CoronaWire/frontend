@@ -11,6 +11,8 @@ import { setScopeAction } from './../actionCreators/actions';
 import { H3, H4, Metadata, Link } from './core';
 import { FeedSelector } from './FeedSelector';
 import { timeSince } from './../helpers/datetime';
+import { trackEvent } from './../helpers/ga';
+import { capitalize } from './../helpers/utilities';
 import { InformationFeedLoader } from './Loading/';
 
 // #toFix: make components responsive
@@ -67,10 +69,14 @@ const InformationFeedComponent = () => {
     handleFetch(activeFeed);
   }, [activeFeed]);
 
-  // #important #toChange: once hte InformationFeedComponent gets "upgraded" to hold both GlobalFeedComponent
-  // and NationalFeedComponent (not created yet), then create Wrapper that will hold the two components and set
-  // the margin of that to be the DashboardStyling margin
-  // or set it to the RightSideContainer? Make it consistent. Currently margin is set to the first child component.
+  const trackArticleClick = () => {
+    trackEvent({
+      category: `${activeFeed}Feed`,
+      action: 'click',
+      label: `${activeFeed}Article`,
+    });
+  };
+
   return (
     <FeedWrapper>
       <FeedSelector activeFeed={activeFeed} setActiveFeed={setActiveFeed} />
@@ -80,7 +86,7 @@ const InformationFeedComponent = () => {
         <React.Fragment>
           {feed.map((article) => (
             <FeedArticle key={article.id}>
-              <Link href={article.article_url} target="_blank">
+              <Link onClick={trackArticleClick} href={article.article_url} target="_blank">
                 <ArticleTitle> {article.title} </ArticleTitle>
               </Link>
               <ArticleMetaData>{timeSince(article.published_at)} - {article.source_id}</ArticleMetaData>

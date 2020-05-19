@@ -1,7 +1,7 @@
 // Main Dashboard Component = renders the News Aggregation
 
 // External Packages
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
@@ -15,6 +15,8 @@ import SingleNewsComponent from '../components/SingleNewsComponent';
 import { media } from './../helpers/media';
 import { LocalZeroState } from './ZeroState';
 import { Container, H3, H2, Button as BaseButton } from './core';
+import { trackEvent } from './../helpers/ga';
+import { useTimingEffect } from './../helpers/hooks';
 import { NewsFeedLoader } from './Loading/';
 
 // #toDo: make paddingLeft and marginLeft below 30px
@@ -160,6 +162,7 @@ const MainDashboardComponent = () => {
   const [radius, setRadius] = useState(STARTING_RADIUS);
   const dispatch = useDispatch();
   const { scope, location } = useSelector(({ newsFeed }) => newsFeed);
+  useTimingEffect(scope);
 
   const handleFetch = async (scope, location, query, options) => {
     setLoading(true);
@@ -211,6 +214,14 @@ const MainDashboardComponent = () => {
     setRadius(STARTING_RADIUS);
     setHasMore(true);
   }, [scope, location, localType]);
+
+  const trackArticleClick = () => {
+    trackEvent({
+      category: 'homepage',
+      action: 'click',
+      label: `${scope}Article`,
+    })
+  };
 
   return (
     <OuterWrapper>
@@ -279,6 +290,7 @@ const MainDashboardComponent = () => {
                 summary={article.summary}
                 articleUrl={article.article_url}
                 source={article.source_id}
+                onClick={trackArticleClick}
               />
             )) : (
               <NewsFeedLoader />

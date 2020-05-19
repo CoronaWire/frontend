@@ -9,6 +9,7 @@ import { Input, b1Css, SearchIcon } from './core';
 import { retry } from './../helpers/utilities';
 import { saveLocationToLocalStorage } from './../helpers/localStorage';
 import { useUpdateEffect } from './../helpers/hooks';
+import { trackEvent } from './../helpers/ga';
 
 const InputWrapper = styled.div`
   position: relative;
@@ -113,6 +114,13 @@ export const SearchBarComponent = ({ handleSelect }) => {
         value={inputValue}
         onChange={e => setInputValue(e.target.value)}
         placeholder="Enter your city"
+        onFocus={() => {
+          trackEvent({
+            category: 'homepage',
+            action: 'click',
+            label: 'search',
+          });
+        }}
       />
     </InputWrapper>
   );
