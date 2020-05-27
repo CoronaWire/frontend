@@ -14,7 +14,7 @@ import {
 } from './core';
 import { retry } from './../helpers/utilities';
 import { saveLocationToLocalStorage } from './../helpers/localStorage';
-import { useUpdateEffect } from './../helpers/hooks';
+import { useCurrentLocation, useUpdateEffect } from './../helpers/hooks';
 import { trackEvent } from './../helpers/ga';
 
 const InputWrapper = styled.div`
@@ -81,15 +81,18 @@ export const SearchBarComponent = ({ handleSelect }) => {
     }
   }
 
+  const onPromptLocation = useCurrentLocation(redirectToNewsDashboard);
+
   const [predictionsList, setPredictionsList] = useState([]);
 
-  const onSelect = (prediction) => {
-    if (prediction.place_id === 'current_location') {
+  const onSelect = (option) => {
+    if (option.place_id === 'current_location') {
+      onPromptLocation();
       return;
     }
     placesService.current.getDetails(
       {
-        placeId: prediction.place_id,
+        placeId: option.place_id,
         fields: ['name', 'geometry', 'formatted_address'],
         sessionToken: sessionToken.current,
       },
@@ -201,15 +204,15 @@ export const SearchBarComponent = ({ handleSelect }) => {
         }}
       />
       <DropdownWrapper visible={isFocused}>
-        {options.map(prediction => (
+        {options.map(option => (
           <DropdownItem
             align="center"
             onClick={() => {
-              onSelect(prediction)
+              onSelect(option)
             }}
-            key={prediction.place_id}
+            key={option.place_id}
           >
-            <B1>{prediction.description}</B1>
+            <B1>{option.description}</B1>
           </DropdownItem>
         ))}
       </DropdownWrapper>
