@@ -52,7 +52,7 @@ export const useTimingEffect = (scope) => {
   }, []);
 };
 
-export const useCurrentLocation = (onSuccess) => {
+export const useCurrentLocation = (onSuccess = () => null) => {
   const dispatch = useDispatch();
 
   const handleSetLocation = async (position) => {

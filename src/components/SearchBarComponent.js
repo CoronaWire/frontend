@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { setLocationAction } from './../actionCreators/actions';
 import { fetchFipsInfo } from './../helpers/fips';
 import {
@@ -50,26 +50,43 @@ const DropdownWrapper = styled.div`
   ${({ visible }) => !visible && 'display: none'};
 `;
 
+const highlightedCss = css`
+  border-left: 4px solid ${({ theme }) => theme.newsColors.pink};
+  background: ${({ theme }) => theme.newsColors.pinkHover};
+`;
 const DropdownItem = styled(Container)`
   cursor: pointer;
   height: 48px;
   padding-left: 42px;
   border-left: 4px solid transparent;
   &:hover {
-    border-left: 4px solid ${({ theme }) => theme.newsColors.pink};
-    background: ${({ theme }) => theme.newsColors.pinkHover};
+    ${highlightedCss};
   }
+  ${({ active }) => active && highlightedCss};
   ${B1} {
     color: ${({ theme }) => theme.newsColors.navy};
   }
 `;
 
-export const SearchBarComponent = ({ handleSelect }) => {
+export const SearchBarComponent = () => {
   const autocompleteService = useRef(null);
   const placesService = useRef(null);
-  const sessionToken = useRef(null);
-  const inputRef = useRef(null);
   const mapRef = useRef(null);
+  const sessionToken = useRef(null);
+
+  const setup = () => {
+    autocompleteService.current = new window.google.maps.places.AutocompleteService();;
+    placesService.current = new window.google.maps.places.PlacesService(mapRef.current);
+  };
+
+  useEffect(() => {
+    retry(
+      () => window && window.google,
+      setup,
+    );
+  }, []);
+
+  const inputRef = useRef(null);
   const dispatch = useDispatch();
   const routerLocation = useLocation();
   const [isFocused, setIsFocused] = useState(false);
@@ -82,7 +99,6 @@ export const SearchBarComponent = ({ handleSelect }) => {
   }
 
   const onPromptLocation = useCurrentLocation(redirectToNewsDashboard);
-
   const [predictionsList, setPredictionsList] = useState([]);
 
   const onSelect = (option) => {
@@ -100,49 +116,35 @@ export const SearchBarComponent = ({ handleSelect }) => {
         if (status !== window.google.maps.places.PlacesServiceStatus.OK) {
           return;
         }
-        if (address) {
-          const {
-            geometry: { location } = {},
-            formatted_address: name,
-          } = address;
-          if (!location) {
-            redirectToNewsDashboard();
-            return;
-          }
-          const lat = location.lat();
-          const lng = location.lng();
-          const fipsData = await fetchFipsInfo(lat, lng);
-
-          const userLocation = {
-            lat,
-            lng,
-            name,
-            ...fipsData,
-          };
-
-          saveLocationToLocalStorage(userLocation);
-          dispatch(
-            setLocationAction(userLocation),
-          );
+        const {
+          geometry: { location } = {},
+          formatted_address: name,
+        } = address;
+        if (!location) {
+          redirectToNewsDashboard();
+          return;
         }
+        const lat = location.lat();
+        const lng = location.lng();
+        const fipsData = await fetchFipsInfo(lat, lng);
+
+        const userLocation = {
+          lat,
+          lng,
+          name,
+          ...fipsData,
+        };
+
+        saveLocationToLocalStorage(userLocation);
+        dispatch(
+          setLocationAction(userLocation),
+        );
         inputRef.current.blur();
         setPredictionsList([]);
         redirectToNewsDashboard();
       },
     );
   };
-
-  const setup = () => {
-    autocompleteService.current = new window.google.maps.places.AutocompleteService();;
-    placesService.current = new window.google.maps.places.PlacesService(mapRef.current);
-  };
-
-  useEffect(() => {
-    retry(
-      () => window && window.google,
-      setup,
-    );
-  }, []);
 
   const setLocation = useSelector(({ newsFeed: { location } }) => location && location.name);
   const [inputValue, setInputValue] = useState(setLocation || '');
@@ -171,16 +173,49 @@ export const SearchBarComponent = ({ handleSelect }) => {
     );
   }, [inputValue]);
 
-  useEffect(() => {
-    if (isFocused) {
-      sessionToken.current = new window.google.maps.places.AutocompleteSessionToken();
-    }
-  }, [isFocused]);
 
   const options = [
     { place_id: 'current_location', description: 'Use current location' },
     ...predictionsList,
   ];
+
+  const [activeItem, setActiveItem] = useState(null);
+  const handleKeyPress = e => {
+    switch (e.key) {
+      case 'ArrowDown':
+        if (!activeItem) {
+          setActiveItem(options[0]);
+        } else {
+          const index = options.findIndex(item => item.place_id === activeItem.place_id);
+          if (index + 1 < options.length) {
+            setActiveItem(options[index + 1]);
+          }
+        }
+        return false;
+      case 'ArrowUp':
+        if (activeItem) {
+          const index = options.findIndex(item => item.place_id === activeItem.place_id);
+          if (index - 1 >= 0) {
+            setActiveItem(options[index - 1]);
+          }
+        }
+        return false;
+      case 'Enter':
+        if (activeItem) {
+          onSelect(activeItem);
+        }
+        return false;
+    }
+  };
+
+  useUpdateEffect(() => {
+    if (isFocused) {
+      setActiveItem(null);
+      sessionToken.current = new window.google.maps.places.AutocompleteSessionToken();
+    }
+  }, [isFocused]);
+
+  const activeId = activeItem && activeItem.place_id;
 
   return (
     <InputWrapper>
@@ -190,6 +225,7 @@ export const SearchBarComponent = ({ handleSelect }) => {
         value={inputValue}
         ref={inputRef}
         onChange={e => setInputValue(e.target.value)}
+        onKeyDown={handleKeyPress}
         placeholder="Enter your city"
         onFocus={(e) => {
           setIsFocused(true);
@@ -207,6 +243,7 @@ export const SearchBarComponent = ({ handleSelect }) => {
         {options.map(option => (
           <DropdownItem
             align="center"
+            active={option.place_id === activeId}
             onClick={() => {
               onSelect(option)
             }}
