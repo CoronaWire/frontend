@@ -54,6 +54,7 @@ const highlightedCss = css`
   border-left: 4px solid ${({ theme }) => theme.newsColors.pink};
   background: ${({ theme }) => theme.newsColors.pinkHover};
 `;
+
 const DropdownItem = styled(Container)`
   cursor: pointer;
   height: 48px;
