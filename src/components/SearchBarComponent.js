@@ -47,6 +47,7 @@ const DropdownWrapper = styled.div`
   background: white;
   box-shadow: 0px 2px 2px rgba(36, 42, 73, 0.2);
   border-radius: 2px;
+  ${({ visible }) => !visible && 'display: none'};
 `;
 
 const DropdownItem = styled(Container)`
@@ -68,7 +69,7 @@ export const SearchBarComponent = ({ handleSelect }) => {
   const placesService = useRef(null);
   const sessionToken = useRef(null);
   const inputRef = useRef(null);
-  const wrapperRef = useRef(null);
+  const mapRef = useRef(null);
   const dispatch = useDispatch();
   const routerLocation = useLocation();
   const [isFocused, setIsFocused] = useState(false);
@@ -83,6 +84,9 @@ export const SearchBarComponent = ({ handleSelect }) => {
   const [predictionsList, setPredictionsList] = useState([]);
 
   const onSelect = (prediction) => {
+    if (prediction.place_id === 'current_location') {
+      return;
+    }
     placesService.current.getDetails(
       {
         placeId: prediction.place_id,
@@ -127,7 +131,7 @@ export const SearchBarComponent = ({ handleSelect }) => {
 
   const setup = () => {
     autocompleteService.current = new window.google.maps.places.AutocompleteService();;
-    placesService.current = new window.google.maps.places.PlacesService(wrapperRef.current);
+    placesService.current = new window.google.maps.places.PlacesService(mapRef.current);
   };
 
   useEffect(() => {
@@ -145,7 +149,7 @@ export const SearchBarComponent = ({ handleSelect }) => {
   }, [setLocation]);
 
   useUpdateEffect(() => {
-    if (!isFocused) {
+    if (!isFocused || !inputValue) {
       return;
     }
     autocompleteService.current.getPlacePredictions(
@@ -162,13 +166,18 @@ export const SearchBarComponent = ({ handleSelect }) => {
         setPredictionsList(predictions);
       },
     );
-  }, [inputValue, isFocused]);
+  }, [inputValue]);
 
   useEffect(() => {
     if (isFocused) {
       sessionToken.current = new window.google.maps.places.AutocompleteSessionToken();
     }
   }, [isFocused]);
+
+  const options = [
+    { place_id: 'current_location', description: 'Use current location' },
+    ...predictionsList,
+  ];
 
   return (
     <InputWrapper>
@@ -179,7 +188,7 @@ export const SearchBarComponent = ({ handleSelect }) => {
         ref={inputRef}
         onChange={e => setInputValue(e.target.value)}
         placeholder="Enter your city"
-        onFocus={() => {
+        onFocus={(e) => {
           setIsFocused(true);
           trackEvent({
             category: 'homepage',
@@ -188,20 +197,23 @@ export const SearchBarComponent = ({ handleSelect }) => {
           });
         }}
         onBlur={() => {
-          setIsFocused(false);
+          setTimeout(() => setIsFocused(false), 100);
         }}
       />
-      <DropdownWrapper ref={wrapperRef}>
-        {predictionsList.map(prediction => (
+      <DropdownWrapper visible={isFocused}>
+        {options.map(prediction => (
           <DropdownItem
             align="center"
-            onClick={() => onSelect(prediction)}
+            onClick={() => {
+              onSelect(prediction)
+            }}
             key={prediction.place_id}
           >
             <B1>{prediction.description}</B1>
           </DropdownItem>
         ))}
       </DropdownWrapper>
+      <div ref={mapRef} />
     </InputWrapper>
   );
 };
