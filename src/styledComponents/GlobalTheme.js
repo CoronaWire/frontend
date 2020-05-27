@@ -42,6 +42,7 @@ const GlobalTheme = {
   },
   newsColors: {
     pink: '#FF335F',
+    pinkHover: 'rgba(255, 51, 95, 0.05)',
     navy: '#242A49',
     ivory: '#F5F5F3',
     darkGrey: '#4F536B',
