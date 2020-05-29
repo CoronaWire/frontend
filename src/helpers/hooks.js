@@ -1,5 +1,9 @@
 import { useRef, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { trackTiming } from './ga';
+import { fetchFipsInfo } from './fips';
+import { saveLocationToLocalStorage } from './localStorage';
+import { setLocationAction } from './../actionCreators/actions';
 
 export const useUpdateEffect = (cb, props) => {
   const didMountRef = useRef(false);
@@ -46,4 +50,34 @@ export const useTimingEffect = (scope) => {
       });
     };
   }, []);
+};
+
+export const useCurrentLocation = (onSuccess = () => null) => {
+  const dispatch = useDispatch();
+
+  const handleSetLocation = async (position) => {
+    const { coords: { latitude: lat, longitude: lng } } = position;
+    const fipsData = await fetchFipsInfo(lat, lng);
+    const userLocation = {
+      lat,
+      lng,
+      name: 'Current location',
+      ...fipsData,
+    };
+
+    saveLocationToLocalStorage(userLocation);
+    dispatch(
+      setLocationAction(userLocation),
+    );
+    onSuccess();
+  };
+
+  return () => {
+    window.navigator.geolocation.getCurrentPosition(
+      handleSetLocation,
+      err => {
+        console.log(err);
+      },
+    );
+  };
 };
