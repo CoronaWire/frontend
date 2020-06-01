@@ -57,7 +57,7 @@ const ArticleSummary = styled(SmallText)`
 
 const ArticleMetaDataText = styled(MediumText)`
     background-color: transparent;
-    font-size: 13px;
+    font-size: 12px;
 `
 
 // #toDo #globalTheme: move colors up to global theme
