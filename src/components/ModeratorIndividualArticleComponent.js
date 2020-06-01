@@ -196,7 +196,7 @@ class ModeratorIndividualArticleComponent extends Component {
 
 
     render(){
-        const { title, author, summary, specificity, city, state, country, content } = this.props.articleObject;
+        let { title, author, summary, specificity, city, state, country, content } = this.props.articleObject;
         const articleURL = this.props.articleObject.article_url;
         const fipsProcessed = this.props.articleObject.fips_processed;
         const hasLongLat = this.props.articleObject.longlat;
@@ -206,6 +206,7 @@ class ModeratorIndividualArticleComponent extends Component {
         const sourceCity = this.props.articleObject.sourcecity;
         const sourceState = this.props.articleObject.sourcestate;
         const articleID = this.props.articleObject.id;
+        specificity = specificity === null ? 'undefined' : specificity;
 
         // Sets the lat and long to be filled later
         let latitude = 'None';
@@ -226,6 +227,7 @@ class ModeratorIndividualArticleComponent extends Component {
         }
         const defaultOption = dropdownOptions[0];
         console.log('Article object', this.props.articleObject);
+        console.log('Component re-rendered with specificity', specificity);
         return (
             <IndividualArticleWrapper>
                 <HalfGrid>
@@ -278,7 +280,7 @@ class ModeratorIndividualArticleComponent extends Component {
                             <InputTitle>
                             Specificity
                             </InputTitle>
-                            <DropDownListWrapper onChange={this.dropdownChange} defaultValue={this.state.specificity}>
+                            <DropDownListWrapper onChange={this.dropdownChange} value={specificity}>
                                 {/* <DropDownListOption id='' value={null} selected={this.state.specificity === null ? 'selected': ''}> Not Specified </DropDownListOption>
                                 <DropDownListOption id='local' value='local' selected={this.state.specificity === 'local' ? 'selected': ''}> Local </DropDownListOption>
                                 <DropDownListOption id='regional' value='regional' selected={this.state.specificity ===  'regional' ? 'selected': ''} > Regional </DropDownListOption>
