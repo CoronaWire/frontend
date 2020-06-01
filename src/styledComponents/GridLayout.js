@@ -15,7 +15,7 @@ export const TinyGrid = styled.div`
 
 export const LargeGrid = styled.div`
     height: 100%;
-    width: 46%;
+    width: 44%;
     background-color: transparent;
     padding-left: 20px;
     padding-right: 20px;
@@ -44,7 +44,7 @@ export const SmallGrid = styled.div`
 
 export const SmallerGrid = styled.div`
     height: 100%;
-    width: 13%;
+    width: 12%;
     background-color: transparent;
     padding-left: 20px;
     justify-content: center;

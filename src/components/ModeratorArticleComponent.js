@@ -153,9 +153,9 @@ class ModeratorArticleComponent extends Component {
         // console.log('Published at after hours removed', publishedAt);
         // const relativeTime = moment(`${publishedTime}`, "YYYY-MM-DDTHH:MM:SSZ").fromNow();
         // console.log('Relative time given by the moment js library', relativeTime);
-        let readable = new Date(publishedTime);
-        readable = readable.toString()
-        readable = removeStandardTimeFromDate(readable);
+        let convertedPublishedTime = new Date(publishedTime);
+        convertedPublishedTime = convertedPublishedTime.toString()
+        convertedPublishedTime = removeStandardTimeFromDate(convertedPublishedTime);
 
         // Capitalizes mod_status
         const mod_status =  status.charAt(0).toUpperCase() + status.slice(1);
@@ -206,18 +206,22 @@ class ModeratorArticleComponent extends Component {
                             </ArticleSummary>
                         </ArticleText>
                     </LargeArticleGrid>
-                    <SmallGrid>
+                    <SmallerGrid>
                         <ArticleMetaDataText> {this.props.articleObject.source_id} </ArticleMetaDataText>
-                    </SmallGrid>
+                    </SmallerGrid>
+                    <SmallerGrid>
+                        <ArticleMetaDataText> {this.props.articleObject.sourceloc} </ArticleMetaDataText>
+                    </SmallerGrid>
                     <SmallGrid>
-                        <ArticleMetaDataText> {readable} </ArticleMetaDataText>
+                        <ArticleMetaDataText> {convertedPublishedTime} </ArticleMetaDataText>
                     </SmallGrid>
-                    <SmallGrid>
+                    
+                    <SmallerGrid>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >
                             <StatusText status={this.props.articleObject.mod_status}> {mod_status} </StatusText>
                             <UnderlinedMediumText onClick={() => this.props.undoArticleApprovalRejection(articleID)} > Undo </UnderlinedMediumText>
                         </ColumnWrapper>
-                    </SmallGrid>
+                    </SmallerGrid>
                 </IndividualArticleWrapper>
                 
             </>

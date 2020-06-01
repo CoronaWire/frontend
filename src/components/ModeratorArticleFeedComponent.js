@@ -111,15 +111,18 @@ class ModeratorArticleFeedComponent extends PureComponent {
                 <LargeGrid> 
                     <BoldSmallText> Article </BoldSmallText>
                 </LargeGrid>
-                <SmallGrid>
+                <SmallerGrid>
                     <BoldSmallText> Source </BoldSmallText>
-                </SmallGrid>
+                </SmallerGrid>
+                <SmallerGrid>
+                    <BoldSmallText> Location </BoldSmallText>
+                </SmallerGrid>
                 <SmallGrid>
                     <BoldSmallText> Published </BoldSmallText>
                 </SmallGrid>
-                <SmallGrid>
+                <SmallerGrid>
                     <BoldSmallText> Status </BoldSmallText>
-                </SmallGrid>
+                </SmallerGrid>
             </ArticleFeedTitleBar>
             <ArticleFeedWrapper>
                 {   loadingStatus === 'loaded' ?
