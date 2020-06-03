@@ -83,7 +83,7 @@ const MobileImage = styled(Image)`
   width: 100%;
   height: 120px;
   margin-bottom: 14px;
-  margint-top: -6px;
+  margin-top: -6px;
   ${media.aboveMobile`
     display: none;
   `};
