@@ -291,6 +291,7 @@ const MainDashboardComponent = () => {
                 articleUrl={article.article_url}
                 source={article.source_id}
                 onClick={trackArticleClick}
+                imageUrl={article.image_url}
               />
             )) : (
               <NewsFeedLoader />

@@ -15,7 +15,7 @@ const SingleNewsWrapper = styled.div`
   ${({ theme }) => `border: 1px solid ${theme.newsColors.lightGrey}`};
   padding: 20px 16px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   ${({ theme }) => `background-color: ${theme.newsColors.white}`};
   margin-bottom: 16px;
   ${media.mobile`
@@ -72,25 +72,62 @@ const SourceContainer = styled(Container)`
   margin-bottom: 14px;
 `;
 
+const Image = styled.img`
+  width: 158px;
+  height: 158px;
+  object-fit: cover;
+  border-radius: 2px;
+`;
+
+const MobileImage = styled(Image)`
+  width: 100%;
+  height: 120px;
+  margin-bottom: 14px;
+  margint-top: -6px;
+  ${media.aboveMobile`
+    display: none;
+  `};
+`;
+
+const ContentContainer = styled(Container)`
+  flex: 1;
+`;
+
+const ImageContainer = styled(Container)`
+  margin-left: 16px;
+  ${media.mobile`
+    display: none;
+  `};
+`;
+
 const SingleNewsComponent = ({
   publishedAt,
   title,
   summary,
   source,
   articleUrl,
+  imageUrl,
   onClick = () => null,
 }) => (
   <SingleNewsWrapper>
-    <SourceContainer>
-      <DataSource>{source}</DataSource>
-    </SourceContainer>
-    <Link onClick={onClick} target="_blank" href={articleUrl}>
-      <NewsTitle>{title}</NewsTitle>
-    </Link>
-    <NewsTextContainer>
-      <NewsText>{summary}</NewsText>
-    </NewsTextContainer>
-    <NewsTimeStamp>{timeSince(publishedAt)}</NewsTimeStamp>
+    <ContentContainer flexColumn>
+      <SourceContainer>
+        <DataSource>{source}</DataSource>
+      </SourceContainer>
+      <Link onClick={onClick} target="_blank" href={articleUrl}>
+        <NewsTitle>{title}</NewsTitle>
+      </Link>
+      <NewsTextContainer>
+        <NewsText>{summary}</NewsText>
+      </NewsTextContainer>
+      {!!imageUrl && <MobileImage src={imageUrl} />}
+      <NewsTimeStamp>{timeSince(publishedAt)}</NewsTimeStamp>
+    </ContentContainer>
+    {!!imageUrl && (
+      <ImageContainer>
+        <Image src={imageUrl} />
+      </ImageContainer>
+    )}
   </SingleNewsWrapper>
 );
 
