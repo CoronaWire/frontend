@@ -181,6 +181,8 @@ const MainDashboardComponent = () => {
   };
 
   const handleFetchMore = async () => {
+    console.log('fetching more');
+    console.log(location);
     const max = mainFeed && mainFeed[mainFeed.length - 1] && mainFeed[mainFeed.length - 1].id - 1;
     if (!max) {
       return;
