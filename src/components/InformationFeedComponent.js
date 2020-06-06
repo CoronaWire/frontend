@@ -32,7 +32,7 @@ const FeedArticle = styled.div`
 
 const ArticleTitle = styled(H4)`
   margin-bottom: 8px;
-  color: ${({ theme }) => theme.newsColors.navy};
+  color: ${({ theme }) => theme.newsColors.secondary};
   &:hover {
     opacity: 0.7;
   }
@@ -45,7 +45,7 @@ const ArticleMetaData = styled(Metadata)`
 
 const MoreText = styled(H3)`
   margin-top: 24px;
-  color: ${({ theme }) => theme.newsColors.pink};
+  color: ${({ theme }) => theme.newsColors.primary};
   cursor: pointer;
   text-transform: uppercase;
 `;

@@ -106,7 +106,7 @@ const ScopeWrapper = styled.div`
 
 const BackToNews = styled(H3)`
   cursor: pointer;
-  color: ${({ theme }) => theme.newsColors.pink};
+  color: ${({ theme }) => theme.newsColors.primary};
   margin-bottom: 24px;
   text-transform: uppercase;
 `;
@@ -122,7 +122,7 @@ const ToggleButton = styled(BaseButton)`
     background: ${theme.newsColors.midGrey};
     color: ${theme.newsColors.white};
     &:disabled {
-      background: ${theme.newsColors.pink};
+      background: ${theme.newsColors.primary};
       cursor: not-allowed;
     }
   `};
