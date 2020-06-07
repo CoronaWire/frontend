@@ -115,10 +115,12 @@ class ModeratorCurateComponent extends PureComponent {
             newsSourceArray: [],
             newsSourceFilterArray: [],
             totalArticlesCount: 0,
+            loadingStatus: '',
+            howManyExtraArticlesRetrieved: 1, 
         }
         // #comment: articles will be either stored in redux state or locally.
     }
-
+    
 
     componentDidMount = async () => {
         const paramObject = {
@@ -141,6 +143,8 @@ class ModeratorCurateComponent extends PureComponent {
         const { status, region, offset, sourceArray } = paramObject;
         let returnedResponse, articlesArray, returnedCountObject, totalArticlesCount;
         let newParamObject = {};
+
+        this.changeLoadingStatus('loading');
 
         if (region === 'National') {
             newParamObject = {
@@ -207,10 +211,16 @@ class ModeratorCurateComponent extends PureComponent {
             this.setState({totalArticlesCount})
         }
         console.log('Returned response from back-end', returnedResponse);
+        let articlesArrayLength = articlesArray.length;
         let articleFeedObject = transformIntoArticleObject(articlesArray)
         let selectedArticlesObject = createObjectOfArticleIDs(articlesArray);
         // console.log('Returned response', returnedResponse);
         // console.log('Article object', articleFeedObject)
+        if (articlesArrayLength === 0) {
+            this.changeLoadingStatus('noData');
+        } else {
+            this.changeLoadingStatus('loaded');
+        }
 
         this.setState({
             articleFeed: articleFeedObject,
@@ -245,6 +255,10 @@ class ModeratorCurateComponent extends PureComponent {
 
         // Ensures that we move back to the article feed component 
         this.goBackToArticleFeed()
+
+        // Resets the variable to 1 in order to ensure that the button at the end of the current feed properly displays
+        // Load More Articles when there are more articles to load 
+        this.resetLoadMoreArticlesButton();
     }
 
     toggleLocationFilter = (event) => {
@@ -346,8 +360,8 @@ class ModeratorCurateComponent extends PureComponent {
         //     articlesArray = returnedResponse.data.articlesArray;
         //     articleCount = returnedResponse.data.articleCount[0].count;
         // }
-        console.log(`Returned response`);
-        console.log(returnedResponse);
+
+        const howManyExtraArticlesRetrieved = returnedResponse.data.length;
         // #toDo: this needs to be done either on back-end or within the individual component
         let articleFeedObject = transformIntoArticleObject(articlesArray)
         let hashOfArticleIDs = createObjectOfArticleIDs(articlesArray);
@@ -362,7 +376,8 @@ class ModeratorCurateComponent extends PureComponent {
         this.setState({
             articleFeed: articleFeedObject,
             selectedArticles: hashOfArticleIDs,
-            articleCount: articleCount
+            articleCount: articleCount,
+            howManyExtraArticlesRetrieved: howManyExtraArticlesRetrieved,
         })
 
     }
@@ -443,6 +458,11 @@ class ModeratorCurateComponent extends PureComponent {
 
         this.retrieveArticle(paramObject);
 
+    }
+
+    resetLoadMoreArticlesButton = () => {
+        let howManyExtraArticlesRetrieved = 1;
+        this.setState({howManyExtraArticlesRetrieved});
     }
 
     // Ensures that the news source array is cleared out whenever the user toggles the location. Different location potentially implies
@@ -780,12 +800,18 @@ class ModeratorCurateComponent extends PureComponent {
         }
     }
 
+    changeLoadingStatus = (loadingStatus) => {
+        console.log('Changing loading status');
+        this.setState({
+            loadingStatus: loadingStatus
+        })
+    }
     // #toFix: make the CityBUtton a component within itself. Loop through. Code not DRY.
     render(){
         // Array of all the different article_ids for the articles displayed. Allows us to loop through
         // list of articles when attempting to edit
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
-        const {totalArticlesCount} = this.state;
+        const {totalArticlesCount, howManyExtraArticlesRetrieved} = this.state;
         // Current article chosen by the user
         // console.log('Index of article displayed', this.state.articleDisplayedIndex)
         // console.log('Current article object', this.state.currentlySelectedArticle);
@@ -793,6 +819,7 @@ class ModeratorCurateComponent extends PureComponent {
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         // console.log('Article currently displayed ', this.state.articleCurrentlyDisplayed);
         // console.log('Current article', currentArticle);
+        console.log('Article currently selected or next', this.state.currentlySelectedArticle);
         return(
             <FeedWrapper>
                 <FilterActionsWrapper>
@@ -840,6 +867,9 @@ class ModeratorCurateComponent extends PureComponent {
                         retrieveMoreArticles={this.retrieveMoreArticles}
                         approveArticleAndDeleteFromFeed={this.approveArticleAndDeleteFromFeed}
                         rejectArticleAndDeleteFromFeed={this.rejectArticleAndDeleteFromFeed}
+                        modStatus={this.state.statusFilter}
+                        loadingStatus={this.state.loadingStatus}
+                        howManyExtraArticlesRetrieved={howManyExtraArticlesRetrieved}
                         />
                         :
                         <ModeratorIndividualArticleComponent 

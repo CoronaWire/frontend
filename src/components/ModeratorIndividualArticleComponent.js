@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 // Internal Modules
 import { HalfGrid } from '../styledComponents/GridLayout';
+import GoogleMapsComponent from './GoogleMapsComponent';
 
 const IndividualArticleWrapper = styled.div`
     width: 100%;
@@ -28,11 +29,15 @@ const ArticleDataWrapper = styled.div`
 const InputTitle = styled.p`
     background-color: transparent;
     font-size: 14px;
-    color: ${props => props.success ? '#1AAE9F' : 'black'};
+    color: black;
     margin-bottom: 5px;
     display: inline-block;
     font-weight: 600;
 `;
+
+const SuccessFailureInputText = styled(InputTitle)`
+    color: ${props => props.processed === null || props.processed === false ?'#D3455B' : '#1AAE9F' };
+`
 
 const MediumTextField = styled.textarea`
     background-color: white;
@@ -66,6 +71,7 @@ const SmallTextField = styled(MediumTextField)`
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 10px;
+    cursor: ${props => props.disabled ?'not-allowed' : 'pointer' };
 `
 
 const InputWrapper = styled.div`
@@ -98,7 +104,7 @@ const ContentDisplayTypeButton = styled.button`
     background-color: ${props => props.contentTypeDisplayed === props.currentButtonType ? '#1AAE9F' : 'transparent'};
     text-align: center;
     outline: none;
-    cursor: pointer;
+    cursor: ${props => props.disabled === false ? 'pointer' : 'not-allowed'};
     color: black;
     font-size: 16px;
     font-weight: 600;
@@ -161,8 +167,11 @@ class ModeratorIndividualArticleComponent extends Component {
             contentTypeDisplayed: 'Outline',
             articleURL: props.articleObject.article_url,
             outline: 'https://outline.com/' + props.articleObject.article_url,
-            specificity: props.articleObject.specificity
+            specificity: props.articleObject.specificity,
+            longitude: props.articleObject.longlat === null ?'None' : props.articleObject.longlat.x,
+            latitude: props.articleObject.longlat === null ?'None' : props.articleObject.longlat.y,
         }
+        console.log("THIS STATE IS NOW", this.state);
     }
 
     handleChange = (event) => {
@@ -185,18 +194,64 @@ class ModeratorIndividualArticleComponent extends Component {
         this.props.editArticleInformation('specificity', event.target.value);
     }
 
+
     render(){
-        const { title, author, summary, specificity, city, state, country, content } = this.props.articleObject;
+        let { title, author, summary, specificity, city, state, country, content } = this.props.articleObject;
         const articleURL = this.props.articleObject.article_url;
         const fipsProcessed = this.props.articleObject.fips_processed;
+        const hasLongLat = this.props.articleObject.longlat;
         const outlineURL = 'https://outline.com/' + articleURL;
         const dropdownOptions = ['Local', 'Regional', 'National', 'Global'];
+        const sourceCountry = this.props.articleObject.sourcecountry;
+        const sourceCity = this.props.articleObject.sourcecity;
+        const sourceState = this.props.articleObject.sourcestate;
+        const articleID = this.props.articleObject.id;
+        specificity = specificity === null ? 'undefined' : specificity;
+
+        // Sets the lat and long to be filled later
+        let latitude = 'None';
+        let longitude = 'None';
+        let position = {
+            longitude: longitude,
+            latitude: latitude
+        };
+        // Ensures that we define the longitude and latitude only when the object longlat returned is not null
+        // position Object passed down below to the Google Maps Component to render the longitude and latitude correctly
+        if (fipsProcessed === true && this.props.articleObject.longlat !== null) {
+            longitude = this.props.articleObject.longlat.x
+            latitude = this.props.articleObject.longlat.y
+            position = {
+                longitude: Number(longitude),
+                latitude: Number(latitude),
+            }
+        }
         const defaultOption = dropdownOptions[0];
-        console.log('Specificity of this object is', specificity);
+        console.log('Article object', this.props.articleObject);
+        console.log('Component re-rendered with specificity', specificity);
         return (
             <IndividualArticleWrapper>
                 <HalfGrid>
                     <ArticleDataWrapper>
+                        
+                        <InputWrapper>
+                            <InputTitle> Processing and Geolocation status </InputTitle>
+                            <SuccessFailureInputText processed={fipsProcessed} >
+                                {
+                                    fipsProcessed === false ? "Article hasn't been fips_processed yet." :  "Article successfully fips_processed. "
+                                }
+                            </SuccessFailureInputText>
+                            <SuccessFailureInputText processed={hasLongLat} >
+                                {
+                                    hasLongLat === null ? "Geo-coordinates and FIPS not set." :  "Geo-coordinates and FIPS set."
+                                }
+                            </SuccessFailureInputText>
+                        </InputWrapper>
+                        <InputWrapper>
+                            <InputTitle>
+                            Article ID
+                            </InputTitle>
+                            <SmallTextField id='id' value={articleID} disabled />
+                        </InputWrapper>
                         <InputWrapper>
                             <InputTitle>
                             Title
@@ -225,7 +280,7 @@ class ModeratorIndividualArticleComponent extends Component {
                             <InputTitle>
                             Specificity
                             </InputTitle>
-                            <DropDownListWrapper onChange={this.dropdownChange} defaultValue={this.state.specificity}>
+                            <DropDownListWrapper onChange={this.dropdownChange} value={specificity}>
                                 {/* <DropDownListOption id='' value={null} selected={this.state.specificity === null ? 'selected': ''}> Not Specified </DropDownListOption>
                                 <DropDownListOption id='local' value='local' selected={this.state.specificity === 'local' ? 'selected': ''}> Local </DropDownListOption>
                                 <DropDownListOption id='regional' value='regional' selected={this.state.specificity ===  'regional' ? 'selected': ''} > Regional </DropDownListOption>
@@ -240,50 +295,67 @@ class ModeratorIndividualArticleComponent extends Component {
                         </InputWrapper>
                         { 
                             // Currently only shows the City, State, Country fields if it's fips_processed = Location associated with article by our cron job 'successfully'
-                            fipsProcessed === true && 
+                            fipsProcessed === true &&
                             <>
                             <InputWrapper>
                                 <InputTitle>
-                                City
+                                Longitude 
                                 </InputTitle>
-                                <SmallTextField id='city' value={city} onChange={this.handleChange} />
+                                <SmallTextField id='longitude' value={longitude} disabled/>
+                                <InputTitle>
+                                Latitude 
+                                </InputTitle>
+                                <SmallTextField id='latitude' value={latitude} disabled/>
                             </InputWrapper>
                             <InputWrapper>
                                 <InputTitle>
-                                State
+                                Interpolated City
                                 </InputTitle>
-                                <SmallTextField id='state' value={state} onChange={this.handleChange}/>
+                                <SmallTextField id='city' value={city} disabled />
                             </InputWrapper>
                             <InputWrapper>
                                 <InputTitle>
-                                Country
+                                Interpolated State
                                 </InputTitle>
-                                <SmallTextField id='country' value={country} onChange={this.handleChange}>
+                                <SmallTextField id='state' value={state} disabled/>
+                            </InputWrapper>
+                            <InputWrapper>
+                                <InputTitle>
+                                Interpolated Country
+                                </InputTitle>
+                                <SmallTextField id='country' value={country} disabled>
                                 </SmallTextField>
                             </InputWrapper>
-                            <LastInputWrapper>
-                                <InputTitle success>
-                                    Article successfully fips_processed. Locations associated to it found above.
-                                </InputTitle>
-                            </LastInputWrapper>
-                        
-                            </>
-                        }
-                        {
-                            fipsProcessed === false &&
-                            <LastInputWrapper>
+                            <InputWrapper>
                                 <InputTitle>
-                                    Article hasn't been fips_processed yet. No locations associated to it for the moment.
+                                Source City
                                 </InputTitle>
-                            </LastInputWrapper>
+                                <SmallTextField id='sourcecity' value={sourceCity} disabled />
+                            </InputWrapper>
+                            <InputWrapper>
+                                <InputTitle>
+                                Source State
+                                </InputTitle>
+                                <SmallTextField id='sourcestate' value={sourceState} disabled/>
+                            </InputWrapper>
+                            <InputWrapper>
+                                <InputTitle>
+                                Source Country
+                                </InputTitle>
+                                <SmallTextField id='sourcecountry' value={sourceCountry} disabled />
+                            </InputWrapper>
+                            </>
+                            
                         }
                     </ArticleDataWrapper>
                 </HalfGrid>
                 <HalfGrid>
                     <ContentDisplayChoiceWrapper>
-                        <ContentDisplayTypeButton onClick={() => this.changeContentDisplay('Outline')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Outline'} > Outline </ContentDisplayTypeButton>
-                        <ContentDisplayTypeButton onClick={() => this.changeContentDisplay('IFrame')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'IFrame'} > IFrame </ContentDisplayTypeButton>
-                        <ContentDisplayTypeButton onClick={() => this.changeContentDisplay('Text')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Text'}> Text </ContentDisplayTypeButton>                       
+                        <ContentDisplayTypeButton disabled={false} onClick={() => this.changeContentDisplay('Outline')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Outline'} > Outline </ContentDisplayTypeButton>
+                        <ContentDisplayTypeButton disabled={false} onClick={() => this.changeContentDisplay('IFrame')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'IFrame'} > IFrame </ContentDisplayTypeButton>
+                        <ContentDisplayTypeButton disabled={false} onClick={() => this.changeContentDisplay('Text')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Text'}> Text </ContentDisplayTypeButton>  
+                        <ContentDisplayTypeButton disabled={hasLongLat === null} onClick={() => this.changeContentDisplay('Map')} contentTypeDisplayed={this.state.contentTypeDisplayed} currentButtonType={'Map'}> Map </ContentDisplayTypeButton>      
+                                    
                     </ContentDisplayChoiceWrapper>
                     {
                         this.state.contentTypeDisplayed === 'Outline' &&  <IFrame src={`${outlineURL}`} />
@@ -293,6 +365,9 @@ class ModeratorIndividualArticleComponent extends Component {
                     }
                     {
                         this.state.contentTypeDisplayed === 'Text' &&  <TextContent> {content} </TextContent>
+                    }
+                    {
+                        this.state.contentTypeDisplayed === 'Map' &&  <GoogleMapsComponent changeContentDisplay={this.changeContentDisplay} position={position}/>
                     }
                 </HalfGrid>
             </IndividualArticleWrapper>

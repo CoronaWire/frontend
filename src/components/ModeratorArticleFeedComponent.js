@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { SmallText } from '../styledComponents/Text';
 import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid } from '../styledComponents/GridLayout';
-import { OutlineButton } from '../styledComponents/Buttons';
+import { OutlineButton, NoBorderButton } from '../styledComponents/Buttons';
 
 // Sub-Components
 import ModeratorArticleComponent from './ModeratorArticleComponent'
@@ -18,6 +18,9 @@ const BoldSmallText = styled(SmallText)`
     font-weight: 600;
 `;
 
+const BoldSmallerText = styled(BoldSmallText)`
+    font-size: 9px;
+`
 
 const ArticleFeedTitleBar = styled.div`
     height: 40px;
@@ -54,6 +57,30 @@ const Button = styled(OutlineButton)`
     transition: background-color 0.2s ease-in, color 0.2s ease-in;
 `
 
+const DisabledButton = styled(OutlineButton)`
+    margin-top: 20px;
+    margin-bottom: 20px;
+    cursor: not-allowed;
+`
+
+const FeedWrapper = styled.div`
+    background-color: white;
+    color:black;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+const CenterFeedMessage = styled.h4`
+    font-weight: 600;
+    color: black;
+    font-size:20px;
+    text-align: center;
+`
+const ARTICLE_RETRIEVAL_BATCH_LENGTH = 30;
+
 class ModeratorArticleFeedComponent extends PureComponent {
     constructor(props) {
         super(props);
@@ -64,52 +91,112 @@ class ModeratorArticleFeedComponent extends PureComponent {
 
     render(){
         const articleKeysArray = Object.keys(this.props.articleFeed);
+        let articlesArrayLength = articleKeysArray.length;
+        console.log('Articles Array Length', articlesArrayLength);
+    
+        const { modStatus, loadingStatus, howManyExtraArticlesRetrieved } = this.props;
+
+        const ArticlesDisplayed = articleKeysArray.map((objectKey, index) => {
+                                const articleObject = this.props.articleFeed[objectKey];
+                                const articleKey = objectKey;
+                                return <ModeratorArticleComponent 
+                                        articleObject={articleObject} 
+                                        key={articleKey} 
+                                        toggleArticleSelected={this.props.toggleArticleSelected}
+                                        checked={this.props.selectedArticles[articleKey]}
+                                        articleID={articleKey}
+                                        articleIndex={index}
+                                        undoArticleApprovalRejection={this.props.undoArticleApprovalRejection}
+                                        selectIndividualArticle={this.props.selectIndividualArticle}
+                                        approveArticleAndDeleteFromFeed={this.props.approveArticleAndDeleteFromFeed}
+                                        rejectArticleAndDeleteFromFeed={this.props.rejectArticleAndDeleteFromFeed}
+                                        />
+                                })
+
+        const FeedLoadingMessage = loadingStatus === 'loading' ?
+                                    <FeedWrapper>
+                                        <CenterFeedMessage> Loading... </CenterFeedMessage>
+                                    </FeedWrapper>
+                                    : 
+                                    <FeedWrapper>
+                                        <CenterFeedMessage> No articles to display </CenterFeedMessage>
+                                    </FeedWrapper>
+
+        console.log('Number of articles retrived by Load More button', howManyExtraArticlesRetrieved);
+
+        const LoadMoreButton = howManyExtraArticlesRetrieved === 0  || articlesArrayLength < ARTICLE_RETRIEVAL_BATCH_LENGTH ?
+                            <DisabledButton disabled> No more articles to load </DisabledButton>
+                            :
+                            <Button onClick={this.props.retrieveMoreArticles}> Load more Articles </Button>
+
         return(
             <>
             <ArticleFeedTitleBar GlobalTheme={GlobalTheme} >
-                <TinyGrid >
-                    <BoldSmallText> Select </BoldSmallText>
-                </TinyGrid>
-                <TinyGrid>
-                    {/* Added here in order to make the alignment consistent with the below elements */}
-                </TinyGrid>
+                    {
+                    modStatus === 'pending' ? 
+                    <>
+                    <TinyGrid >
+                        <BoldSmallText> Select </BoldSmallText>
+                    </TinyGrid>
+                    <TinyGrid>
+                        {/* Added here in order to make the alignment consistent with the below elements */}
+                    </TinyGrid>
+                    </>
+                    : 
+                    <>
+                    <TinyGrid >
+                        <BoldSmallerText> PROCESSED </BoldSmallerText>
+                    </TinyGrid>
+                    <TinyGrid>
+                        <BoldSmallerText> GEOSET </BoldSmallerText>
+                    </TinyGrid>
+                    </>
+                    }
                 <LargeGrid> 
                     <BoldSmallText> Article </BoldSmallText>
                 </LargeGrid>
-                <SmallGrid>
+                <SmallerGrid>
                     <BoldSmallText> Source </BoldSmallText>
-                </SmallGrid>
+                </SmallerGrid>
+                <SmallerGrid>
+                    <BoldSmallText> Location </BoldSmallText>
+                </SmallerGrid>
                 <SmallGrid>
                     <BoldSmallText> Published </BoldSmallText>
                 </SmallGrid>
-                <SmallGrid>
+                <SmallerGrid>
                     <BoldSmallText> Status </BoldSmallText>
-                </SmallGrid>
+                </SmallerGrid>
             </ArticleFeedTitleBar>
             <ArticleFeedWrapper>
-                {
-                    articleKeysArray.map((objectKey, index) => {
-                        const articleObject = this.props.articleFeed[objectKey];
-                        const articleKey = objectKey;
-                        return <ModeratorArticleComponent 
-                                articleObject={articleObject} 
-                                key={articleKey} 
-                                toggleArticleSelected={this.props.toggleArticleSelected}
-                                checked={this.props.selectedArticles[articleKey]}
-                                articleID={articleKey}
-                                articleIndex={index}
-                                undoArticleApprovalRejection={this.props.undoArticleApprovalRejection}
-                                selectIndividualArticle={this.props.selectIndividualArticle}
-                                approveArticleAndDeleteFromFeed={this.props.approveArticleAndDeleteFromFeed}
-                                rejectArticleAndDeleteFromFeed={this.props.rejectArticleAndDeleteFromFeed}
-                                />
-                    })
-                }
-                <EndOfFeedContainer>
+                {   loadingStatus === 'loaded' ?
+                    <>
                     {
-                        articleKeysArray.length > 0 && <Button onClick={this.props.retrieveMoreArticles}> Load more Articles </Button>
+                        articlesArrayLength === 0 ?
+                        <FeedWrapper>
+                            <CenterFeedMessage> All recent articles have been reviewed. Please check back later. </CenterFeedMessage>
+                        </FeedWrapper>
+                        :
+                        <>
+                        { ArticlesDisplayed }
+                        </>
                     }
-                </EndOfFeedContainer>
+                    <EndOfFeedContainer>
+                        {
+                            articleKeysArray.length > 0 && 
+                            <>
+                            {LoadMoreButton}
+                            </>
+                        }
+                    </EndOfFeedContainer>
+                    </>
+                    :
+                    <>
+                    {
+                        FeedLoadingMessage
+                    }
+                    </>
+                }
             </ArticleFeedWrapper>
         </>
         )

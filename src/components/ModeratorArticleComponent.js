@@ -57,7 +57,7 @@ const ArticleSummary = styled(SmallText)`
 
 const ArticleMetaDataText = styled(MediumText)`
     background-color: transparent;
-    font-size: 13px;
+    font-size: 12px;
 `
 
 // #toDo #globalTheme: move colors up to global theme
@@ -84,7 +84,7 @@ const StatusCircle = styled.div`
     width: 15px;
     border-radius: 50%;
     outline: none;
-    background-color: ${props => props.status === 'approved' ? '#1AAE9F' : '#D3455B' }
+    background-color: ${props => props.status === null || props.status === false ? '#D3455B' : '#1AAE9F'  }
 `
 
 // #toFix #toDo: create a core component that styles column
@@ -153,12 +153,14 @@ class ModeratorArticleComponent extends Component {
         // console.log('Published at after hours removed', publishedAt);
         // const relativeTime = moment(`${publishedTime}`, "YYYY-MM-DDTHH:MM:SSZ").fromNow();
         // console.log('Relative time given by the moment js library', relativeTime);
-        let readable = new Date(publishedTime);
-        readable = readable.toString()
-        readable = removeStandardTimeFromDate(readable);
+        let convertedPublishedTime = new Date(publishedTime);
+        convertedPublishedTime = convertedPublishedTime.toString()
+        convertedPublishedTime = removeStandardTimeFromDate(convertedPublishedTime);
 
         // Capitalizes mod_status
-        const mod_status =  status.charAt(0).toUpperCase() + status.slice(1)
+        const mod_status =  status.charAt(0).toUpperCase() + status.slice(1);
+        const hasLongLat = articleObject.longlat;
+        const fipsProcessed = articleObject.fips_processed;
         return (
             <>
                 <IndividualArticleWrapper 
@@ -170,24 +172,29 @@ class ModeratorArticleComponent extends Component {
                     <TinyArticleGrid onClick={() => this.props.toggleArticleSelected(articleID)} modStatus={this.props.articleObject.mod_status}>
                         {
                             (this.props.articleObject.mod_status === 'approved' || this.props.articleObject.mod_status === 'rejected') ?
-                            <StatusCircle status={this.props.articleObject.mod_status} />
+                            // If article is approved or rejected, then we show whether it was already FIPS processed
+                            <StatusCircle status={fipsProcessed} />
                             :
                             <Checkbox checked={this.props.checked} onClick={() => this.props.toggleArticleSelected(articleID)} />
 
                         }
                     </TinyArticleGrid>
-                    <ArticleGridApproveReject>
-                        { this.props.articleObject.mod_status === 'pending' &&
-                            <>
+                    {
+                        this.props.articleObject.mod_status === 'pending' ?
+                        <ArticleGridApproveReject>
                             <ApproveRejectButton id='approve' onClick={() => this.props.approveArticleAndDeleteFromFeed(articleID)}>
                                 <Text> Approve </Text>
                             </ApproveRejectButton>
                             <ApproveRejectButton id='reject' onClick={() => this.props.rejectArticleAndDeleteFromFeed(articleID)}>
                                 <Text> Reject </Text>
                             </ApproveRejectButton>
-                            </>
-                        }
-                    </ArticleGridApproveReject>
+                        </ArticleGridApproveReject>
+                        :
+                        // If article is approved or rejected, we show a status to show whether it has longLat values yet
+                        <TinyGrid>
+                                <StatusCircle status={hasLongLat} />
+                        </TinyGrid>
+                    }
                     <LargeArticleGrid onClick={() =>this.props.selectIndividualArticle(articleID, articleIndex, articleObject)} id={articleID}>
                         {/* <ArticleImage src={this.props.articleObject.image_url} /> */}
                         <ArticleText>
@@ -199,18 +206,22 @@ class ModeratorArticleComponent extends Component {
                             </ArticleSummary>
                         </ArticleText>
                     </LargeArticleGrid>
-                    <SmallGrid>
+                    <SmallerGrid>
                         <ArticleMetaDataText> {this.props.articleObject.source_id} </ArticleMetaDataText>
-                    </SmallGrid>
+                    </SmallerGrid>
+                    <SmallerGrid>
+                        <ArticleMetaDataText> {this.props.articleObject.sourceloc} </ArticleMetaDataText>
+                    </SmallerGrid>
                     <SmallGrid>
-                        <ArticleMetaDataText> {readable} </ArticleMetaDataText>
+                        <ArticleMetaDataText> {convertedPublishedTime} </ArticleMetaDataText>
                     </SmallGrid>
-                    <SmallGrid>
+                    
+                    <SmallerGrid>
                         <ColumnWrapper status={this.props.articleObject.mod_status} >
                             <StatusText status={this.props.articleObject.mod_status}> {mod_status} </StatusText>
                             <UnderlinedMediumText onClick={() => this.props.undoArticleApprovalRejection(articleID)} > Undo </UnderlinedMediumText>
                         </ColumnWrapper>
-                    </SmallGrid>
+                    </SmallerGrid>
                 </IndividualArticleWrapper>
                 
             </>
