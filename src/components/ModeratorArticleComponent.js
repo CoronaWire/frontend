@@ -6,9 +6,12 @@
 // and toggleArticleSelected function
 
 // External Packages
-import React, { Component } from 'react';
+import moment from 'moment'; // Not used anymore but might be used later to get a sense of how long ago the different articles were published 
 import styled from 'styled-components'
-import moment from 'moment';
+import React, { Component } from 'react';
+// Icons
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid } from '../styledComponents/GridLayout';
@@ -29,8 +32,6 @@ const IndividualArticleWrapper = styled.div`
     background-color: ${props => props.checked === true ? '#B2ACFA' : 'white'};
     flex-shrink: 0;
 `;
-
-
 
 const ArticleText = styled.div`
     height: 100%;
@@ -133,19 +134,110 @@ const Text = styled.p`
     font-size: 14px;
     text-align: center;
     width: 100%;
+`;
+
+const CenteredSmallerGrid = styled(SmallerGrid)`
+    justify-content: center;
+    align-items: center;
+    display: flex;
+`;
+
+const IconsWrapper = styled.div`
+    width: auto;
+    height: auto;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    visibility: ${props => (props.status === 'approved' || props.status === 'rejected') ? 'visible' : 'hidden'};
 `
+
+const IndividualIconWrapper = styled.div`
+    height: 30px;
+    width: 30px;
+    border: 2px #0F0083 solid;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 7px;
+    margin-right: 7px;
+    &:hover {
+        background-color: #c7ceff;
+    };
+    position: relative;
+`;
+
+const StarStyles = {
+    color: '#0F0083',
+    backgroundColor: 'transparent',
+    height: '50px',
+};
+
+const CloseStyles = {
+    color: '#0F0083',
+    backgroundColor: 'transparent',
+    height: '50px',
+};
+
+const DescriptionTextWrapper = styled.div`
+    position: absolute;
+    top: -30px;
+    width: 50px;
+    height: 20px;
+    background-color: #0F0083;
+    border-radius: 5px;
+    opacity: ${props => props.isTransparent ? 0 : 1};
+    transition: opacity 0.5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const DescriptionText = styled.p`
+    font-size: 12px;
+    text-align: center;
+    color: white;
+    font-size: 500;
+    width: auto;
+    height: auto
+    display: inline-block;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    background-color: transparent;
+    vertically-align: middle;
+`;
 
 class ModeratorArticleComponent extends Component {
     constructor(props){
         super(props);
         this.state = {
             // Empty for now
+            isFeaturedTransparent: true,
+            isDeleteTransparent: true,
         }
         this.toggleArticleSelected = this.props.toggleArticleSelected;
     }
 
+    toggleFeatured = () => {
+        let { isFeaturedTransparent } = this.state;
+        console.log('Toggle featured is', isFeaturedTransparent);
+        this.setState({
+            isFeaturedTransparent: !isFeaturedTransparent,
+        })
+    }
+
+    toggleDesigned = () => {
+        let { isDeleteTransparent } = this.state;
+        console.log('Toggle designed is', isDeleteTransparent)
+        this.setState({
+            isDeleteTransparent: !isDeleteTransparent,
+        })
+    }
+
     render() {
         const { articleID, articleIndex, articleObject } = this.props;
+        const { isFeaturedTransparent, isDeleteTransparent } = this.state;
         const status = articleObject.mod_status
         const publishedTime = articleObject.published_at;
         // console.log('Published Time on article', publishedTime);
@@ -167,7 +259,6 @@ class ModeratorArticleComponent extends Component {
                         GlobalTheme={GlobalTheme} 
                         // onClick={() => this.props.toggleArticleSelected(articleID)}
                         checked={this.props.checked}
-                        
                     >
                     <TinyArticleGrid onClick={() => this.props.toggleArticleSelected(articleID)} modStatus={this.props.articleObject.mod_status}>
                         {
@@ -216,12 +307,26 @@ class ModeratorArticleComponent extends Component {
                         <ArticleMetaDataText> {convertedPublishedTime} </ArticleMetaDataText>
                     </SmallGrid>
                     
-                    <SmallerGrid>
-                        <ColumnWrapper status={this.props.articleObject.mod_status} >
+                    <CenteredSmallerGrid>
+                        <IconsWrapper status={this.props.articleObject.mod_status}>
+                            <IndividualIconWrapper onMouseEnter={this.toggleFeatured} onMouseLeave={this.toggleFeatured} >
+                                <DescriptionTextWrapper isTransparent={isFeaturedTransparent} >
+                                     <DescriptionText> Feature </DescriptionText> 
+                                </DescriptionTextWrapper>
+                                <StarBorderIcon style={StarStyles} />
+                            </IndividualIconWrapper>
+                            <IndividualIconWrapper onMouseEnter={this.toggleDesigned} onMouseLeave={this.toggleDesigned}>
+                                <DescriptionTextWrapper isTransparent={isDeleteTransparent} > 
+                                    <DescriptionText> Delete </DescriptionText> 
+                                 </DescriptionTextWrapper>
+                                <CloseOutlinedIcon style={CloseStyles} onClick={() => this.props.undoArticleApprovalRejection(articleID)} />
+                            </IndividualIconWrapper>
+                        </IconsWrapper>
+                        {/* <ColumnWrapper status={this.props.articleObject.mod_status} >
                             <StatusText status={this.props.articleObject.mod_status}> {mod_status} </StatusText>
                             <UnderlinedMediumText onClick={() => this.props.undoArticleApprovalRejection(articleID)} > Undo </UnderlinedMediumText>
-                        </ColumnWrapper>
-                    </SmallerGrid>
+                        </ColumnWrapper> */}
+                    </CenteredSmallerGrid>
                 </IndividualArticleWrapper>
                 
             </>

@@ -9,7 +9,7 @@ import axios from 'axios';
 // Styled Components
 // import { NoBorderButton } from '../styledComponents/Buttons';
 // Sub-Components
-import RegionStatusFilterComponent from './RegionStatusFilterComponent'
+import RegionStatusFilterComponent from './RegionStatusFilterComponent';
 import ModeratorArticleFeedComponent from './ModeratorArticleFeedComponent';
 import ModeratorIndividualArticleComponent from './ModeratorIndividualArticleComponent';
 import ModeratorArticleFeedBottomBar from './ModeratorArticleFeedBottomBar'
