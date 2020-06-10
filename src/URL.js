@@ -6,6 +6,8 @@ export const ARTICLE_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspo
 
 export const MAKE_ARTICLE_PENDING_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/review';
 
+export const MAKE_ARTICLE_FEATURED = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/feature';
+
 export const retrieveArticlesURL = (status, region, offset) => {
     return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/${status}/region/${region}/offset/${offset}`;
 };

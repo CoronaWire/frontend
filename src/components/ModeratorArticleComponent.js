@@ -313,7 +313,7 @@ class ModeratorArticleComponent extends Component {
                                 <DescriptionTextWrapper isTransparent={isFeaturedTransparent} >
                                      <DescriptionText> Feature </DescriptionText> 
                                 </DescriptionTextWrapper>
-                                <StarBorderIcon style={StarStyles} />
+                                <StarBorderIcon style={StarStyles} onClick={() => this.props.featureArticle(articleID)}/>
                             </IndividualIconWrapper>
                             <IndividualIconWrapper onMouseEnter={this.toggleDesigned} onMouseLeave={this.toggleDesigned}>
                                 <DescriptionTextWrapper isTransparent={isDeleteTransparent} > 

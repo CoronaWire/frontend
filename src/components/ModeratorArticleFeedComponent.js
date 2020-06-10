@@ -110,6 +110,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
                                         selectIndividualArticle={this.props.selectIndividualArticle}
                                         approveArticleAndDeleteFromFeed={this.props.approveArticleAndDeleteFromFeed}
                                         rejectArticleAndDeleteFromFeed={this.props.rejectArticleAndDeleteFromFeed}
+                                        featureArticle={this.props.featureArticle}
                                         />
                                 })
 

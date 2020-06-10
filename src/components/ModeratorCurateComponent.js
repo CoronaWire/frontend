@@ -25,6 +25,7 @@ import { ARTICLE_URL,
         APPROVE_ARTICLE_URL, 
         REJECT_ARTICLE_URL, 
         MAKE_ARTICLE_PENDING_URL, 
+        MAKE_ARTICLE_FEATURED,
         retrieveArticleURL, 
         retrieveAllSources, 
         retrieveStateSources, 
@@ -678,6 +679,23 @@ class ModeratorCurateComponent extends PureComponent {
         // this.setState({articleFeed});
     }
 
+
+    featureArticle = async (articleID) => {
+        const URL = MAKE_ARTICLE_FEATURED;
+        let makeArticleFeaturedResponse;
+        console.log('Feature Article function ran');
+
+        try {
+            makeArticleFeaturedResponse = await axios.put(URL, {
+                articleID: articleID, 
+            })
+        } catch (error) {
+            console.error(`Error caught while attempting to make article ${articleID} featured`);
+        }
+        
+        console.log('Make article featured response', makeArticleFeaturedResponse);
+    }
+
     togglePageDisplayed = () => {
         this.setState({
             pageDisplayed: this.state.pageDisplayed === 'articleFeed' ? 'individualArticle' : 'articleFeed'
@@ -866,6 +884,7 @@ class ModeratorCurateComponent extends PureComponent {
                         <ModeratorArticleFeedComponent 
                         toggleArticleSelected={this.toggleArticleSelected}
                         undoArticleApprovalRejection={this.undoArticleApprovalRejection}
+                        featureArticle={this.featureArticle}
                         selectedArticles={this.state.selectedArticles}
                         articleFeed={this.state.articleFeed}
                         selectIndividualArticle={this.selectIndividualArticle}
