@@ -52,7 +52,8 @@ const Button = styled(OutlineButton)`
     margin-bottom: 20px;
     &:hover {
         color: white;
-        background-color: rgb(24,11,255);
+        background-color: #0F0083;
+        border-color: #0F0083;
     }
     transition: background-color 0.2s ease-in, color 0.2s ease-in;
 `

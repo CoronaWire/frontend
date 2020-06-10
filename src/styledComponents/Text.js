@@ -38,7 +38,7 @@ export const UnderlinedMediumText = styled.div`
 `
 
 export const GradientText = styled.p`
-    color: rgb(24,11,255);
+    color: #0F0083;
     padding-left: 10px;
     padding-right: 10px;
     display: inline-block;
