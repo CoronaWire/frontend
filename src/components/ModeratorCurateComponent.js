@@ -18,7 +18,7 @@ import ArticleStatusFilterComponent from './ArticleStatusFilterComponent';
 import IndividualArticleTopActionComponent from './IndividualArticleTopActionComponent';
 import NewsSourceFilterComponent from './NewsSourceFilterComponent';
 // Utility Function
-import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles, removeElementFromArray } from '../utilityFunctions';
+import { transformIntoArticleObject, createObjectOfArticleIDs, getSelectedArticles, removeElementFromArray, updateArticleObjectInFeed } from '../utilityFunctions';
 
 // URLs
 import { ARTICLE_URL, 
@@ -693,8 +693,9 @@ class ModeratorCurateComponent extends PureComponent {
         } catch (error) {
             console.error(`Error caught while attempting to make article ${articleID} featured`);
         }
-        
         console.log('Make article featured response', makeArticleFeaturedResponse);
+        let articleObject = makeArticleFeaturedResponse.data[0]
+        this.updateArticle(articleObject);
     }
 
     unfeatureArticle = async (articleID) => {
@@ -711,8 +712,30 @@ class ModeratorCurateComponent extends PureComponent {
         }
         
         console.log('Make article featured response', makeArticleUnfeaturedResponse);
+        let articleObject = makeArticleUnfeaturedResponse.data[0]
+        this.updateArticle(articleObject);
     }
 
+    // #toDo #important #improvement 
+    // Would be better to return the whole object so that it can all be updated at once. 
+    // Would also help when the articles are edited in the front-end and not directly retrieved.
+    // Note to self: would this be solved automatically if we had pub sub set up?
+    // Would probably also solve the problem of moderators editing same articles at the same time
+    updateArticle = (articleObject) => {
+
+        // First step is to change the article object in the ArticleFeed object stored in the component's state
+        const { article_id } = articleObject;
+        let articleFeed = {...this.state.articleFeed};
+        let articleFeedArray = {...this.state.articleFeedArray};
+        console.log('Article Feed in Update function', articleFeed);
+        let updatedArticleObject = updateArticleObjectInFeed(articleFeed, articleObject);
+        articleFeed[article_id] = updatedArticleObject;
+        this.setState({articleFeed});
+
+        // Second step is to make sure that the data is consistent by making sure that the object stored in the ArticleFeedArray is
+        // the same
+    }
+    
     togglePageDisplayed = () => {
         this.setState({
             pageDisplayed: this.state.pageDisplayed === 'articleFeed' ? 'individualArticle' : 'articleFeed'

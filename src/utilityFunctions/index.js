@@ -7,4 +7,5 @@ export {
     removeStandardTimeFromDate,
     removeElementFromArray,
     removeDayAndTime,
+    updateArticleObjectInFeed,
  } from './articleFeed';

@@ -221,7 +221,7 @@ const FeaturedText = styled.p`
     padding-left: 4px;
     padding-right: 4px;
     border-radius: 5px;
-    color:  #0F0083;
+    color: #0F0083;
     font-size: 11px;
     border: 2px solid #0F0083;
     display: inline-block;

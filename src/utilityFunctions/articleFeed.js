@@ -164,3 +164,17 @@ export const removeElementFromArray = (element, array) => {
     };
     return array;
 }
+
+
+export const updateArticleObjectInFeed = (articleFeed, articleObject) => {
+    const { article_id } = articleObject;
+    const objectKeys = Object.keys(articleObject);
+    console.log('Article object keys', objectKeys);
+    let objectOfArticleInFeed = {...articleFeed[article_id]};
+    for (let i=0; i < objectKeys.length; i++) {
+        let currentKey = objectKeys[i];
+        objectOfArticleInFeed[currentKey] = articleObject[currentKey];
+    }
+    console.log('Final Article Object', objectOfArticleInFeed);
+    return objectOfArticleInFeed;
+}
