@@ -171,7 +171,6 @@ class ModeratorIndividualArticleComponent extends Component {
             longitude: props.articleObject.longlat === null ?'None' : props.articleObject.longlat.x,
             latitude: props.articleObject.longlat === null ?'None' : props.articleObject.longlat.y,
         }
-        console.log("THIS STATE IS NOW", this.state);
     }
 
     handleChange = (event) => {
@@ -226,7 +225,7 @@ class ModeratorIndividualArticleComponent extends Component {
             }
         }
         const defaultOption = dropdownOptions[0];
-        console.log('Article object', this.props.articleObject);
+        console.log('Article object rendered in ./ModeratorIndividualArticleComponent', this.props.articleObject);
         console.log('Component re-rendered with specificity', specificity);
         return (
             <IndividualArticleWrapper>

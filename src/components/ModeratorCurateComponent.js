@@ -716,9 +716,14 @@ class ModeratorCurateComponent extends PureComponent {
         const feedLength = Object.keys(this.state.articleFeed).length;
         console.log('Article feed length', feedLength);
         const articleFeedArrayKeys = Object.keys(this.state.articleFeed);
+        console.log('Article Feed Array Keys', articleFeedArrayKeys);
+        // Ensures that we loop back to the beginning of the feed when we've reached the end of the current feed
+        console.log("Article ID that's currently displayed", articleFeedArrayKeys[articleDisplayedIndex])
         articleDisplayedIndex = articleDisplayedIndex === feedLength-1 ? 0 : articleDisplayedIndex + 1;
-        console.log('New article displayed index', articleDisplayedIndex);
-        const currentlyDisplayedArticleObject = this.state.articleFeed[articleFeedArrayKeys[this.state.articleDisplayedIndex]]
+        console.log('Index of next article that is about to be displayed', articleDisplayedIndex);
+        console.log("Article ID that's about to be displayed", articleFeedArrayKeys[articleDisplayedIndex])
+        const currentlyDisplayedArticleObject = this.state.articleFeed[articleFeedArrayKeys[articleDisplayedIndex]]
+        console.log('Article Feed', this.state.articleFeed);
         console.log('Next article to display', currentlyDisplayedArticleObject);
         this.setState({
             articleDisplayedIndex: articleDisplayedIndex,
@@ -740,7 +745,7 @@ class ModeratorCurateComponent extends PureComponent {
 
     approveAndNextArticle = () => {
         const { articleDisplayedIndex, articleFeed } = this.state;
-        console.log('Current article before next called', articleDisplayedIndex);
+        console.log('Current article index before next article is called', articleDisplayedIndex);
         const articleKey = Object.keys(articleFeed)[Number(articleDisplayedIndex)];
         const articleObject = articleFeed[articleKey]
         const articleID = articleObject.article_id;
@@ -819,7 +824,7 @@ class ModeratorCurateComponent extends PureComponent {
         // console.log('Article currently displayed index', this.state.articleDisplayedIndex);
         // console.log('Article currently displayed ', this.state.articleCurrentlyDisplayed);
         // console.log('Current article', currentArticle);
-        console.log('Article currently selected or next', this.state.currentlySelectedArticle);
+        console.log('Individual article currently selected', this.state.currentlySelectedArticle);
         return(
             <FeedWrapper>
                 <FilterActionsWrapper>
