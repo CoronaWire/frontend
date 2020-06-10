@@ -6,4 +6,5 @@ export {
     getSelectedArticles,
     removeStandardTimeFromDate,
     removeElementFromArray,
+    removeDayAndTime,
  } from './articleFeed';

@@ -132,6 +132,25 @@ export const removeStandardTimeFromDate = (dateString) => {
 }
 
 /*
+*
+*  Removes the Day 'Monday' and the time from the string returned by the
+* removeStandardTimeFromDate function above
+* I.e.  Wed Jun 09 2060 20:00:00 --> Jun 09 2060
+*
+*/
+export const removeDayAndTime = (dateString) => {
+    let dateArray = dateString.split(' ');
+    let finalDateString = '';
+
+    finalDateString = finalDateString + dateArray[1] + ' ';
+    finalDateString = finalDateString + dateArray[2] + ' ';
+    finalDateString = finalDateString + dateArray[3];
+
+    console.log('Final date', finalDateString);
+    return finalDateString;
+}
+
+/*
 *   Removes an element from array. If input array [1,4, 39, 32] and element=39
 *   Then output --> [1,4,32]
 *

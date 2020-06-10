@@ -50,6 +50,15 @@ export const SmallerGrid = styled.div`
     justify-content: center;
     align-items: center;
 `
+
+export const SmallestGrid = styled.div`
+    width: 8%;
+    height: 100%;
+    background-color: transparent;
+    justify-content: center;
+    align-items: center;
+`
+
 export const HalfGrid = styled.div`
     height: 100%;
     width: 50%;

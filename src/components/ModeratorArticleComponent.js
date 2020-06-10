@@ -14,10 +14,14 @@ import StarBorderIcon from '@material-ui/icons/StarBorder';
 import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
-import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid } from '../styledComponents/GridLayout';
+import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid, SmallestGrid } from '../styledComponents/GridLayout';
 import { LargeText, SmallText, UnderlinedMediumText, MediumText } from '../styledComponents/Text';
-import { removeHoursFromDate, removeStandardTimeFromDate } from '../utilityFunctions';
+import { removeHoursFromDate, removeStandardTimeFromDate, removeDayAndTime } from '../utilityFunctions';
 import { timeSince } from './../helpers/datetime';
+
+const TestSmallGrid = styled(SmallestGrid)`
+    background-color: transparent;
+`
 
 const IndividualArticleWrapper = styled.div`
     background-color: transparent;
@@ -136,7 +140,7 @@ const Text = styled.p`
     width: 100%;
 `;
 
-const CenteredSmallerGrid = styled(SmallerGrid)`
+const CenteredSmallerGrid = styled(SmallestGrid)`
     justify-content: center;
     align-items: center;
     display: flex;
@@ -183,7 +187,7 @@ const CloseStyles = {
 const DescriptionTextWrapper = styled.div`
     position: absolute;
     top: -30px;
-    width: 50px;
+    width: auto;
     height: 20px;
     background-color: #0F0083;
     border-radius: 5px;
@@ -200,13 +204,28 @@ const DescriptionText = styled.p`
     color: white;
     font-size: 500;
     width: auto;
-    height: auto
+    height: auto;
+    padding-left: 4px;
+    padding-right: 4px;
     display: inline-block;
     margin-top: 0px;
     margin-bottom: 0px;
     background-color: transparent;
     vertically-align: middle;
 `;
+
+const FeaturedText = styled.p`
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding-left: 4px;
+    padding-right: 4px;
+    border-radius: 5px;
+    color:  #0F0083;
+    font-size: 11px;
+    border: 2px solid #0F0083;
+    display: inline-block;
+`
 
 class ModeratorArticleComponent extends Component {
     constructor(props){
@@ -248,11 +267,14 @@ class ModeratorArticleComponent extends Component {
         let convertedPublishedTime = new Date(publishedTime);
         convertedPublishedTime = convertedPublishedTime.toString()
         convertedPublishedTime = removeStandardTimeFromDate(convertedPublishedTime);
+        convertedPublishedTime = removeDayAndTime(convertedPublishedTime);
 
         // Capitalizes mod_status
         const mod_status =  status.charAt(0).toUpperCase() + status.slice(1);
         const hasLongLat = articleObject.longlat;
         const fipsProcessed = articleObject.fips_processed;
+        const featured = articleObject.featured;
+
         return (
             <>
                 <IndividualArticleWrapper 
@@ -303,17 +325,33 @@ class ModeratorArticleComponent extends Component {
                     <SmallerGrid>
                         <ArticleMetaDataText> {this.props.articleObject.sourceloc} </ArticleMetaDataText>
                     </SmallerGrid>
-                    <SmallGrid>
+                    <SmallestGrid>
                         <ArticleMetaDataText> {convertedPublishedTime} </ArticleMetaDataText>
-                    </SmallGrid>
+                    </SmallestGrid>
+                    <SmallestGrid>
+                        {
+                            featured === true && 
+                                <FeaturedText>
+                                    FEATURED
+                                </FeaturedText>
+                        }
+                    </SmallestGrid>
                     
                     <CenteredSmallerGrid>
                         <IconsWrapper status={this.props.articleObject.mod_status}>
                             <IndividualIconWrapper onMouseEnter={this.toggleFeatured} onMouseLeave={this.toggleFeatured} >
                                 <DescriptionTextWrapper isTransparent={isFeaturedTransparent} >
-                                     <DescriptionText> Feature </DescriptionText> 
+                                    { featured === true ?
+                                        <DescriptionText> Unfeature </DescriptionText> 
+                                        :
+                                        <DescriptionText> Feature </DescriptionText> 
+                                    }
                                 </DescriptionTextWrapper>
-                                <StarBorderIcon style={StarStyles} onClick={() => this.props.featureArticle(articleID)}/>
+                                { featured === true ?
+                                        <StarBorderIcon style={StarStyles} onClick={() => this.props.unfeatureArticle(articleID)}/>
+                                        :
+                                        <StarBorderIcon style={StarStyles} onClick={() => this.props.featureArticle(articleID)}/>
+                                    }
                             </IndividualIconWrapper>
                             <IndividualIconWrapper onMouseEnter={this.toggleDesigned} onMouseLeave={this.toggleDesigned}>
                                 <DescriptionTextWrapper isTransparent={isDeleteTransparent} > 

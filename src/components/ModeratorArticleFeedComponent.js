@@ -7,7 +7,7 @@ import styled from 'styled-components';
 // Internal Modules
 import GlobalTheme from '../styledComponents/GlobalTheme';
 import { SmallText } from '../styledComponents/Text';
-import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid } from '../styledComponents/GridLayout';
+import { TinyGrid, LargeGrid, SmallGrid, SmallerGrid, SmallestGrid } from '../styledComponents/GridLayout';
 import { OutlineButton, NoBorderButton } from '../styledComponents/Buttons';
 
 // Sub-Components
@@ -111,6 +111,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
                                         approveArticleAndDeleteFromFeed={this.props.approveArticleAndDeleteFromFeed}
                                         rejectArticleAndDeleteFromFeed={this.props.rejectArticleAndDeleteFromFeed}
                                         featureArticle={this.props.featureArticle}
+                                        unfeatureArticle={this.props.unfeatureArticle}
                                         />
                                 })
 
@@ -137,7 +138,7 @@ class ModeratorArticleFeedComponent extends PureComponent {
                     modStatus === 'pending' ? 
                     <>
                     <TinyGrid >
-                        <BoldSmallText> Select </BoldSmallText>
+                        <BoldSmallText> SELECT </BoldSmallText>
                     </TinyGrid>
                     <TinyGrid>
                         {/* Added here in order to make the alignment consistent with the below elements */}
@@ -154,20 +155,23 @@ class ModeratorArticleFeedComponent extends PureComponent {
                     </>
                     }
                 <LargeGrid> 
-                    <BoldSmallText> Article </BoldSmallText>
+                    <BoldSmallText> ARTICLE </BoldSmallText>
                 </LargeGrid>
                 <SmallerGrid>
-                    <BoldSmallText> Source </BoldSmallText>
+                    <BoldSmallText> SOURCE </BoldSmallText>
                 </SmallerGrid>
                 <SmallerGrid>
-                    <BoldSmallText> Location </BoldSmallText>
+                    <BoldSmallText> PRIMARY LOCATION </BoldSmallText>
                 </SmallerGrid>
-                <SmallGrid>
-                    <BoldSmallText> Published </BoldSmallText>
-                </SmallGrid>
-                <SmallerGrid>
-                    <BoldSmallText> Status </BoldSmallText>
-                </SmallerGrid>
+                <SmallestGrid>
+                    <BoldSmallText> PUBLISHED </BoldSmallText>
+                </SmallestGrid>
+                <SmallestGrid>
+                    <BoldSmallText> STATUS </BoldSmallText>
+                </SmallestGrid>
+                <SmallestGrid>
+                    <BoldSmallText> ACTIONS </BoldSmallText>
+                </SmallestGrid>
             </ArticleFeedTitleBar>
             <ArticleFeedWrapper>
                 {   loadingStatus === 'loaded' ?
