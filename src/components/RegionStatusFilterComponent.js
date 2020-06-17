@@ -104,8 +104,6 @@ class RegionStatusFilterComponent extends PureComponent {
     }
 
     render(){
-        console.log('States displayed', this.state.statesArray)
-
         const ListOfOptions = this.state.statesArray.map((stateString) => {
             return <StateDropDownOption 
                     value={stateString} 
@@ -120,10 +118,11 @@ class RegionStatusFilterComponent extends PureComponent {
 
         let DropdownSelectStateComponent =  
         <StateDropDownListWrapper 
+            onChange={this.dropDownChange}
             locationFilter={this.props.locationFilter} 
             selectedState={this.state.selectedState}
         >
-            <StateDropDownOption value='None'> None </StateDropDownOption>
+            <StateDropDownOption value='None'> No state selected </StateDropDownOption>
             { ListOfOptions }
         </StateDropDownListWrapper>
 
@@ -168,9 +167,10 @@ class RegionStatusFilterComponent extends PureComponent {
                             locationFilter={this.props.locationFilter} 
                             selectedState={this.state.selectedState}    
                         >
-                            <StateDropDownOption value='None'> None </StateDropDownOption>
+                            <StateDropDownOption value='None'> No state selected </StateDropDownOption>
                             { ListOfOptions }
                         </StateDropDownListWrapper>
+
                         <MiddleWrapper>
                         <StatusButton 
                         id='pending' 

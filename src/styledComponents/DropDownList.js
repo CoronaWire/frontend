@@ -32,7 +32,7 @@ export const StateDropDownListWrapper = styled.select`
     border-bottom-width: 3px;
     border-bottom-style: solid;
     border-bottom-color: ${props => props.locationFilter === props.selectedState ? '#6558F5' : 'white'};
-    min-width: 70px;
+    min-width: 120px;
     &:hover {
         border-bottom: 3px solid #6558F5;
     }
