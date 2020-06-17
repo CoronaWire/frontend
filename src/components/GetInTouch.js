@@ -4,16 +4,16 @@ import { Link, B1, H4, H3, Container } from './core';
 
 const Title = styled(H3)`
   text-transform: uppercase;
-  color: ${({ theme }) => theme.newsColors.navy};
+  color: ${({ theme }) => theme.newsColors.secondary};
 `;
 
 const Desc = styled(B1)`
   margin-top: 8px;
-  color: ${({ theme }) => theme.newsColors.navy};
+  color: ${({ theme }) => theme.newsColors.secondary};
 `;
 
 const EmailTitle = styled(H4)`
-  color: ${({ theme }) => theme.newsColors.navy};
+  color: ${({ theme }) => theme.newsColors.secondary};
   margin: 24px 0 8px;
 `;
 

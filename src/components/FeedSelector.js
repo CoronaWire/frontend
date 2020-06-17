@@ -11,9 +11,9 @@ const OptionWrapper = styled(Container)`
   cursor: pointer;
   border-bottom: 2px solid ${({ theme }) => theme.newsColors.midGrey};
   ${({ active, theme }) => active && css`
-    border-bottom: 2px solid ${({ theme }) => theme.newsColors.pink};
+    border-bottom: 2px solid ${({ theme }) => theme.newsColors.primary};
     ${OptionText} {
-      color: ${theme.newsColors.pink};
+      color: ${theme.newsColors.primary};
     }
   `};
 `;

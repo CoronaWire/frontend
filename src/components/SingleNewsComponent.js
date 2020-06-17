@@ -34,7 +34,7 @@ const lineHeight = 22;
 
 // #toDo #UIUX: what happens if title/text too long? Cut off at X amount of characters. Or set overflow-x hidden.
 const NewsText = styled(B1)`
-  ${({ theme }) => `color: ${theme.newsColors.navy}`};
+  ${({ theme }) => `color: ${theme.newsColors.secondary}`};
 `;
 
 const NewsTextContainer = styled.div`
@@ -44,7 +44,7 @@ const NewsTextContainer = styled.div`
 `;
 
 const NewsTitle = styled(H1)`
-  ${({ theme }) => `color: ${theme.newsColors.navy}`};
+  ${({ theme }) => `color: ${theme.newsColors.secondary}`};
   margin-bottom: 16px;
   &:hover {
     opacity: 0.7;
@@ -52,7 +52,7 @@ const NewsTitle = styled(H1)`
 `
 
 const DataSource = styled(H4)`
-  ${({ theme }) => `color: ${theme.newsColors.pink}`};
+  ${({ theme }) => `color: ${theme.newsColors.primary}`};
 `
 
 // #toDo #UIUX #UXUI: is the whole URL container a link or just the website / twitter text?

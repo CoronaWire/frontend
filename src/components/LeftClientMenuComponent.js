@@ -43,7 +43,7 @@ const MenuContent = styled(Container)`
 `;
 
 const FeedbackText = styled(B1)`
-  ${({ theme }) => `color: ${theme.newsColors.navy}`};
+  ${({ theme }) => `color: ${theme.newsColors.secondary}`};
   margin-bottom: 16px;
   ${media.mobileLayout`
     ${({ theme }) => `color: ${theme.newsColors.lightGrey}`};
@@ -52,7 +52,7 @@ const FeedbackText = styled(B1)`
 
 const FeedbackButton = styled(Button)`
   ${({ theme }) => css`
-    background: ${theme.newsColors.pink};
+    background: ${theme.newsColors.primary};
     color: ${theme.newsColors.white};
   `};
   text-transform: uppercase;

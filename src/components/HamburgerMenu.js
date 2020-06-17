@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   z-index: 1000;
   width: 100vw;
   height: 100vh;
-  background: ${({ theme }) => theme.newsColors.navy};
+  background: ${({ theme }) => theme.newsColors.secondary};
   padding-top: 12px;
 `;
 

@@ -16,9 +16,9 @@ const OptionWrapper = styled(Container)`
   width: ${({ total }) => `calc(100% / ${total})`};
   border-bottom: 1px solid transparent;
   ${({ active, theme }) => active && css`
-    border-bottom: 1px solid ${({ theme }) => theme.newsColors.pink};
+    border-bottom: 1px solid ${({ theme }) => theme.newsColors.primary};
     ${OptionText} {
-      color: ${theme.newsColors.pink};
+      color: ${theme.newsColors.primary};
     }
   `};
 `;
