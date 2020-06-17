@@ -264,11 +264,11 @@ class ModeratorCurateComponent extends PureComponent {
     }
 
     toggleLocationFilter = (event) => {
-        const location = event.target.id;
+        const location = event.target ? event.target.id : event;
         this.setState({
             locationFilter: location
         })
-        console.log('Location changed to ', location)
+        console.log(`Location changed to ${location}`);
         // #toDo: function name and location in state should be changed
         // Object passed in order to retrieve articles by status
         const paramObject = {

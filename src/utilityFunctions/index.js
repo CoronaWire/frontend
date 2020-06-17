@@ -8,4 +8,5 @@ export {
     removeElementFromArray,
     removeDayAndTime,
     updateArticleObjectInFeed,
+    deleteElementFromArray
  } from './articleFeed';

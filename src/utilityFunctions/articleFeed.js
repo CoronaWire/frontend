@@ -146,7 +146,7 @@ export const removeDayAndTime = (dateString) => {
     finalDateString = finalDateString + dateArray[2] + ' ';
     finalDateString = finalDateString + dateArray[3];
 
-    console.log('Final date', finalDateString);
+    // console.log('Final date', finalDateString);
     return finalDateString;
 }
 
@@ -166,6 +166,18 @@ export const removeElementFromArray = (element, array) => {
 }
 
 
+/**
+ * 
+ * Updates the individual article object in the feed object with the article's most up to date information
+ * Eg. Let's assume we have a feed has articles { 2: {...}, 45: {...}} where article with key 2 is an article about 
+ * 'Uber firing 3,000 people'
+ * If the user updates information about this article and saves it, this ensures that it's saved in the local state
+ * of the article so that it's consistent with what it's in the database, before the feed is retrieved again
+ * 
+ * @param {Object} articleFeed Object feed of all the articles that were retrieved
+ * @param {Object} articleObject Object of the article that we are going to update in the above articleFeed object
+ */
+
 export const updateArticleObjectInFeed = (articleFeed, articleObject) => {
     const { article_id } = articleObject;
     const objectKeys = Object.keys(articleObject);
@@ -177,4 +189,34 @@ export const updateArticleObjectInFeed = (articleFeed, articleObject) => {
     }
     console.log('Final Article Object', objectOfArticleInFeed);
     return objectOfArticleInFeed;
+}
+
+/**
+ * 
+ * Removes the elements in elementsToDelete from arrayList
+ * Currently used in ./RegionStatusFilterComponent to remove the 'California' and 'Washington' state
+ * from the list of states retrieved from the database
+ * 
+ * @param {Array} arrayList Array of elements
+ * @param {Object} elementsToDelete Object of elements to be deleted from arrayList
+ * 
+ */
+
+export const deleteElementFromArray  = (arrayList, elementsToDelete ) => {
+
+    let finalArray = [];
+    let length = arrayList.length;
+
+    for (let i=0; i<length; i++) {
+
+        let currentLocation = arrayList[i];
+        
+        // If the current location is not present in the object, then we can safely add it to the final array
+        if (elementsToDelete[currentLocation] == undefined) {
+            finalArray.push(currentLocation)
+        }
+    }
+    
+    return finalArray;
+
 }

@@ -10,6 +10,7 @@ export const MAKE_ARTICLE_FEATURED = 'https://moderatorapi-dot-coronawire-2020.u
 
 export const MAKE_ARTICLE_UNFEATURED = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/unfeature';
 
+export const SOURCE_STATES_URL = 'https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/sourceStates';
 
 export const retrieveArticlesURL = (status, region, offset) => {
     return `https://moderatorapi-dot-coronawire-2020.uc.r.appspot.com/articles/status/${status}/region/${region}/offset/${offset}`;

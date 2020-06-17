@@ -10,11 +10,15 @@
 // External Packages
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+
 // Internal Modules
 import TabularButton from '../styledComponents/TabularButton';
 import { LeftPositionedWrapper, RightPositionedWrapper, MiddleWrapper } from '../styledComponents/PositionedWrappers';
+import { StateDropDownListWrapper, StateDropDownOption } from '../styledComponents/DropDownList';
 import { MediumText } from '../styledComponents/Text';
-
+import { SOURCE_STATES_URL } from '../URL';
+import { deleteElementFromArray } from '../utilityFunctions';
 
 const FiltersWrapper = styled.div`
     width: 100%;
@@ -71,15 +75,66 @@ class RegionStatusFilterComponent extends PureComponent {
         super(props);
         this.state = {
             // Empty for now
+            statesArray: [],
+            selectedState: ''
         }
     }
 
+    componentDidMount = async () => {
+        let statesArray =  await axios.get(SOURCE_STATES_URL);
+        statesArray = statesArray.data;
+
+        const statesToDelete = {
+            'California': 1,
+            'Washington': 1,
+        }
+
+        statesArray = deleteElementFromArray(statesArray, statesToDelete)
+        this.setState({statesArray});
+
+    }
+    
+    dropDownChange = (event) => {
+        let locationName = event.target.value;
+        console.log('Drop down changed to event', locationName);
+        this.props.toggleLocationFilter(locationName);
+
+
+        this.setState({selectedState: locationName})
+    }
+
     render(){
-        return(
+        console.log('States displayed', this.state.statesArray)
+
+        const ListOfOptions = this.state.statesArray.map((stateString) => {
+            return <StateDropDownOption 
+                    value={stateString} 
+                    > 
+                    {stateString} 
+                    </StateDropDownOption>
+        })
+
+        console.log('Selected state', this.state.selectedState);
+        console.log('Location Filter', this.props.locationFilter);
+        console.log('Are they equal', this.state.selectedState == this.props.locationFilter);
+
+        let DropdownSelectStateComponent =  
+        <StateDropDownListWrapper 
+            locationFilter={this.props.locationFilter} 
+            selectedState={this.state.selectedState}
+        >
+            <StateDropDownOption value='None'> None </StateDropDownOption>
+            { ListOfOptions }
+        </StateDropDownListWrapper>
+
+        // #toDo: Make 'all' capitalized in both moderation-app-engine service and ModeratorCurateFunction
+        return( 
                 <FiltersWrapper>
                     <LeftPositionedWrapper>
-                        <CityButton id='all' // #toDo: Make 'all' capitalized in both moderation-app-engine service and ModeratorCurateFunction
-                        selectedID={this.props.locationFilter} 
+                        <CityButton id='all' 
+                        // selectedID added as a property so that the component knows if it's been selected
+                        // if selectedID == id, then the appropriate design is displayed to show that n the screen
+                        selectedID={this.props.locationFilter}  
                         onClick={this.props.toggleLocationFilter}
                         >
                             All  
@@ -108,6 +163,14 @@ class RegionStatusFilterComponent extends PureComponent {
                         > 
                         National
                         </CityButton>
+                        <StateDropDownListWrapper 
+                            onChange={this.dropDownChange}
+                            locationFilter={this.props.locationFilter} 
+                            selectedState={this.state.selectedState}    
+                        >
+                            <StateDropDownOption value='None'> None </StateDropDownOption>
+                            { ListOfOptions }
+                        </StateDropDownListWrapper>
                         <MiddleWrapper>
                         <StatusButton 
                         id='pending' 
@@ -130,6 +193,8 @@ class RegionStatusFilterComponent extends PureComponent {
                         > 
                         Rejected 
                         </StatusButton>
+                       
+
                     </MiddleWrapper>
                     </LeftPositionedWrapper>
                     <RightPositionedWrapper>
