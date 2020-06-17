@@ -16,6 +16,14 @@ const OptionWrapper = styled(Container)`
       color: ${theme.newsColors.primary};
     }
   `};
+  ${({ theme }) => css`
+    &:hover {
+      border-bottom: 2px solid ${({ theme }) => theme.newsColors.primary};
+      ${OptionText} {
+        color: ${theme.newsColors.primary};
+      }
+    }
+  `};
 `;
 
 const Divider = styled.div`
