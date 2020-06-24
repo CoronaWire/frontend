@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 import { media } from './../helpers/media';
 import LeftMenuButtonComponent from './LeftMenuComplexButtonComponent';
 import DividingLine from '../styledComponents/DividingLine';
-import { B1, Container, Button } from './core';
+import { H3, Container, Button } from './core';
 import { trackEvent } from './../helpers/ga';
 
 // #toDo: Needs to be connected to parent component, Dashboard and send up the actual news
@@ -42,7 +42,7 @@ const MenuContent = styled(Container)`
   width: 100%;
 `;
 
-const FeedbackText = styled(B1)`
+const FeedbackText = styled(H3)`
   ${({ theme }) => `color: ${theme.newsColors.secondary}`};
   margin-bottom: 16px;
   ${media.mobileLayout`

@@ -49,6 +49,13 @@ const StyledLink = styled(NavLink)`
       }
     `};
   }
+  ${({ theme }) => css`
+    &:hover {
+      ${MenuButtonTitle}, ${MenuButtonSubTitle} {
+        color: ${theme.newsColors.primary};
+      }
+    }
+  `};
 `;
 
 // For now, MenuButtonTitle here is the initial design made with Jeff's wireframe.
