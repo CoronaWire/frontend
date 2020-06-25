@@ -41,9 +41,9 @@ const GlobalTheme = {
     lightDarkGrey: '#DBDBDB',
   },
   newsColors: {
-    pink: '#FF335F',
-    pinkHover: 'rgba(255, 51, 95, 0.05)',
-    navy: '#242A49',
+    primary: '#FF335F',
+    primaryHover: 'rgba(255, 51, 95, 0.05)',
+    secondary: '#242A49',
     ivory: '#F5F5F3',
     darkGrey: '#4F536B',
     midGrey: '#9194A4',

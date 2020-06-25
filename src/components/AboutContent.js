@@ -4,7 +4,7 @@ import { H2, B1, Container } from './core';
 import aboutImage from './../images/about.png';
 
 const Title = styled(H2)`
-  color: ${({ theme }) => theme.newsColors.navy};
+  color: ${({ theme }) => theme.newsColors.secondary};
   text-transform: uppercase;
   margin: 45px 0 8px;
   &:first-child {
@@ -13,7 +13,7 @@ const Title = styled(H2)`
 `;
 
 const Body = styled(B1)`
-  color: ${({ theme }) => theme.newsColors.navy};
+  color: ${({ theme }) => theme.newsColors.secondary};
 `;
 
 const Image = styled.img`

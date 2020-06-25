@@ -42,13 +42,20 @@ const StyledLink = styled(NavLink)`
   &.active {
     ${({ theme }) => css`
       ${Wrapper} {
-        border-left: 4px solid ${theme.newsColors.pink};
+        border-left: 4px solid ${theme.newsColors.primary};
       }
       ${MenuButtonTitle}, ${MenuButtonSubTitle} {
-        color: ${theme.newsColors.pink};
+        color: ${theme.newsColors.primary};
       }
     `};
   }
+  ${({ theme }) => css`
+    &:hover {
+      ${MenuButtonTitle}, ${MenuButtonSubTitle} {
+        color: ${theme.newsColors.primary};
+      }
+    }
+  `};
 `;
 
 // For now, MenuButtonTitle here is the initial design made with Jeff's wireframe.

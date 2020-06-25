@@ -5,7 +5,7 @@ import { H4, Container } from './core';
 
 const ZeroText = styled(H4)`
   margin-bottom: 20px;
-  color: ${({ theme }) => theme.newsColors.navy};
+  color: ${({ theme }) => theme.newsColors.secondary};
 `;
 
 const Bold = styled.span`

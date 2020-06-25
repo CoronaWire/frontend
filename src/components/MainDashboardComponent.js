@@ -19,94 +19,9 @@ import { trackEvent } from './../helpers/ga';
 import { useTimingEffect } from './../helpers/hooks';
 import { NewsFeedLoader } from './Loading/';
 
-// #toDo: make paddingLeft and marginLeft below 30px
-
-const Button = styled(LoginButton)`
-    background-color: white;
-    color: black;
-    border-radius: 5px;
-    border: 1px solid #D3D3D3;
-    width: auto;
-    margin: 0;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    box-sizing: border-box;
-    height: 32px;
-    &:hover {
-      background-color: #F0F0F0;
-    }
-    ${({ active }) => active && css`
-      border: none;
-      color: white;
-      background-color: #828282;
-      &:hover {
-        background-color: #828282;
-      }
-    `};
-`;
-
-const ButtonsContainer = styled.div`
-    background-color: white;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-
-    ${Button} {
-      margin-right: 20px;
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-
-    ${media.mobile`
-      margin-top: -8px;
-      ${Button} {
-        margin-top: 8px;
-        margin-right: 8px;
-      }
-    `};
-`;
-
-// #toFix: resizing of the button when the bottom border is added
-const ScopeButton = styled.button`
-    width: auto;
-    min-width: 50px;
-    height: 100%;
-    outline: none;
-    background-color: white;
-    color: black;
-    border-bottom-style: solid;
-    border-bottom-color: ${({ underlined }) => underlined ? 'black': 'white'};
-    border-bottom-width: 2px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-    border-top-width: 0px;
-    cursor: pointer;
-    ${media.aboveMobile`
-      &:hover {
-        background-color: #F0F0F0;
-      };
-    `};
-    box-sizing: border-width;
-`;
-
-const ScopeWrapper = styled.div`
-    background-color: transparent;
-    height: 40px;
-    width: 100%
-    border-bottom-style: solid;
-    border-bottom-color: black;
-    border-bottom-width: 3px;
-    justify-content: flex-start;
-    display: flex;
-`
-
 const BackToNews = styled(H3)`
   cursor: pointer;
-  color: ${({ theme }) => theme.newsColors.pink};
+  color: ${({ theme }) => theme.newsColors.primary};
   margin-bottom: 24px;
   text-transform: uppercase;
 `;
@@ -122,7 +37,7 @@ const ToggleButton = styled(BaseButton)`
     background: ${theme.newsColors.midGrey};
     color: ${theme.newsColors.white};
     &:disabled {
-      background: ${theme.newsColors.pink};
+      background: ${theme.newsColors.primary};
       cursor: not-allowed;
     }
   `};
@@ -181,6 +96,7 @@ const MainDashboardComponent = () => {
   };
 
   const handleFetchMore = async () => {
+    console.log('fetch more');
     const max = mainFeed && mainFeed[mainFeed.length - 1] && mainFeed[mainFeed.length - 1].id - 1;
     if (!max) {
       return;
@@ -223,15 +139,34 @@ const MainDashboardComponent = () => {
     })
   };
 
+  const renderFeed = () => !loading ? (
+    <InfiniteScroll
+      hasMore={hasMore}
+      pageStart={0}
+      loader={<NewsFeedLoader showText={false} count={1} />}
+      loadMore={handleFetchMore}
+    >
+      <NewsListWrapper>
+        {mainFeed.map(article => (
+          <SingleNewsComponent
+            key={article.id}
+            title={article.title}
+            publishedAt={article.published_at}
+            summary={article.summary}
+            articleUrl={article.article_url}
+            imageUrl={article.image_url}
+            source={article.source_id}
+            onClick={trackArticleClick}
+          />
+        ))}
+      </NewsListWrapper>
+    </InfiniteScroll>
+  ) : (
+    <NewsFeedLoader />
+  );
+
   return (
     <OuterWrapper>
-      {false && (
-        <ButtonsContainer>
-          {categories.map((value, index) => (
-            <Button key={index}>{value}</Button>
-          ))}
-        </ButtonsContainer>
-      )}
       {scope !== 'local' ? (
         <React.Fragment>
           <BackToNews
@@ -275,29 +210,7 @@ const MainDashboardComponent = () => {
       {!loading && scope === 'local' && !mainFeed.length ? (
         <LocalZeroState />
       ) : (
-        <InfiniteScroll
-          hasMore={!loading && hasMore}
-          pageStart={0}
-          loader={<NewsFeedLoader showText={false} count={1} />}
-          loadMore={handleFetchMore}
-        >
-          <NewsListWrapper>
-            {!loading ? mainFeed.map(article => (
-              <SingleNewsComponent
-                key={article.id}
-                title={article.title}
-                publishedAt={article.published_at}
-                summary={article.summary}
-                articleUrl={article.article_url}
-                source={article.source_id}
-                onClick={trackArticleClick}
-                imageUrl={article.image_url}
-              />
-            )) : (
-              <NewsFeedLoader />
-            )}
-          </NewsListWrapper>
-        </InfiniteScroll>
+        renderFeed()
       )}
     </OuterWrapper>
   );

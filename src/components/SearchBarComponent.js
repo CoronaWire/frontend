@@ -51,8 +51,8 @@ const DropdownWrapper = styled.div`
 `;
 
 const highlightedCss = css`
-  border-left: 4px solid ${({ theme }) => theme.newsColors.pink};
-  background: ${({ theme }) => theme.newsColors.pinkHover};
+  border-left: 4px solid ${({ theme }) => theme.newsColors.primary};
+  background: ${({ theme }) => theme.newsColors.primaryHover};
 `;
 
 const DropdownItem = styled(Container)`
@@ -65,7 +65,7 @@ const DropdownItem = styled(Container)`
   }
   ${({ active }) => active && highlightedCss};
   ${B1} {
-    color: ${({ theme }) => theme.newsColors.navy};
+    color: ${({ theme }) => theme.newsColors.secondary};
   }
 `;
 
