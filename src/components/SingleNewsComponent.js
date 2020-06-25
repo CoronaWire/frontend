@@ -125,7 +125,7 @@ const SingleNewsComponent = ({
     </ContentContainer>
     {!!imageUrl && (
       <ImageContainer>
-        <Image src={imageUrl} alt={title} />
+        <Image alt={title} src={imageUrl} />
       </ImageContainer>
     )}
   </SingleNewsWrapper>
