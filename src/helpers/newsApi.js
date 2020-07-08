@@ -16,7 +16,7 @@ const resolvePath = ({ scope, location, options }) => {
         case 'coord':
           return `/articles/scope/local/${lat},${lng}/`;
         case 'fips':
-          return `/articles/scope/fips/${countyFipsCode}/`
+          return `/articles/relevant/?fips=${countyFipsCode}`
         default:
           return `/articles/nearby/`;
       }
@@ -34,7 +34,9 @@ export const fetchArticles = async ({
   query: { radius, ...query } = {},
   options = {},
 }) => {
-  const apiUrl = process.env.REACT_APP_NEWS_API_URL;
+  const apiUrl = scope === 'local'
+    ? process.env.REACT_APP_NEWS_API_URL_V2
+    : process.env.REACT_APP_NEWS_API_URL;
 
   const radiusQuery = scope === 'local' && options.localType === 'coord' ? { radius } : {};
   const locationQuery =

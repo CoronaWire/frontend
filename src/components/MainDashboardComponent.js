@@ -70,7 +70,7 @@ const STARTING_RADIUS = 0.1;
 const MainDashboardComponent = () => {
   const categories = ['Health', 'Food', 'Public Services', 'Social', 'Housing', 'Labor']; // #toDecide : Finalize number of categories and type of categories
 
-  const [localType, setLocalType] = useState('nearby');
+  const [localType, setLocalType] = useState('fips');
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -141,7 +141,7 @@ const MainDashboardComponent = () => {
 
   const renderFeed = () => !loading ? (
     <InfiniteScroll
-      hasMore={hasMore}
+      hasMore={scope !== 'local' && hasMore}
       pageStart={0}
       loader={<NewsFeedLoader showText={false} count={1} />}
       loadMore={handleFetchMore}
@@ -152,9 +152,9 @@ const MainDashboardComponent = () => {
             key={article.id}
             title={article.title}
             publishedAt={article.published_at}
-            summary={article.summary}
-            articleUrl={article.article_url}
-            source={article.source_id}
+            summary={article.summary || article.description}
+            articleUrl={article.article_url || article.url}
+            source={article.source_id || article.name}
             onClick={trackArticleClick}
           />
         ))}
