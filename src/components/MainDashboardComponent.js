@@ -140,6 +140,7 @@ const MainDashboardComponent = () => {
             summary={article.description}
             articleUrl={article.url}
             source={article.name}
+            imageUrl={article.image_url}
             onClick={trackArticleClick}
           />
         ))}
