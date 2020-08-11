@@ -64,7 +64,6 @@ const OuterWrapper = styled.div``;
 
 const Loading = () => null;
 
-const STARTING_RADIUS = 0.1;
 
 // #mainNewsFeedQuery
 const MainDashboardComponent = () => {
@@ -74,7 +73,7 @@ const MainDashboardComponent = () => {
   const [mainFeed, setMainFeed] = useState([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [radius, setRadius] = useState(STARTING_RADIUS);
+  const [page, setPage] = useState(0);
   const dispatch = useDispatch();
   const { scope, location } = useSelector(({ newsFeed }) => newsFeed);
   useTimingEffect(scope);
@@ -87,47 +86,33 @@ const MainDashboardComponent = () => {
       setMainFeed(articles);
     }
     const length = articles && articles.length;
-    // try again with increased radius if using coord
-    if (options.localType === 'coord' && scope === 'local' && !length && radius < 0.5) {
-      setRadius(query.radius + 0.1);
-    } else {
-      setLoading(false);
-    }
+    setLoading(false);
   };
 
   const handleFetchMore = async () => {
     console.log('fetch more');
-    const max = mainFeed && mainFeed[mainFeed.length - 1] && mainFeed[mainFeed.length - 1].id - 1;
-    if (!max) {
-      return;
-    }
     const data = await fetchArticles({
       scope,
       location,
-      query: { max, radius },
+      query: { p: page + 1 },
       options: { localType },
     });
     if (data && data.data && data.data.length) {
       setMainFeed([...mainFeed, ...data.data]);
+      setPage(page + 1);
     } else {
       setHasMore(false);
     }
   }
 
   useEffect(() => {
-    if (radius > STARTING_RADIUS) {
-      handleFetch(scope, location, { radius }, { localType });
-    }
-  }, [radius])
-
-  useEffect(() => {
     handleFetch(
       scope,
       location,
-      { radius: STARTING_RADIUS },
+      { p: 0 },
       { localType },
     );
-    setRadius(STARTING_RADIUS);
+    setPage(0);
     setHasMore(true);
   }, [scope, location, localType]);
 
@@ -152,9 +137,9 @@ const MainDashboardComponent = () => {
             key={article.id}
             title={article.title}
             publishedAt={article.published_at}
-            summary={article.summary}
-            articleUrl={article.article_url}
-            source={article.source_id}
+            summary={article.description}
+            articleUrl={article.url}
+            source={article.name}
             onClick={trackArticleClick}
           />
         ))}
