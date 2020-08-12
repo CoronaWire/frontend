@@ -11,6 +11,7 @@ const getQueryParams = ({
 }) => {
   switch (audience) {
     case 'global':
+      return { audience: 'international', ...query };
     case 'national':
       return { audience, ...query };
     default:
