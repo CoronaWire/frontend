@@ -89,7 +89,9 @@ const InformationFeedComponent = () => {
               <Link onClick={trackArticleClick} href={article.article_url} target="_blank">
                 <ArticleTitle> {article.title} </ArticleTitle>
               </Link>
-              <ArticleMetaData>{timeSince(article.published_at)} - {article.source_id}</ArticleMetaData>
+              <ArticleMetaData>
+                {timeSince(article.published_at)} - {article.name}
+              </ArticleMetaData>
             </FeedArticle>
           ))}
           <MoreText
