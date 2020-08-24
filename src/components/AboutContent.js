@@ -47,7 +47,7 @@ export const AboutContent = () => (
       Covid Wire combines algorithmic and human curation, cross-referencing content from
       municipal governments, local news outlets and research institutions, to create one simple feed.
     </Body>
-    <Image src={aboutImage} />
+    {false && <Image src={aboutImage} />}
     <Title>Why we launched covid wire</Title>
     <Body>
       We are a growing team of 16 journalists, editors, engineers, designers and builders.
