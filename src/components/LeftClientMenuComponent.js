@@ -82,8 +82,8 @@ const LeftClientMenuComponent = () => (
     <MenuContent flexColumn>
       <Separator />
       <FeedbackText>Made for local.</FeedbackText>
-      <FeedbackButton as="a" target="_blank" href="https://forms.gle/XKZM3viPsEfE2bAB9">
-        Give Feedback
+      <FeedbackButton as="a" className="dbox-donation-button" href="https://donorbox.org/covid-wire">
+        Donate
       </FeedbackButton>
     </MenuContent>
   </LeftMenuWrapper>
