@@ -81,3 +81,21 @@ export const useCurrentLocation = (onSuccess = () => null) => {
     );
   };
 };
+
+export const useOutsideClickEffect = ({ ref, onClick, shouldAttach }) => {
+  const handleOutsideClick = e => {
+    if (ref.current && !ref.current.contains(e.target)) {
+      onClick();
+    }
+  }
+  useEffect(() => {
+    if (shouldAttach) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    } else {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    }
+  }, [shouldAttach]);
+}
