@@ -14,7 +14,11 @@ import {
 } from './core';
 import { retry } from './../helpers/utilities';
 import { saveLocationToLocalStorage } from './../helpers/localStorage';
-import { useCurrentLocation, useUpdateEffect } from './../helpers/hooks';
+import {
+  useCurrentLocation,
+  useUpdateEffect,
+  useOutsideClickEffect,
+} from './../helpers/hooks';
 import { trackEvent } from './../helpers/ga';
 
 const InputWrapper = styled.div`
@@ -73,6 +77,7 @@ export const SearchBarComponent = () => {
   const autocompleteService = useRef(null);
   const placesService = useRef(null);
   const mapRef = useRef(null);
+  const wrapperRef = useRef(null);
   const sessionToken = useRef(null);
 
   const setup = () => {
@@ -145,6 +150,7 @@ export const SearchBarComponent = () => {
         redirectToNewsDashboard();
       },
     );
+    setIsFocused(false);
   };
 
   const setLocation = useSelector(({ newsFeed: { location } }) => location && location.name);
@@ -179,6 +185,14 @@ export const SearchBarComponent = () => {
     { place_id: 'current_location', description: 'Use current location' },
     ...predictionsList,
   ];
+
+  useOutsideClickEffect({
+    ref: wrapperRef,
+    shouldAttach: isFocused,
+    onClick: () => {
+      setIsFocused(false);
+    },
+  });
 
   const [activeItem, setActiveItem] = useState(null);
   const handleKeyPress = e => {
@@ -219,7 +233,7 @@ export const SearchBarComponent = () => {
   const activeId = activeItem && activeItem.place_id;
 
   return (
-    <InputWrapper>
+    <InputWrapper ref={wrapperRef}>
       <SearchIcon />
       <TextInput
         type="text"
@@ -235,9 +249,6 @@ export const SearchBarComponent = () => {
             action: 'click',
             label: 'search',
           });
-        }}
-        onBlur={() => {
-          setTimeout(() => setIsFocused(false), 100);
         }}
       />
       <DropdownWrapper visible={isFocused}>
